@@ -21,6 +21,7 @@
 ## 目录约定
 
 - `skills/<skill-name>/SKILL.md`：每个 skill 的主说明文件。
+- `skills/<skill-name>/SOURCE.md`：每个 skill 的来源和作者记录文件，必须存在。
 - `skills/<skill-name>/scripts/`：可选，放置该 skill 需要复用的脚本。
 - `skills/<skill-name>/references/`：可选，放置该 skill 的补充参考文档。
 - `skills/<skill-name>/examples/`：可选但涉及测试时必需，放置人工测试记录、样例输入输出和验证说明。
@@ -38,6 +39,9 @@
 ## 编写要求
 
 - `SKILL.md` 使用清晰的触发条件开头，说明什么时候应该使用该 skill。
+- `SOURCE.md` 必须记录作者、来源类型、源 skill 地址或说明、当前维护者和使用要求。
+- 自己创建的 skill，作者写 `Jeronasand & Codex`，来源类型写 `original`。
+- 来自其他作者或其他 skill 源的 skill，必须注明原作者、源地址、原始版本或引用时间；使用时应优先使用源 skill，不要把来源不明的副本当作自建内容。
 - 操作步骤要可执行，避免只写概念解释。
 - 示例命令使用占位符，不能包含真实 token、私钥、cookie、账号或内部 URL。
 - 如果 skill 依赖本地工具，写清楚依赖名称、检查命令和失败时的处理方式。
