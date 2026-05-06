@@ -10,6 +10,7 @@
 # Skill-specific ignores belong in skills/<skill-name>/.gitignore.
 /.env
 /.env.*
+web/.env.skills-dna-scoring
 
 # Dependency and build outputs
 node_modules/

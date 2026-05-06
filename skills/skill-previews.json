@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generatedAt": "2026-05-06T20:03:09.794Z",
+  "generatedAt": "2026-05-06T20:24:36.147Z",
   "skills": [
     {
       "name": "git-commit-convention",
@@ -191,6 +191,37 @@
               "language": "markdown",
               "size": 781,
               "content": "# Git Commit Convention Release Notes\n\n## Current Release\n\n- Skill: `git-commit-convention`\n- Version: `git-commit-convention/v1.0.5`\n- Previous version: `git-commit-convention/v1.0.4`\n- Release type: patch\n- Maintainer: `Jeronasand & Codex`\n\n## Summary\n\n根据仓库规范和实际 diff 生成 git commit 内容，并在改动混杂多个主题时提示用户是否拆分提交。\n\n## Changes\n\n- 补充可复制给 agent 的安装 prompt。\n- 明确安装前需要检查 `skills/associations.json`，有相关 skill 时先询问用户是否一起安装。\n\n## Artifacts\n\n无外部 artifact。\n\n## Verification\n\n- `git diff --check`\n- basic skill package checks\n\n## GitHub Release\n\n本次 tag 推送后，为该 tag 单独创建 GitHub Release；Release 内容以本文件为准。"
+            }
+          ]
+        },
+        {
+          "tag": "git-commit-convention/v1.0.6",
+          "version": "v1.0.6",
+          "createdAt": "2026-05-07",
+          "files": [
+            {
+              "path": "SKILL.md",
+              "language": "markdown",
+              "size": 4314,
+              "content": "---\nname: git-commit-convention\ndescription: \"Generate repository-compliant git commit messages and commit workflows. Use when the user asks Codex to write a commit message, commit staged or unstaged changes, follow a repo's git convention, inspect diffs before committing, or translate work into a Conventional Commit style message such as `type: subject`.\"\n---\n\n# Git Commit Convention\n\nUse this skill to turn real repository changes into a commit message that follows the repository's own rules.\n\n## Workflow\n\n1. Inspect the repository rules before writing the message.\n   - Read `AGENTS.md`, `CONVENTIONS.md`, `CONTRIBUTING.md`, `.gitmessage`, README contribution sections, package-specific docs, or other repository-maintained rule files if they exist.\n   - Prefer explicit local rules over generic conventions.\n   - Treat repository-maintained rule files as binding for this repository, including any documented commit units, release units, staging rules, generated-file rules, tag rules, or \"ask before split/merge\" requirements.\n   - If the user provides a convention in the prompt, treat it as the newest rule for this task.\n\n2. Inspect the actual change set.\n   - Run `git status --short --branch`.\n   - Use `git diff --stat` for the scope.\n   - Use `git diff` for unstaged changes and `git diff --cached` for staged changes when composing a real commit.\n   - Do not include unrelated dirty files in the message unless they are part of the requested commit.\n\n3. Decide whether the change set should be split.\n   - If the diff mixes unrelated purposes, unrelated modules, generated files plus source edits, formatting-only churn plus behavior changes, or multiple commit types such as `feat` and `fix`, pause before composing a single message.\n   - If the repository rules define commit or release units, use those local units as the primary split boundary.\n   - If the diff mixes files from different locally defined units, propose one commit per unit unless the user explicitly asks to merge them.\n   - Treat generated index files, lockfiles, snapshots, or build metadata according to the repository's local rules; if no local rule exists, commit them with the source change that caused them.\n   - Explain the likely split groups in concrete file or behavior terms.\n   - Ask the user whether they want separate commits.\n   - Do not split or partially stage without user confirmation.\n   - If the user confirms, create one focused message per group and stage/commit each group separately.\n   - If the user wants one commit anyway, write a single message that honestly describes the combined scope.\n\n4. Choose the commit type from the repo convention.\n   - Common types: `feat`, `fix`, `docs`, `chore`, `refactor`, `test`, `build`, `ci`, `perf`.\n   - For documentation-only changes, prefer `docs`.\n   - For new reusable skill content, prefer `feat` unless the repo treats skills as documentation.\n   - For repository setup, formatting, or metadata, prefer `chore`.\n\n5. Write the subject.\n   - Keep it concise, imperative, and specific.\n   - Use lowercase after the type unless the repo's convention differs.\n   - Avoid trailing punctuation.\n   - Mention the user-visible outcome, not every file touched.\n\n6. Add a body only when it helps.\n   - Use a body for multi-part changes, behavior changes, migrations, or important validation notes.\n   - Skip the body for small obvious changes.\n\n## Default Format\n\nWhen the repository only says `type: subject`, use:\n\n```text\ntype: short imperative subject\n```\n\nExamples:\n\n```text\ndocs: add public skills repository guide\nfeat: add git commit convention skill\nfix: correct skill validation command\nchore: update skill index metadata\n```\n\n## Commit Execution\n\nIf the user asks Codex to commit:\n\n1. Verify the intended files with `git status --short`.\n2. Stage only the relevant files.\n3. Run repository validation when available, or at minimum run `git diff --check` for text changes.\n4. Commit with the selected message.\n5. Report the commit hash and the files included.\n\nNever stage or commit unrelated user changes without explicit permission.\n\n## Response Shape\n\nIf only asked for a message, return the recommended commit message first:\n\n```text\nfeat: add git commit convention skill\n```\n\nThen briefly explain why that type and subject match the diff if useful."
+            },
+            {
+              "path": "README.md",
+              "language": "markdown",
+              "size": 2901,
+              "content": "# Git Commit Convention\n\n## 用途\n\n这个 skill 用于帮助 Codex 根据目标仓库的真实改动和本地提交规范生成 git commit 内容，也可以在用户要求提交时辅助完成检查、暂存、提交和结果汇报。\n\n## 适用场景\n\n- 用户要求“帮我写 commit message”。\n- 用户要求“按照仓库规范提交”。\n- 仓库有 `AGENTS.md`、`CONTRIBUTING.md`、`.gitmessage` 或其他提交规范。\n- 仓库有 `CONVENTIONS.md` 或其他项目约定文件，里面定义了提交单元、发布单元、tag 或生成文件规则。\n- 需要根据 staged/unstaged diff 判断提交类型和提交摘要。\n\n## 引用方式\n\n在目标仓库的 `.codex/public-skills.yaml` 中选择固定版本：\n\n```yaml\nskills:\n  - name: git-commit-convention\n    repo: git@github.com:Jeronasand/public-skills.git\n    ref: git-commit-convention/v1.0.6\n```\n\n## 常用输出\n\n当仓库只要求 `type: subject` 时，输出类似：\n\n```text\nfeat: add git commit convention skill\ndocs: update repository usage guide\nfix: correct validation command\n```\n\n## 混乱改动处理\n\n如果当前 diff 同时包含多个不相关目的，例如功能改动、bug 修复、格式化、生成文件、文档调整混在一起，Codex 不能直接合成一个 commit。\n\nCodex 必须优先读取仓库自己的规则文件，例如 `AGENTS.md`、`CONVENTIONS.md`、`CONTRIBUTING.md`、`.gitmessage` 和 README 中的协作说明。如果仓库规则定义了提交单元、发布单元、生成文件归属或 tag 规则，应按这些本地规则判断拆分边界。\n\nCodex 应先说明建议拆分的提交组，并询问用户是否分开提交。只有用户确认后，才可以按组分别 stage 和 commit；如果用户明确要求一个 commit，则使用一个能准确覆盖整体范围的提交信息。\n\n## Agent 安装 Prompt\n\n复制下面这句话给目标仓库里的 Codex/agent：\n\n```text\n请从 git@github.com:Jeronasand/public-skills.git 安装 public skill `git-commit-convention`，固定版本 `git-commit-convention/v1.0.6`，安装到当前仓库 `.codex/skills/git-commit-convention`；安装前请检查 `skills/associations.json`，如果存在相关 skill，请先询问我是否一起安装。\n```\n\n## 环境变量\n\n这个 skill 不需要环境变量。\n\n## 作者和来源\n\n- 作者：`Jeronasand & Codex`\n- 来源类型：`original`\n- 来源记录：[SOURCE.md](./SOURCE.md)\n\n## 版本\n\n- `v1.0.6`：读取仓库约定文件，并按仓库定义的提交/发布单元判断拆分提交。\n- `v1.0.5`：补充可复制给 agent 的安装 prompt。\n- 当前版本：`git-commit-convention/v1.0.6`\n- `v1.0.4`：当改动内容混乱或跨多个主题时，先提示用户是否分开提交。\n- `v1.0.3`：补充独立 RELEASE.md 发布记录。\n- `v1.0.2`：补充中文 README。\n- `v1.0.1`：补充来源记录。\n- `v1.0.0`：新增 git 提交规范 skill。"
+            },
+            {
+              "path": "SOURCE.md",
+              "language": "markdown",
+              "size": 279,
+              "content": "# Source\n\n## Author\n\nJeronasand & Codex\n\n## Source Type\n\noriginal\n\n## Source Skill\n\nThis skill was created directly in this repository.\n\n## Maintainer\n\nJeronasand & Codex\n\n## Usage Requirement\n\nUse `skills/git-commit-convention/` from this repository when referencing this skill."
+            },
+            {
+              "path": "RELEASE.md",
+              "language": "markdown",
+              "size": 957,
+              "content": "# Git Commit Convention Release Notes\n\n## Current Release\n\n- Skill: `git-commit-convention`\n- Version: `git-commit-convention/v1.0.6`\n- Previous version: `git-commit-convention/v1.0.5`\n- Release type: patch\n- Maintainer: `Jeronasand & Codex`\n\n## Summary\n\n根据仓库规范和实际 diff 生成 git commit 内容，并在改动混杂多个主题时提示用户是否拆分提交。\n\n## Changes\n\n- 明确必须读取 `CONVENTIONS.md` 等仓库约定文件。\n- 如果仓库规则定义了提交单元、发布单元、生成文件归属或 tag 规则，按本地规则判断拆分提交。\n- 生成文件、索引文件、lockfile 和快照默认跟随触发它们变化的源改动；仓库有明确规则时以仓库规则为准。\n\n## Artifacts\n\n无外部 artifact。\n\n## Verification\n\n- `git diff --check`\n- basic skill package checks\n\n## GitHub Release\n\n本次 tag 推送后，为该 tag 单独创建 GitHub Release；Release 内容以本文件为准。"
             }
           ]
         }

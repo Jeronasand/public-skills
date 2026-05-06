@@ -389,6 +389,56 @@ h1 {
   padding: 7px 8px;
 }
 
+.scoreBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--field);
+  padding: 10px;
+}
+
+.scoreBar div,
+.scoreBadge {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 3px;
+}
+
+.scoreBar strong,
+.scoreBadge strong {
+  font-size: 24px;
+}
+
+.scoreBar span,
+.scoreBadge span {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.scoreBar p {
+  color: var(--muted);
+  font-size: 12px;
+  text-align: right;
+}
+
+.scoreBar.good strong,
+.scoreBadge.good strong {
+  color: var(--accent);
+}
+
+.scoreBar.warn strong,
+.scoreBadge.warn strong {
+  color: var(--accent-2);
+}
+
+.scoreBar.bad strong,
+.scoreBadge.bad strong {
+  color: #b91c1c;
+}
+
 .promptBox {
   display: grid;
   gap: 7px;
@@ -421,14 +471,14 @@ h1 {
   cursor: pointer;
 }
 
-.cardActions,
-.selectionActions {
+.cardActions {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 8px;
 }
 
-.selectButton {
+.selectButton,
+.issueButton {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -439,10 +489,20 @@ h1 {
   background: var(--panel-solid);
   color: var(--ink);
   cursor: pointer;
+  text-decoration: none;
 }
 
 .previewPanel {
   padding-bottom: 20px;
+}
+
+.scoreBadge {
+  align-self: start;
+  min-height: 42px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel-solid);
+  padding: 8px 10px;
 }
 
 .modeSwitch {
@@ -472,6 +532,92 @@ h1 {
   background: var(--panel-solid);
   color: var(--ink);
   box-shadow: 0 1px 8px rgba(20, 34, 48, 0.08);
+}
+
+.issueSummary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) minmax(170px, auto);
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.issueSummary div,
+.issueSummary a,
+.scoreSummary,
+.recommendations span,
+.issueList a {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel-solid);
+}
+
+.issueSummary div {
+  padding: 11px;
+}
+
+.issueSummary strong {
+  display: block;
+  font-size: 20px;
+}
+
+.issueSummary span {
+  display: block;
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.issueSummary a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 48px;
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.scoreSummary {
+  margin-bottom: 10px;
+  padding: 12px;
+  color: #2d3a45;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.recommendations {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.recommendations span {
+  padding: 8px 10px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.issueList {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.issueList a {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 10px;
+  padding: 10px;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.issueList span,
+.issueList em {
+  color: var(--muted);
+  font-size: 12px;
+  font-style: normal;
 }
 
 .previewLayout {
@@ -653,7 +799,8 @@ h1 {
   }
 
   .metrics,
-  .sourceGrid {
+  .sourceGrid,
+  .issueSummary {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
@@ -679,7 +826,9 @@ h1 {
 @media (max-width: 560px) {
   .metrics,
   .skillsGrid,
-  .sourceGrid {
+  .sourceGrid,
+  .issueSummary,
+  .issueList a {
     grid-template-columns: 1fr;
   }
 
@@ -693,7 +842,6 @@ h1 {
   }
 
   .cardActions,
-  .selectionActions,
   .dateGrid {
     grid-template-columns: 1fr;
   }

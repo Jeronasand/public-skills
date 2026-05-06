@@ -6,6 +6,7 @@ import {
   Check,
   CircleDot,
   Copy,
+  ExternalLink,
   FileText,
   GitBranch,
   History,
@@ -13,6 +14,7 @@ import {
   RefreshCcw,
   Search,
   Settings2,
+  Star,
   TerminalSquare,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
@@ -108,6 +110,49 @@ type SkillPreviews = {
   skills: SkillPreview[];
 };
 
+type SkillIssue = {
+  number: number;
+  title: string;
+  state: "OPEN" | "CLOSED";
+  url: string;
+  labels: string[];
+  createdAt: string;
+  updatedAt: string;
+  closedAt?: string;
+  penalty: number;
+};
+
+type SkillScore = {
+  name: string;
+  tag: string;
+  score: number;
+  method: "deepseek" | "issue-fallback";
+  model: string | null;
+  summary: string;
+  deductions: Array<{
+    reason: string;
+    points: number;
+  }>;
+  recommendations: string[];
+  openIssueCount: number;
+  closedIssueCount: number;
+  totalDeduction: number;
+  updatedAt: string;
+  issues: SkillIssue[];
+};
+
+type SkillScores = {
+  version: number;
+  generatedAt: string;
+  repository: string;
+  scoring: {
+    base: number;
+    rule: string;
+    minScore: number;
+  };
+  skills: SkillScore[];
+};
+
 type SkillsData =
   | { status: "loading"; error: null }
   | { status: "error"; error: Error }
@@ -117,6 +162,7 @@ type SkillsData =
       categories: Categories;
       associations: Associations;
       previews: SkillPreviews;
+      scores: SkillScores;
       error: null;
     };
 
@@ -125,6 +171,8 @@ const metricLabels = {
   categories: "分类",
   env: "需要环境变量",
   associations: "关联规则",
+  averageScore: "平均评分",
+  openIssues: "Open Issues",
 };
 
 const jsonFiles = {
@@ -132,6 +180,7 @@ const jsonFiles = {
   categories: "categories.json",
   associations: "associations.json",
   previews: "skill-previews.json",
+  scores: "skill-scores.json",
 };
 
 const remoteDataBase =
@@ -230,9 +279,10 @@ function useSkillsData() {
       loadJson<Categories>(jsonFiles.categories),
       loadJson<Associations>(jsonFiles.associations),
       loadJson<SkillPreviews>(jsonFiles.previews),
+      loadJson<SkillScores>(jsonFiles.scores),
     ])
-      .then(([catalog, categories, associations, previews]) => {
-        if (alive) setData({ status: "ready", catalog, categories, associations, previews, error: null });
+      .then(([catalog, categories, associations, previews, scores]) => {
+        if (alive) setData({ status: "ready", catalog, categories, associations, previews, scores, error: null });
       })
       .catch((error) => {
         if (alive) setData({ status: "error", error });
@@ -259,15 +309,51 @@ function Metric({ value, label, icon: Icon }: { value: number; label: string; ic
   );
 }
 
+function githubIssueUrl(skill: Skill) {
+  const title = `[skill:${skill.name}] 问题反馈：`;
+  const body = [
+    `## Skill`,
+    ``,
+    `- Name: ${skill.name}`,
+    `- Tag: ${skill.tag}`,
+    `- Source: Skills DNA Web`,
+    ``,
+    `## 问题类型`,
+    ``,
+    `- [ ] bug / 失效`,
+    `- [ ] 文档问题`,
+    `- [ ] 示例或测试问题`,
+    `- [ ] 能力建议`,
+    ``,
+    `## 现象或建议`,
+    ``,
+    `请描述你遇到的问题、复现步骤或建议。`,
+    ``,
+    `## 期望结果`,
+    ``,
+    `请描述修复后应该达到的效果。`,
+  ].join("\n");
+  return `https://github.com/Jeronasand/public-skills/issues/new?title=${encodeURIComponent(title)}&body=${encodeURIComponent(body)}`;
+}
+
+function scoreClass(score?: number) {
+  if (score === undefined) return "";
+  if (score >= 90) return "good";
+  if (score >= 70) return "warn";
+  return "bad";
+}
+
 function SkillCard({
   skill,
   categories,
   active,
+  score,
   onPreview,
 }: {
   skill: Skill;
   categories: Categories;
   active: boolean;
+  score?: SkillScore;
   onPreview: (name: string) => void;
 }) {
   const [copied, setCopied] = useState(false);
@@ -311,6 +397,16 @@ function SkillCard({
         <span className="flag inherit">可继承</span>
       </div>
 
+      <div className={`scoreBar ${scoreClass(score?.score)}`}>
+        <div>
+          <strong>{score?.score ?? 100}</strong>
+          <span>/100</span>
+        </div>
+        <p>
+          {score?.openIssueCount || 0} open issue · 已修复 {score?.closedIssueCount || 0}
+        </p>
+      </div>
+
       <div className="dateGrid">
         <span>创建 {skill.createdAt || "未知"}</span>
         <span>更新 {skill.updatedAt || "未知"}</span>
@@ -330,6 +426,10 @@ function SkillCard({
           <FileText size={16} aria-hidden="true" />
           {active ? "正在预览" : "预览内容"}
         </button>
+        <a className="issueButton" href={githubIssueUrl(skill)} target="_blank" rel="noreferrer">
+          <ExternalLink size={16} aria-hidden="true" />
+          提交 Issue
+        </a>
       </div>
     </article>
   );
@@ -340,7 +440,7 @@ function formatBytes(size: number) {
   return `${(size / 1024).toFixed(1)} KB`;
 }
 
-function SkillPreviewPanel({ skill, preview }: { skill: Skill; preview?: SkillPreview }) {
+function SkillPreviewPanel({ skill, preview, score }: { skill: Skill; preview?: SkillPreview; score?: SkillScore }) {
   const [mode, setMode] = useState<"latest" | "history">("latest");
   const [activeHistoryTag, setActiveHistoryTag] = useState("");
   const [activeFilePath, setActiveFilePath] = useState("");
@@ -370,6 +470,11 @@ function SkillPreviewPanel({ skill, preview }: { skill: Skill; preview?: SkillPr
             {preview?.updatedAt || skill.updatedAt || "未知"}
           </p>
         </div>
+        <div className={`scoreBadge ${scoreClass(score?.score)}`}>
+          <Star size={18} aria-hidden="true" />
+          <strong>{score?.score ?? 100}</strong>
+          <span>/100</span>
+        </div>
         <div className="modeSwitch">
           <button className={mode === "latest" ? "active" : ""} type="button" onClick={() => setMode("latest")}>
             最新内容
@@ -384,52 +489,99 @@ function SkillPreviewPanel({ skill, preview }: { skill: Skill; preview?: SkillPr
       {!preview ? (
         <div className="empty">当前 skill 还没有生成预览数据，请运行 web 的数据同步流程。</div>
       ) : (
-        <div className="previewLayout">
-          <aside className="fileRail">
-            {mode === "history" && (
-              <label className="versionSelect">
-                <span>历史 tag</span>
-                <select value={activeHistory?.tag || ""} onChange={(event) => setActiveHistoryTag(event.target.value)}>
-                  {preview.history.map((item) => (
-                    <option key={item.tag} value={item.tag}>
-                      {item.tag} · {item.createdAt}
-                    </option>
-                  ))}
-                </select>
-              </label>
-            )}
-            <div className="fileList">
-              {files.map((file) => (
-                <button
-                  className={activeFile?.path === file.path ? "active" : ""}
-                  type="button"
-                  key={file.path}
-                  onClick={() => setActiveFilePath(file.path)}
-                >
-                  <span>{file.path}</span>
-                  <small>
-                    {file.language} · {formatBytes(file.size)}
-                  </small>
-                </button>
+        <>
+          <div className="issueSummary">
+            <div>
+              <strong>{score?.openIssueCount || 0}</strong>
+              <span>Open issues</span>
+            </div>
+            <div>
+              <strong>{score?.closedIssueCount || 0}</strong>
+              <span>已修复 issues</span>
+            </div>
+            <div>
+              <strong>{score?.totalDeduction || 0}</strong>
+              <span>当前扣分</span>
+            </div>
+            <div>
+              <strong>{score?.method === "deepseek" ? "DS" : "Fallback"}</strong>
+              <span>评分方式</span>
+            </div>
+            <a href={githubIssueUrl(skill)} target="_blank" rel="noreferrer">
+              <ExternalLink size={16} aria-hidden="true" />
+              提交 GitHub Issue
+            </a>
+          </div>
+
+          {score?.summary ? <p className="scoreSummary">{score.summary}</p> : null}
+
+          {score?.recommendations.length ? (
+            <div className="recommendations">
+              {score.recommendations.slice(0, 3).map((item) => (
+                <span key={item}>{item}</span>
               ))}
             </div>
-          </aside>
-          <article className="filePreview">
-            {activeFile ? (
-              <>
-                <div className="filePreviewHeader">
-                  <strong>{activeFile.path}</strong>
-                  <span>{mode === "latest" ? "latest" : activeHistory?.tag}</span>
-                </div>
-                <pre>
-                  <code>{activeFile.content}</code>
-                </pre>
-              </>
-            ) : (
-              <div className="empty">当前版本没有可预览的文本文件。</div>
-            )}
-          </article>
-        </div>
+          ) : null}
+
+          {score?.issues.length ? (
+            <div className="issueList">
+              {score.issues.slice(0, 5).map((issue) => (
+                <a href={issue.url} target="_blank" rel="noreferrer" key={issue.number}>
+                  <span>#{issue.number}</span>
+                  <strong>{issue.title}</strong>
+                  <em>{issue.state === "OPEN" ? `扣 ${issue.penalty} 分` : "已修复"}</em>
+                </a>
+              ))}
+            </div>
+          ) : null}
+
+          <div className="previewLayout">
+            <aside className="fileRail">
+              {mode === "history" && (
+                <label className="versionSelect">
+                  <span>历史 tag</span>
+                  <select value={activeHistory?.tag || ""} onChange={(event) => setActiveHistoryTag(event.target.value)}>
+                    {preview.history.map((item) => (
+                      <option key={item.tag} value={item.tag}>
+                        {item.tag} · {item.createdAt}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              )}
+              <div className="fileList">
+                {files.map((file) => (
+                  <button
+                    className={activeFile?.path === file.path ? "active" : ""}
+                    type="button"
+                    key={file.path}
+                    onClick={() => setActiveFilePath(file.path)}
+                  >
+                    <span>{file.path}</span>
+                    <small>
+                      {file.language} · {formatBytes(file.size)}
+                    </small>
+                  </button>
+                ))}
+              </div>
+            </aside>
+            <article className="filePreview">
+              {activeFile ? (
+                <>
+                  <div className="filePreviewHeader">
+                    <strong>{activeFile.path}</strong>
+                    <span>{mode === "latest" ? "latest" : activeHistory?.tag}</span>
+                  </div>
+                  <pre>
+                    <code>{activeFile.content}</code>
+                  </pre>
+                </>
+              ) : (
+                <div className="empty">当前版本没有可预览的文本文件。</div>
+              )}
+            </article>
+          </div>
+        </>
       )}
     </section>
   );
@@ -507,6 +659,12 @@ function App() {
     : undefined;
   const activePreview =
     isReady && activeSkill ? data.previews.skills.find((preview) => preview.name === activeSkill.name) : undefined;
+  const activeScore =
+    isReady && activeSkill ? data.scores.skills.find((score) => score.name === activeSkill.name) : undefined;
+  const averageScore = isReady
+    ? Math.round(data.scores.skills.reduce((sum, item) => sum + item.score, 0) / Math.max(data.scores.skills.length, 1))
+    : 0;
+  const openIssueCount = isReady ? data.scores.skills.reduce((sum, item) => sum + item.openIssueCount, 0) : 0;
 
   return (
     <>
@@ -605,10 +763,11 @@ function App() {
                   <Metric value={data.catalog.skills.length} label={metricLabels.total} icon={Boxes} />
                   <Metric value={data.categories.categories.length} label={metricLabels.categories} icon={Braces} />
                   <Metric value={data.catalog.skills.filter((skill) => skill.requiresEnv).length} label={metricLabels.env} icon={Settings2} />
-                  <Metric value={data.associations.associations.length} label={metricLabels.associations} icon={Link2} />
+                  <Metric value={averageScore} label={metricLabels.averageScore} icon={Star} />
+                  <Metric value={openIssueCount} label={metricLabels.openIssues} icon={Link2} />
                 </section>
 
-                {activeSkill && <SkillPreviewPanel skill={activeSkill} preview={activePreview} />}
+                {activeSkill && <SkillPreviewPanel skill={activeSkill} preview={activePreview} score={activeScore} />}
 
                 <section className="panel">
                   <div className="panelHeader">
@@ -629,6 +788,7 @@ function App() {
                           skill={skill}
                           categories={data.categories}
                           active={activeSkill?.name === skill.name}
+                          score={data.scores.skills.find((score) => score.name === skill.name)}
                           onPreview={setActiveSkillName}
                           key={skill.name}
                         />

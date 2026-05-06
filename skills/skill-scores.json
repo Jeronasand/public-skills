@@ -1,0 +1,252 @@
+{
+  "version": 1,
+  "generatedAt": "2026-05-06T20:24:39.030Z",
+  "repository": "Jeronasand/public-skills",
+  "scoring": {
+    "base": 100,
+    "rule": "DeepSeek scores each skill with the provided scoring prompt when DEEPSEEK_API_KEY is configured. Open GitHub issues are included as deductions. Closed issues do not reduce the score after the next data sync. Without a key, issue-based fallback scoring is used.",
+    "minScore": 0
+  },
+  "skills": [
+    {
+      "name": "git-commit-convention",
+      "tag": "git-commit-convention/v1.0.6",
+      "score": 85,
+      "method": "deepseek",
+      "model": "deepseek-v4-pro",
+      "summary": "该技能定义了清晰的提交消息生成流程，但缺少测试/示例、安全脚本的干运行机制，且版本元数据不一致。",
+      "deductions": [
+        {
+          "reason": "缺少测试或示例来验证行为，如拆分提交逻辑和仓库规则解析。",
+          "points": 5
+        },
+        {
+          "reason": "SKILL.md 中描述的提交执行步骤（如暂存和提交）属于高风险操作，但未要求干运行或用户确认预览。",
+          "points": 5
+        },
+        {
+          "reason": "README.md 中版本号显示为 v1.0.6，但 SKILL.md 的 frontmatter 未包含版本字段，元数据不一致。",
+          "points": 3
+        },
+        {
+          "reason": "未提供安装脚本或验证步骤，仅靠手动引用，可能引入错误。",
+          "points": 2
+        }
+      ],
+      "recommendations": [
+        "添加示例场景和预期输出，覆盖拆分提交、仓库规则解析等关键路径。",
+        "在提交执行前增加干运行模式，输出将要暂存的文件和提交消息供用户确认。",
+        "在 SKILL.md 的 frontmatter 中明确版本字段，与 README 保持一致。",
+        "提供自动化安装脚本或校验命令，确保技能正确部署。"
+      ],
+      "openIssueCount": 0,
+      "closedIssueCount": 0,
+      "totalDeduction": 15,
+      "updatedAt": "2026-05-06T20:24:39.030Z",
+      "issues": []
+    },
+    {
+      "name": "oss-upload-folder",
+      "tag": "oss-upload-folder/v1.0.3",
+      "score": 85,
+      "method": "deepseek",
+      "model": "deepseek-v4-pro",
+      "summary": "该技能提供了安全的OSS上传流程，但存在环境变量处理不完整、缺少自动化测试和脚本示例等不足。",
+      "deductions": [
+        {
+          "reason": "环境变量处理不完整：CLI版本未明确说明如何安全传递凭证，仅依赖已安装CLI的配置，但未提供验证或警告。",
+          "points": 5
+        },
+        {
+          "reason": "缺少自动化测试：仅有手动测试记录，无自动化测试或示例验证脚本，无法保证行为正确性。",
+          "points": 5
+        },
+        {
+          "reason": "脚本缺少使用示例：README中虽有命令示例，但scripts目录下未提供可直接运行的示例或测试用例。",
+          "points": 3
+        },
+        {
+          "reason": "版本元数据不一致：README中版本历史记录不完整，且未在SKILL.md中明确当前版本号。",
+          "points": 2
+        }
+      ],
+      "recommendations": [
+        "为CLI版本添加环境变量验证步骤，确保凭证安全传递并给出明确警告。",
+        "添加自动化测试脚本，覆盖主要上传场景和dry-run功能。",
+        "在scripts目录下提供可直接运行的示例脚本或测试用例。",
+        "统一版本号在SKILL.md和README.md中的声明，并完善版本历史记录。"
+      ],
+      "openIssueCount": 0,
+      "closedIssueCount": 0,
+      "totalDeduction": 15,
+      "updatedAt": "2026-05-06T20:24:39.030Z",
+      "issues": []
+    },
+    {
+      "name": "aws-s3-upload-folder",
+      "tag": "aws-s3-upload-folder/v1.0.3",
+      "score": 95,
+      "method": "deepseek",
+      "model": "deepseek-v4-pro",
+      "summary": "该技能文档清晰、安全规则完善，但缺少自动化测试和示例验证，且未提供脚本源码供审查。",
+      "deductions": [
+        {
+          "reason": "缺少自动化测试或示例验证，无法确保脚本行为符合预期",
+          "points": 3
+        },
+        {
+          "reason": "未提供脚本源码，无法审查其安全性和正确性",
+          "points": 2
+        }
+      ],
+      "recommendations": [
+        "添加自动化测试或示例验证脚本，确保上传行为正确",
+        "在仓库中提供脚本源码，便于审查和维护"
+      ],
+      "openIssueCount": 0,
+      "closedIssueCount": 0,
+      "totalDeduction": 5,
+      "updatedAt": "2026-05-06T20:24:39.030Z",
+      "issues": []
+    },
+    {
+      "name": "aws-cloudfront-invalidate",
+      "tag": "aws-cloudfront-invalidate/v1.0.2",
+      "score": 95,
+      "method": "deepseek",
+      "model": "deepseek-v4-pro",
+      "summary": "该技能结构清晰，提供预览和别名校验，安全性较好，但缺少自动化测试和脚本执行示例，存在轻微文档不一致。",
+      "deductions": [
+        {
+          "reason": "缺少自动化测试或验证示例，无法确保脚本行为正确",
+          "points": 3
+        },
+        {
+          "reason": "README中版本号与tag不一致（v1.0.2 vs aws-cloudfront-invalidate/v1.0.2），可能引起混淆",
+          "points": 2
+        }
+      ],
+      "recommendations": [
+        "添加自动化测试或手动测试记录，覆盖主要功能路径",
+        "统一版本号格式，确保README、RELEASE.md和tag一致",
+        "在SKILL.md中补充脚本执行示例，展示实际输出"
+      ],
+      "openIssueCount": 0,
+      "closedIssueCount": 0,
+      "totalDeduction": 5,
+      "updatedAt": "2026-05-06T20:24:39.030Z",
+      "issues": []
+    },
+    {
+      "name": "ai-cli-context-governance",
+      "tag": "ai-cli-context-governance/v1.0.5",
+      "score": 85,
+      "method": "deepseek",
+      "model": "deepseek-v4-pro",
+      "summary": "该技能提供了清晰的AI CLI上下文治理架构和操作指南，但缺少自动化脚本、测试用例和更严格的安全检查，存在一些文档和验证方面的不足。",
+      "deductions": [
+        {
+          "reason": "缺少自动化脚本（如上下文压缩、检索的示例脚本）和对应的测试用例，无法验证行为是否符合预期。",
+          "points": 5
+        },
+        {
+          "reason": "未提供环境变量处理说明，尽管声明不需要环境变量，但未明确说明如何安全处理可能需要的密钥或配置。",
+          "points": 3
+        },
+        {
+          "reason": "缺少干运行（dry-run）模式或安全回滚机制，对于可能修改上下文的操作（如/forget）存在风险。",
+          "points": 3
+        },
+        {
+          "reason": "版本和安装元数据不一致：README中版本为v1.0.5，但SKILL.md中未明确版本，且安装方式仅提及手动复制，缺少自动化安装脚本。",
+          "points": 2
+        },
+        {
+          "reason": "缺少独立的发布文档或变更日志，RELEASE.md内容过于简单，未详细记录每个版本的变更。",
+          "points": 2
+        }
+      ],
+      "recommendations": [
+        "添加示例脚本和测试用例，验证上下文压缩、检索和证据约束等核心功能。",
+        "明确环境变量处理策略，即使当前不需要，也应说明未来扩展时的安全实践。",
+        "为/forget等危险操作提供干运行模式或确认机制，并记录在文档中。",
+        "统一版本号，在SKILL.md中明确版本，并提供自动化安装脚本。",
+        "完善RELEASE.md，详细记录每个版本的变更、修复和已知问题。"
+      ],
+      "openIssueCount": 0,
+      "closedIssueCount": 0,
+      "totalDeduction": 15,
+      "updatedAt": "2026-05-06T20:24:39.030Z",
+      "issues": []
+    },
+    {
+      "name": "bucket-upload-policy",
+      "tag": "bucket-upload-policy/v1.0.3",
+      "score": 85,
+      "method": "deepseek",
+      "model": "deepseek-v4-pro",
+      "summary": "该 skill 规范了大文件/二进制资产的存储策略，文档清晰，但缺少测试、示例和脚本，且未处理潜在的安全风险。",
+      "deductions": [
+        {
+          "reason": "缺少测试或示例来验证 manifest 生成和上传决策逻辑的正确性",
+          "points": 5
+        },
+        {
+          "reason": "未提供 dry-run 脚本或自动化检查，依赖外部 skill，存在误操作风险",
+          "points": 5
+        },
+        {
+          "reason": "密钥配置说明仅提及本地文件，未强调权限最小化和环境变量等更安全实践",
+          "points": 5
+        }
+      ],
+      "recommendations": [
+        "添加示例 manifest 和测试用例，验证上传决策和 manifest 格式",
+        "提供内置 dry-run 检查或校验脚本，减少对外部 skill 的依赖",
+        "在文档中补充密钥安全最佳实践，如使用临时凭证或环境变量"
+      ],
+      "openIssueCount": 0,
+      "closedIssueCount": 0,
+      "totalDeduction": 15,
+      "updatedAt": "2026-05-06T20:24:39.030Z",
+      "issues": []
+    },
+    {
+      "name": "public-skills-catalog",
+      "tag": "public-skills-catalog/v1.0.2",
+      "score": 85,
+      "method": "deepseek",
+      "model": "deepseek-v4-pro",
+      "summary": "该技能结构清晰，文档齐全，但缺少测试/示例、无脚本却未说明，且未提供干运行模式，存在轻微维护风险。",
+      "deductions": [
+        {
+          "reason": "缺少测试或示例文件，无法验证行为是否符合预期",
+          "points": 5
+        },
+        {
+          "reason": "无脚本但未在元数据中明确说明，可能引起误解",
+          "points": 3
+        },
+        {
+          "reason": "未提供干运行模式，直接修改JSON存在风险",
+          "points": 4
+        },
+        {
+          "reason": "版本号与tag不一致（README中为v1.0.2，但tag为public-skills-catalog/v1.0.2），可能造成混淆",
+          "points": 3
+        }
+      ],
+      "recommendations": [
+        "添加示例用法或测试用例，确保渲染和安装提示正确",
+        "在SKILL.md中明确说明无脚本，并解释原因",
+        "为维护工作流增加干运行选项，先输出变更预览再提交",
+        "统一版本号格式，避免歧义"
+      ],
+      "openIssueCount": 0,
+      "closedIssueCount": 0,
+      "totalDeduction": 15,
+      "updatedAt": "2026-05-06T20:24:39.030Z",
+      "issues": []
+    }
+  ]
+}

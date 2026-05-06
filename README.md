@@ -29,7 +29,7 @@ public-skills/
         └── examples/
 ```
 
-具体目录要求、版本规则、Release 规则、环境变量规则、artifact 上传规则、skill 分类规则和关联规则集中记录在 [CONVENTIONS.md](./CONVENTIONS.md)。机器可读目录位于 [skills/catalog.json](./skills/catalog.json)，分类清单位于 [skills/categories.json](./skills/categories.json)，关联清单位于 [skills/associations.json](./skills/associations.json)，Web 预览内容位于 [skills/skill-previews.json](./skills/skill-previews.json)。
+具体目录要求、版本规则、Release 规则、环境变量规则、artifact 上传规则、skill 分类规则和关联规则集中记录在 [CONVENTIONS.md](./CONVENTIONS.md)。机器可读目录位于 [skills/catalog.json](./skills/catalog.json)，分类清单位于 [skills/categories.json](./skills/categories.json)，关联清单位于 [skills/associations.json](./skills/associations.json)，Web 预览内容位于 [skills/skill-previews.json](./skills/skill-previews.json)，评分数据位于 [skills/skill-scores.json](./skills/skill-scores.json)。
 
 ## Skills DNA 预览
 
@@ -40,6 +40,7 @@ https://public-skills.jeronasand.cn/skills-dna/data/catalog.json
 https://public-skills.jeronasand.cn/skills-dna/data/categories.json
 https://public-skills.jeronasand.cn/skills-dna/data/associations.json
 https://public-skills.jeronasand.cn/skills-dna/data/skill-previews.json
+https://public-skills.jeronasand.cn/skills-dna/data/skill-scores.json
 ```
 
 本地运行：
@@ -58,6 +59,14 @@ npm run sync:data
 npm run upload:data:dry-run
 npm run upload:data
 ```
+
+如需使用 DeepSeek V4 Pro 评分，复制本地 env 模板并填写密钥：
+
+```bash
+cp web/.env.skills-dna-scoring.example web/.env.skills-dna-scoring
+```
+
+密钥只允许被 `web/scripts/sync-data.mjs` 在本机或服务端读取，默认模型为 `deepseek-v4-pro`。评分请求会使用 JSON Output 并关闭 thinking，以便生成稳定的结构化评分。密钥不能放进前端代码、Vite public env、仓库文件或 OSS JSON。
 
 打包后，网页产物需要直接上传到 `public-skills` bucket 根目录：
 
