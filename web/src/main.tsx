@@ -12,8 +12,10 @@ import {
   GitBranch,
   History,
   Link2,
+  PlusCircle,
   RefreshCcw,
   Search,
+  Send,
   Settings2,
   Star,
   TerminalSquare,
@@ -162,6 +164,22 @@ type SkillSearchRecommendations = {
 type LiveSearchSuggestion = {
   name: string;
   reason: string;
+};
+
+type SkillRequestFormState = {
+  title: string;
+  slug: string;
+  scenario: string;
+  trigger: string;
+  workflow: string;
+  inputsOutputs: string;
+  dependencies: string;
+  relatedSkills: string;
+  source: string;
+  notes: string;
+  requiresEnv: boolean;
+  needsExamples: boolean;
+  hasArtifacts: boolean;
 };
 
 type ViewMode = "list" | "detail";
@@ -362,6 +380,68 @@ function githubIssueUrl(skill: Skill) {
     `## 期望结果`,
     ``,
     `请描述修复后应该达到的效果。`,
+  ].join("\n");
+  return `https://github.com/Jeronasand/public-skills/issues/new?title=${encodeURIComponent(title)}&body=${encodeURIComponent(body)}`;
+}
+
+const emptySkillRequestForm: SkillRequestFormState = {
+  title: "",
+  slug: "",
+  scenario: "",
+  trigger: "",
+  workflow: "",
+  inputsOutputs: "",
+  dependencies: "",
+  relatedSkills: "",
+  source: "",
+  notes: "",
+  requiresEnv: false,
+  needsExamples: true,
+  hasArtifacts: false,
+};
+
+function skillRequestIssueUrl(form: SkillRequestFormState) {
+  const title = `[skill-request] ${form.title.trim() || "新增 skill 需求"}`;
+  const body = [
+    `## Skill 需求`,
+    ``,
+    `- 标题：${form.title.trim() || "未填写"}`,
+    `- 建议 slug：${form.slug.trim() || "由 Codex 根据仓库规范生成"}`,
+    `- 来源/作者：${form.source.trim() || "需求提交者 / 待确认"}`,
+    `- 相关 skills：${form.relatedSkills.trim() || "无"}`,
+    ``,
+    `## 使用场景`,
+    ``,
+    form.scenario.trim() || "请补充这个 skill 要解决的问题、适用项目或典型任务。",
+    ``,
+    `## 触发条件`,
+    ``,
+    form.trigger.trim() || "请补充用户说什么、出现什么任务时应该启用这个 skill。",
+    ``,
+    `## 期望工作流`,
+    ``,
+    form.workflow.trim() || "请补充希望 Codex 如何执行、需要哪些步骤、是否需要 dry-run 或人工确认。",
+    ``,
+    `## 输入与输出`,
+    ``,
+    form.inputsOutputs.trim() || "请补充输入文件、配置、命令参数，以及最终希望产出的内容。",
+    ``,
+    `## 依赖工具与环境变量`,
+    ``,
+    `- 需要独立 env：${form.requiresEnv ? "是，需要 .env.<skill-name>.example" : "否或暂不确定"}`,
+    form.dependencies.trim() || "请补充 CLI、Node/Python 包、云服务、账号权限或本地工具依赖。",
+    ``,
+    `## 验证与 examples`,
+    ``,
+    `- 需要 examples / 人工测试记录：${form.needsExamples ? "是" : "否或暂不确定"}`,
+    ``,
+    `## Artifact / OSS / S3`,
+    ``,
+    `- 涉及大文件、图片、PDF、二进制或对象存储：${form.hasArtifacts ? "是，需要走 bucket-upload-policy" : "否或暂不确定"}`,
+    ``,
+    `## 备注`,
+    ``,
+    form.notes.trim() || "无",
   ].join("\n");
   return `https://github.com/Jeronasand/public-skills/issues/new?title=${encodeURIComponent(title)}&body=${encodeURIComponent(body)}`;
 }
@@ -588,6 +668,173 @@ function SkillCard({
         </a>
       </div>
     </article>
+  );
+}
+
+function SkillRequestPanel() {
+  const [isOpen, setIsOpen] = useState(false);
+  const [form, setForm] = useState<SkillRequestFormState>(emptySkillRequestForm);
+  const canSubmit = form.title.trim().length > 0 && form.scenario.trim().length > 0;
+
+  function updateField<K extends keyof SkillRequestFormState>(field: K, value: SkillRequestFormState[K]) {
+    setForm((current) => ({ ...current, [field]: value }));
+  }
+
+  function submitRequest(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (!canSubmit) return;
+    window.open(skillRequestIssueUrl(form), "_blank", "noopener,noreferrer");
+  }
+
+  return (
+    <section className={`panel requestPanel ${isOpen ? "open" : ""}`}>
+      <div className="requestSummary">
+        <div>
+          <span className="eyebrow">Skill Request</span>
+          <h2>没有找到合适的 skill？</h2>
+          <p>提交一个结构化需求 issue，Codex 会按仓库规范拆成可公开复用的 skill，再由维护者开发、发布和记录版本。</p>
+        </div>
+        <button className="requestToggle" type="button" onClick={() => setIsOpen((value) => !value)}>
+          <PlusCircle size={17} aria-hidden="true" />
+          {isOpen ? "收起表单" : "创建 Skill 需求"}
+        </button>
+      </div>
+
+      {isOpen ? (
+        <form className="skillRequestForm" onSubmit={submitRequest}>
+          <div className="formGrid">
+            <label>
+              <span>Skill 标题 *</span>
+              <input
+                type="text"
+                placeholder="例如：微信素材批量发布"
+                value={form.title}
+                onChange={(event) => updateField("title", event.target.value)}
+                required
+              />
+            </label>
+            <label>
+              <span>建议 slug</span>
+              <input
+                type="text"
+                placeholder="例如：wechat-material-publish"
+                value={form.slug}
+                onChange={(event) => updateField("slug", event.target.value)}
+              />
+            </label>
+            <label>
+              <span>来源 / 作者</span>
+              <input
+                type="text"
+                placeholder="原创、某个公开 skill、某篇文档或作者名"
+                value={form.source}
+                onChange={(event) => updateField("source", event.target.value)}
+              />
+            </label>
+            <label>
+              <span>相关 skills</span>
+              <input
+                type="text"
+                placeholder="例如：oss-upload-folder, git-commit-convention"
+                value={form.relatedSkills}
+                onChange={(event) => updateField("relatedSkills", event.target.value)}
+              />
+            </label>
+          </div>
+
+          <label className="wideField">
+            <span>使用场景 *</span>
+            <textarea
+              placeholder="这个 skill 要解决什么问题？用户通常在什么项目或任务里需要它？"
+              value={form.scenario}
+              onChange={(event) => updateField("scenario", event.target.value)}
+              required
+            />
+          </label>
+
+          <div className="formGrid">
+            <label>
+              <span>触发条件</span>
+              <textarea
+                placeholder="用户说什么、遇到什么文件或流程时应该启用？"
+                value={form.trigger}
+                onChange={(event) => updateField("trigger", event.target.value)}
+              />
+            </label>
+            <label>
+              <span>期望工作流</span>
+              <textarea
+                placeholder="希望 Codex 检查什么、运行什么命令、是否需要 dry-run？"
+                value={form.workflow}
+                onChange={(event) => updateField("workflow", event.target.value)}
+              />
+            </label>
+            <label>
+              <span>输入与输出</span>
+              <textarea
+                placeholder="输入文件、参数、配置，以及最终产物。"
+                value={form.inputsOutputs}
+                onChange={(event) => updateField("inputsOutputs", event.target.value)}
+              />
+            </label>
+            <label>
+              <span>依赖工具</span>
+              <textarea
+                placeholder="CLI、Node/Python 包、云服务、账号权限或本地工具。"
+                value={form.dependencies}
+                onChange={(event) => updateField("dependencies", event.target.value)}
+              />
+            </label>
+          </div>
+
+          <label className="wideField">
+            <span>备注</span>
+            <textarea
+              placeholder="补充限制、参考链接、人工验收方式或不希望包含的内容。"
+              value={form.notes}
+              onChange={(event) => updateField("notes", event.target.value)}
+            />
+          </label>
+
+          <div className="requestChecks">
+            <label>
+              <input
+                type="checkbox"
+                checked={form.requiresEnv}
+                onChange={(event) => updateField("requiresEnv", event.target.checked)}
+              />
+              <span>需要独立 env 模板</span>
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                checked={form.needsExamples}
+                onChange={(event) => updateField("needsExamples", event.target.checked)}
+              />
+              <span>需要 examples 测试记录</span>
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                checked={form.hasArtifacts}
+                onChange={(event) => updateField("hasArtifacts", event.target.checked)}
+              />
+              <span>涉及 OSS/S3 artifact</span>
+            </label>
+          </div>
+
+          <div className="formActions">
+            <button className="ghostButton" type="button" onClick={() => setForm(emptySkillRequestForm)}>
+              清空
+            </button>
+            <button className="submitIssueButton" type="submit" disabled={!canSubmit}>
+              <Send size={16} aria-hidden="true" />
+              提交 GitHub Issue
+            </button>
+          </div>
+        </form>
+      ) : null}
+    </section>
   );
 }
 
@@ -1229,6 +1476,8 @@ function App() {
                     </div>
                   </section>
                 ) : null}
+
+                {viewMode === "list" ? <SkillRequestPanel /> : null}
 
                 <section className="metrics">
                   <Metric value={data.catalog.skills.length} label={metricLabels.total} icon={Boxes} />
