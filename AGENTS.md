@@ -25,6 +25,7 @@
 - `skills/<skill-name>/references/`：可选，放置该 skill 的补充参考文档。
 - `skills/<skill-name>/examples/`：可选但涉及测试时必需，放置人工测试记录、样例输入输出和验证说明。
 - `skills/<skill-name>/.env.<skill-name>.example`：可选但有环境变量时必需，记录该 skill 需要的环境变量模板。
+- `skills/<skill-name>/.gitignore`：可选但有本地 env、临时产物、测试产物或工具缓存时必需，由每个 skill 自己维护忽略规则。
 - `skills/README.md`：公开 skill 索引，新增 skill 时同步更新。
 
 ## 版本约定
@@ -43,11 +44,13 @@
 - 如果 skill 包含脚本，脚本默认先提供 dry-run 或预览能力，再执行有副作用操作。
 - 如果 skill 涉及测试、验证或人工确认流程，必须补充 `examples/` 目录记录测试样例、人工测试结果和必要的复现步骤。
 - `examples/` 中的记录必须脱敏，不写真实密钥、账号、私有 payload 或不可公开的业务数据。
+- 如果 skill 会产生本地配置、临时文件、测试输出或工具缓存，必须在该 skill 目录下补充 `.gitignore`，不要依赖仓库根 `.gitignore` 处理 skill 内部细节。
 
 ## 环境变量约定
 
 - 如果 skill 需要环境变量，必须在对应 skill 目录内提供 `skills/<skill-name>/.env.<skill-name>.example`。
 - example 文件只写变量名、注释和安全占位值，不写真实密钥、token、cookie、账号或私有 endpoint。
+- skill 目录内的 `.gitignore` 必须忽略 `.env.<skill-name>`，但保留 `.env.<skill-name>.example` 可提交。
 - `SKILL.md` 必须明确要求使用者在目标仓库的 skill 目录复制一份本地配置，例如 `cp .codex/skills/<skill-name>/.env.<skill-name>.example .codex/skills/<skill-name>/.env.<skill-name>`。
 - skill 执行时应优先读取目标仓库 `.codex/skills/<skill-name>/.env.<skill-name>`，避免直接使用宿主环境或通用 `.env` 中的同名变量。
 - 如果缺少必需变量，skill 应停止并提示用户补全 `.env.<skill-name>`，不要静默回退到宿主环境。

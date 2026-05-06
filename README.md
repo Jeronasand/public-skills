@@ -14,6 +14,7 @@ public-skills/
     ├── README.md
     └── <skill-name>/
         ├── .env.<skill-name>.example
+        ├── .gitignore
         ├── SKILL.md
         ├── scripts/
         ├── references/
@@ -85,11 +86,12 @@ skills:
 1. 在 `skills/<skill-name>/` 下创建 `SKILL.md`。
 2. 如需脚本，放到 `scripts/`；如需补充文档，放到 `references/`。
 3. 如果需要环境变量，在 skill 目录内创建 `skills/<skill-name>/.env.<skill-name>.example`。
-4. 如果涉及测试或人工验证，在 `skills/<skill-name>/examples/` 下补充测试记录。
-5. 确认内容不包含密钥、账号、私有 payload 或不可公开的内部信息。
-6. 更新 `skills/README.md` 索引和版本记录。
-7. 按仓库提交规范提交。
-8. 使用 `<skill-name>/v<major>.<minor>.<patch>` 打 tag 并推送。
+4. 如果 skill 会产生本地 env、临时文件、测试输出或工具缓存，在 skill 目录内创建 `.gitignore`。
+5. 如果涉及测试或人工验证，在 `skills/<skill-name>/examples/` 下补充测试记录。
+6. 确认内容不包含密钥、账号、私有 payload 或不可公开的内部信息。
+7. 更新 `skills/README.md` 索引和版本记录。
+8. 按仓库提交规范提交。
+9. 使用 `<skill-name>/v<major>.<minor>.<patch>` 打 tag 并推送。
 
 ## 测试记录约定
 
@@ -117,6 +119,12 @@ cp .codex/skills/<skill-name>/.env.<skill-name>.example \
 ```
 
 skill 应读取 `.codex/skills/<skill-name>/.env.<skill-name>`，不要默认读取宿主环境或通用 `.env`，避免误用目标机器上的同名变量。缺少必需变量时，应提示用户补全该 skill 专属 env 文件。
+
+如果 skill 使用 env 文件，该 skill 目录内还应提供 `.gitignore`，至少包含：
+
+```gitignore
+.env.<skill-name>
+```
 
 ## 提交规范
 

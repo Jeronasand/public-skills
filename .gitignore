@@ -6,11 +6,10 @@
 .idea/
 .vscode/
 
-# Local environment files.
-# Skill env templates are intentionally tracked inside each skill directory.
-.env
-.env.*
-!skills/*/.env.*.example
+# Root local environment files.
+# Skill-specific ignores belong in skills/<skill-name>/.gitignore.
+/.env
+/.env.*
 
 # Dependency and build outputs
 node_modules/
