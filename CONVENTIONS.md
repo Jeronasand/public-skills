@@ -1,6 +1,6 @@
 # public-skills 约定
 
-这个文件集中记录本仓库的 skill 维护、目录、版本、发布、环境变量、artifact 和 git 提交约定。`README.md` 面向使用者介绍仓库，`AGENTS.md` 面向 Codex 协作，具体规则以本文件为准。
+这个文件集中记录本仓库的 skill 维护、目录、分类、版本、发布、环境变量、artifact 和 git 提交约定。`README.md` 面向使用者介绍仓库，`AGENTS.md` 面向 Codex 协作，具体规则以本文件为准。
 
 ## 内容边界
 
@@ -19,6 +19,8 @@ public-skills/
 ├── README.md
 └── skills/
     ├── associations.json
+    ├── catalog.json
+    ├── categories.json
     ├── README.md
     └── <skill-name>/
         ├── .env.<skill-name>.example
@@ -42,6 +44,8 @@ public-skills/
 - `skills/<skill-name>/.env.<skill-name>.example`：可选但有环境变量时必需，记录该 skill 需要的环境变量模板。
 - `skills/<skill-name>/.gitignore`：可选但有本地 env、临时产物、测试产物或工具缓存时必需，由每个 skill 自己维护忽略规则。
 - `skills/associations.json`：skill 关联清单，记录可选联动、替代实现、前置依赖、后续动作和同源关系。
+- `skills/catalog.json`：机器可读 skill 目录，记录所有 skill 的名称、版本、tag、路径、分类、关键词和维护信息，方便 AI 快速读取。
+- `skills/categories.json`：机器可读 skill 分类清单，记录分类名称、说明和分类下的 skill。
 - `skills/README.md`：公开 skill 索引，新增 skill 时同步更新。
 
 ## 新增 skill 流程
@@ -55,11 +59,13 @@ public-skills/
 7. 如果 skill 会产生本地 env、临时文件、测试输出或工具缓存，在 skill 目录内创建 `.gitignore`。
 8. 如果涉及测试或人工验证，在 `skills/<skill-name>/examples/` 下补充测试记录。
 9. 确认内容不包含密钥、账号、私有 payload 或不可公开的内部信息。
-10. 如果和其他 skill 存在关联，更新 `skills/associations.json`。
-11. 更新 `skills/README.md` 索引和版本记录。
-12. 按仓库提交规范提交。
-13. 使用 `<skill-name>/v<major>.<minor>.<patch>` 打 tag 并推送。
-14. 如果 GitHub Release 可用，为该 tag 单独创建 GitHub Release。
+10. Codex 必须根据 skill 真实用途自行判断分类，并更新 `skills/categories.json`。
+11. 更新 `skills/catalog.json` 中的 skill 目录信息。
+12. 如果和其他 skill 存在关联，更新 `skills/associations.json`。
+13. 更新 `skills/README.md` 索引和版本记录。
+14. 按仓库提交规范提交。
+15. 使用 `<skill-name>/v<major>.<minor>.<patch>` 打 tag 并推送。
+16. 如果 GitHub Release 可用，为该 tag 单独创建 GitHub Release。
 
 ## 编写约定
 
@@ -97,6 +103,52 @@ original
 ```
 
 如果 skill 来自其他作者、其他仓库或其他 skill 源，必须记录原作者、源地址、原始版本或引用时间。目标仓库使用时，应优先使用源 skill；本仓库只维护清晰注明来源的公开副本或索引，不把外部来源不明的 skill 当作自建内容。
+
+## Skill 分类与目录 JSON 约定
+
+本仓库必须维护两份机器可读 JSON：
+
+```text
+skills/catalog.json
+skills/categories.json
+```
+
+`skills/catalog.json` 用于让 AI 快速读取当前所有 skills。每个 skill 至少记录：
+
+- `name`
+- `title`
+- `latestVersion`
+- `tag`
+- `path`
+- `skillFile`
+- `readme`
+- `source`
+- `release`
+- `categories`
+- `author`
+- `sourceType`
+- `requiresEnv`
+- `hasScripts`
+- `hasExamples`
+- `description`
+- `keywords`
+
+`skills/categories.json` 用于归类。每个分类至少记录：
+
+- `id`
+- `name`
+- `description`
+- `skills`
+
+Codex 每次创建或更新 skill 时，必须自己判断分类并同步 JSON。不要要求用户手动归类；只有在读完 skill 内容后仍然无法确定分类时，才向用户提问。
+
+分类判断规则：
+
+- 优先根据 skill 的实际工作流和外部工具归类。
+- 一个 skill 可以属于多个分类。
+- 如果现有分类能准确覆盖，不要创建新分类。
+- 如果新增分类，应使用稳定的 kebab-case `id`，并写清楚中文名称和说明。
+- 更新版本、tag、env、脚本、examples、描述或关键词时，必须同步 `skills/catalog.json`。
 
 ## Skill 关联与可选安装约定
 

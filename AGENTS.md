@@ -8,6 +8,7 @@
 
 - 本仓库完全由 Codex 维护；用户只需要描述要新增、修改、发布或引用的 skill 需求。
 - Codex 负责创建 skill、补充索引、写版本记录、运行校验、提交、打 tag 和推送。
+- Codex 每次创建或更新 skill 时，必须自行判断分类，并同步 `skills/catalog.json`、`skills/categories.json` 和必要的 `skills/associations.json`。
 - 不要求用户手动编辑仓库文件；如果需要用户在其他项目执行命令，Codex 应优先给出可复制的最小命令序列。
 - 其他仓库引用本仓库 skill 时，应由目标仓库内的 Codex 根据清单挑选需要的 skill，并固定到指定版本。
 - 如果目标任务需要使用本仓库 skill，Codex 应自动提出安装计划并请求用户授权；授权后由 Codex 执行 clone、checkout tag、symlink 和清单更新，不要求用户手动安装。
@@ -22,7 +23,7 @@
 ## 约定入口
 
 - `CONVENTIONS.md` 是本仓库唯一的详细约定文件。
-- 创建、修改、发布 skill 时，先按 `CONVENTIONS.md` 检查目录、README、SOURCE、RELEASE、env、examples、artifact、关联、版本和提交规则。
+- 创建、修改、发布 skill 时，先按 `CONVENTIONS.md` 检查目录、README、SOURCE、RELEASE、env、examples、artifact、分类、目录 JSON、关联、版本和提交规则。
 - `README.md` 只保留仓库介绍和引用流程，不重复维护完整约定。
 
 ## 发布要求

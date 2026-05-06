@@ -1,0 +1,33 @@
+{
+  "version": 1,
+  "categories": [
+    {
+      "id": "repository-maintenance",
+      "name": "仓库维护",
+      "description": "用于 git 提交、仓库协作规则、索引维护和公开 skill 仓库管理。",
+      "skills": [
+        "git-commit-convention",
+        "public-skills-catalog"
+      ]
+    },
+    {
+      "id": "object-storage-and-cdn",
+      "name": "对象存储与 CDN",
+      "description": "用于 OSS/S3 上传、对象存储 artifact 策略和 CDN 缓存刷新。",
+      "skills": [
+        "bucket-upload-policy",
+        "oss-upload-folder",
+        "aws-s3-upload-folder",
+        "aws-cloudfront-invalidate"
+      ]
+    },
+    {
+      "id": "ai-cli-architecture",
+      "name": "AI CLI 架构",
+      "description": "用于 AI CLI 上下文治理、长上下文性能、幻觉控制和证据约束。",
+      "skills": [
+        "ai-cli-context-governance"
+      ]
+    }
+  ]
+}

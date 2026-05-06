@@ -13,6 +13,8 @@ public-skills/
 ├── README.md
 └── skills/
     ├── associations.json
+    ├── catalog.json
+    ├── categories.json
     ├── README.md
     └── <skill-name>/
         ├── .env.<skill-name>.example
@@ -26,7 +28,7 @@ public-skills/
         └── examples/
 ```
 
-具体目录要求、版本规则、Release 规则、环境变量规则、artifact 上传规则和 skill 关联规则集中记录在 [CONVENTIONS.md](./CONVENTIONS.md)。机器可读的 skill 关联清单位于 [skills/associations.json](./skills/associations.json)。
+具体目录要求、版本规则、Release 规则、环境变量规则、artifact 上传规则、skill 分类规则和关联规则集中记录在 [CONVENTIONS.md](./CONVENTIONS.md)。机器可读目录位于 [skills/catalog.json](./skills/catalog.json)，分类清单位于 [skills/categories.json](./skills/categories.json)，关联清单位于 [skills/associations.json](./skills/associations.json)。
 
 ## 其他项目如何引用
 

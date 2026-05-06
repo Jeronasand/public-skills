@@ -1,0 +1,195 @@
+{
+  "version": 1,
+  "generatedAt": "2026-05-07",
+  "repository": "git@github.com:Jeronasand/public-skills.git",
+  "skills": [
+    {
+      "name": "git-commit-convention",
+      "title": "Git Commit Convention",
+      "latestVersion": "v1.0.3",
+      "tag": "git-commit-convention/v1.0.3",
+      "path": "skills/git-commit-convention/",
+      "skillFile": "skills/git-commit-convention/SKILL.md",
+      "readme": "skills/git-commit-convention/README.md",
+      "source": "skills/git-commit-convention/SOURCE.md",
+      "release": "skills/git-commit-convention/RELEASE.md",
+      "categories": [
+        "repository-maintenance"
+      ],
+      "author": "Jeronasand & Codex",
+      "sourceType": "original",
+      "requiresEnv": false,
+      "hasScripts": false,
+      "hasExamples": false,
+      "description": "根据仓库规范和真实 diff 生成 git commit message，并辅助提交检查、暂存、提交和结果汇报。",
+      "keywords": [
+        "git",
+        "commit",
+        "conventional-commit",
+        "repository"
+      ]
+    },
+    {
+      "name": "oss-upload-folder",
+      "title": "OSS Upload Folder",
+      "latestVersion": "v1.0.2",
+      "tag": "oss-upload-folder/v1.0.2",
+      "path": "skills/oss-upload-folder/",
+      "skillFile": "skills/oss-upload-folder/SKILL.md",
+      "readme": "skills/oss-upload-folder/README.md",
+      "source": "skills/oss-upload-folder/SOURCE.md",
+      "release": "skills/oss-upload-folder/RELEASE.md",
+      "categories": [
+        "object-storage-and-cdn"
+      ],
+      "author": "Jeronasand & Codex",
+      "sourceType": "derived-original",
+      "requiresEnv": true,
+      "hasScripts": true,
+      "hasExamples": true,
+      "description": "使用 OSS CLI 优先的安全流程上传本地文件夹到一个或多个阿里云 OSS 目标，并提供可选 Node.js 版本。",
+      "keywords": [
+        "oss",
+        "aliyun",
+        "object-storage",
+        "upload",
+        "static-site"
+      ]
+    },
+    {
+      "name": "aws-s3-upload-folder",
+      "title": "AWS S3 Upload Folder",
+      "latestVersion": "v1.0.2",
+      "tag": "aws-s3-upload-folder/v1.0.2",
+      "path": "skills/aws-s3-upload-folder/",
+      "skillFile": "skills/aws-s3-upload-folder/SKILL.md",
+      "readme": "skills/aws-s3-upload-folder/README.md",
+      "source": "skills/aws-s3-upload-folder/SOURCE.md",
+      "release": "skills/aws-s3-upload-folder/RELEASE.md",
+      "categories": [
+        "object-storage-and-cdn"
+      ],
+      "author": "Jeronasand & Codex",
+      "sourceType": "original",
+      "requiresEnv": true,
+      "hasScripts": true,
+      "hasExamples": true,
+      "description": "使用 AWS CLI 将本地文件夹上传或同步到一个或多个 Amazon S3 目标。",
+      "keywords": [
+        "aws",
+        "s3",
+        "object-storage",
+        "upload",
+        "static-site"
+      ]
+    },
+    {
+      "name": "aws-cloudfront-invalidate",
+      "title": "AWS CloudFront Invalidate",
+      "latestVersion": "v1.0.1",
+      "tag": "aws-cloudfront-invalidate/v1.0.1",
+      "path": "skills/aws-cloudfront-invalidate/",
+      "skillFile": "skills/aws-cloudfront-invalidate/SKILL.md",
+      "readme": "skills/aws-cloudfront-invalidate/README.md",
+      "source": "skills/aws-cloudfront-invalidate/SOURCE.md",
+      "release": "skills/aws-cloudfront-invalidate/RELEASE.md",
+      "categories": [
+        "object-storage-and-cdn"
+      ],
+      "author": "Jeronasand & Codex",
+      "sourceType": "original",
+      "requiresEnv": true,
+      "hasScripts": true,
+      "hasExamples": true,
+      "description": "使用 AWS CLI 刷新 CloudFront CDN 路径，并支持 alias 校验。",
+      "keywords": [
+        "aws",
+        "cloudfront",
+        "cdn",
+        "invalidate",
+        "cache"
+      ]
+    },
+    {
+      "name": "ai-cli-context-governance",
+      "title": "AI CLI Context Governance",
+      "latestVersion": "v1.0.3",
+      "tag": "ai-cli-context-governance/v1.0.3",
+      "path": "skills/ai-cli-context-governance/",
+      "skillFile": "skills/ai-cli-context-governance/SKILL.md",
+      "readme": "skills/ai-cli-context-governance/README.md",
+      "source": "skills/ai-cli-context-governance/SOURCE.md",
+      "release": "skills/ai-cli-context-governance/RELEASE.md",
+      "categories": [
+        "ai-cli-architecture"
+      ],
+      "author": "Community PDF, organized by Jeronasand & Codex",
+      "sourceType": "community-source",
+      "requiresEnv": false,
+      "hasScripts": false,
+      "hasExamples": true,
+      "description": "AI CLI 长上下文性能、幻觉治理、检索、压缩和证据约束工作流。",
+      "keywords": [
+        "ai-cli",
+        "context",
+        "retrieval",
+        "compaction",
+        "hallucination"
+      ]
+    },
+    {
+      "name": "bucket-upload-policy",
+      "title": "Bucket Upload Policy",
+      "latestVersion": "v1.0.1",
+      "tag": "bucket-upload-policy/v1.0.1",
+      "path": "skills/bucket-upload-policy/",
+      "skillFile": "skills/bucket-upload-policy/SKILL.md",
+      "readme": "skills/bucket-upload-policy/README.md",
+      "source": "skills/bucket-upload-policy/SOURCE.md",
+      "release": "skills/bucket-upload-policy/RELEASE.md",
+      "categories": [
+        "object-storage-and-cdn"
+      ],
+      "author": "Jeronasand & Codex",
+      "sourceType": "original",
+      "requiresEnv": false,
+      "hasScripts": false,
+      "hasExamples": false,
+      "description": "判断 skill 相关大文件或二进制资产是否应上传到 OSS/S3，并生成仓库内 artifact manifest。",
+      "keywords": [
+        "artifact",
+        "oss",
+        "s3",
+        "manifest",
+        "large-files"
+      ]
+    },
+    {
+      "name": "public-skills-catalog",
+      "title": "Public Skills Catalog",
+      "latestVersion": "v1.0.0",
+      "tag": "public-skills-catalog/v1.0.0",
+      "path": "skills/public-skills-catalog/",
+      "skillFile": "skills/public-skills-catalog/SKILL.md",
+      "readme": "skills/public-skills-catalog/README.md",
+      "source": "skills/public-skills-catalog/SOURCE.md",
+      "release": "skills/public-skills-catalog/RELEASE.md",
+      "categories": [
+        "repository-maintenance"
+      ],
+      "author": "Jeronasand & Codex",
+      "sourceType": "original",
+      "requiresEnv": false,
+      "hasScripts": false,
+      "hasExamples": false,
+      "description": "读取 public-skills 的 catalog、categories 和 associations JSON，帮助 AI 快速了解、筛选、组合和安装可用 skills。",
+      "keywords": [
+        "catalog",
+        "index",
+        "skill-discovery",
+        "classification",
+        "associations"
+      ]
+    }
+  ]
+}
