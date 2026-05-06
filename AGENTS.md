@@ -27,6 +27,7 @@
 - `skills/<skill-name>/SKILL.md`：每个 skill 的主说明文件。
 - `skills/<skill-name>/README.md`：每个 skill 的中文说明文件，必须存在。
 - `skills/<skill-name>/SOURCE.md`：每个 skill 的来源和作者记录文件，必须存在。
+- `skills/<skill-name>/RELEASE.md`：每个 skill 的独立发布记录文件，必须存在。
 - `skills/<skill-name>/scripts/`：可选，放置该 skill 需要复用的脚本。
 - `skills/<skill-name>/references/`：可选，放置该 skill 的补充参考文档。
 - `skills/<skill-name>/examples/`：可选但涉及测试时必需，放置人工测试记录、样例输入输出和验证说明。
@@ -40,12 +41,14 @@
 - 新增公开 skill 的首个稳定版本从 `v1.0.0` 开始。
 - 修复同一 skill 的错误递增 patch，新增兼容能力递增 minor，破坏性变更递增 major。
 - 每次发布新 tag 前，必须同步更新 `skills/README.md` 中的当前版本和版本记录。
+- 每个 skill 必须单独发布版本 tag，并维护自己的 `RELEASE.md`；如果 GitHub Release 可用，每个 tag 也要单独创建 GitHub Release。
 
 ## 编写要求
 
 - `SKILL.md` 使用清晰的触发条件开头，说明什么时候应该使用该 skill。
 - `README.md` 必须使用中文，面向人类使用者说明用途、安装/引用方式、环境变量、常用命令、版本和注意事项。
 - `SOURCE.md` 必须记录作者、来源类型、源 skill 地址或说明、当前维护者和使用要求。
+- `RELEASE.md` 必须记录当前版本、上一版本、发布类型、变更内容、artifact、验证项和 GitHub Release 状态。
 - 自己创建的 skill，作者写 `Jeronasand & Codex`，来源类型写 `original`。
 - 来自其他作者或其他 skill 源的 skill，必须注明原作者、源地址、原始版本或引用时间；使用时应优先使用源 skill，不要把来源不明的副本当作自建内容。
 - 操作步骤要可执行，避免只写概念解释。

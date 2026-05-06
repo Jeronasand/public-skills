@@ -21,7 +21,7 @@ aws cloudfront get-distribution --id EXAMPLE_DISTRIBUTION_ID
 skills:
   - name: aws-cloudfront-invalidate
     repo: git@github.com:Jeronasand/public-skills.git
-    ref: aws-cloudfront-invalidate/v1.0.0
+    ref: aws-cloudfront-invalidate/v1.0.1
 ```
 
 ## 环境变量
@@ -87,4 +87,5 @@ AWS_CLOUDFRONT_PATHS=
 
 ## 版本
 
-- 当前版本：`aws-cloudfront-invalidate/v1.0.0`
+- `v1.0.1`：补充独立 RELEASE.md 发布记录。
+- 当前版本：`aws-cloudfront-invalidate/v1.0.1`

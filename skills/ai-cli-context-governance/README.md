@@ -19,7 +19,7 @@
 skills:
   - name: ai-cli-context-governance
     repo: git@github.com:Jeronasand/public-skills.git
-    ref: ai-cli-context-governance/v1.0.1
+    ref: ai-cli-context-governance/v1.0.3
 ```
 
 ## 使用场景
@@ -89,7 +89,8 @@ https://publick-skills.jeronasand.cn/skills/ai-cli-context-governance/v1.0.1/AI_
 
 ## 版本
 
-- 当前版本：`ai-cli-context-governance/v1.0.2`
+- `v1.0.3`：补充独立 RELEASE.md 发布记录。
+- 当前版本：`ai-cli-context-governance/v1.0.3`
 - `v1.0.2`：更新 PDF artifact 上传状态，公开访问已验证。
 - `v1.0.1`：补充原始 PDF 的 OSS artifact manifest。
 - `v1.0.0`：新增 AI CLI 上下文治理 skill。

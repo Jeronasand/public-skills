@@ -100,4 +100,5 @@ S3 上传使用 AWS CLI 本地配置：
 
 ## 版本
 
-- 当前版本：`bucket-upload-policy/v1.0.0`
+- `v1.0.1`：补充独立 RELEASE.md 发布记录。
+- 当前版本：`bucket-upload-policy/v1.0.1`

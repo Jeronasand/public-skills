@@ -33,7 +33,7 @@ aws s3 ls s3://example-bucket/example-prefix/
 skills:
   - name: aws-s3-upload-folder
     repo: git@github.com:Jeronasand/public-skills.git
-    ref: aws-s3-upload-folder/v1.0.0
+    ref: aws-s3-upload-folder/v1.0.2
 ```
 
 ## 环境变量
@@ -113,6 +113,7 @@ AWS_S3_UPLOAD_ACL=
 
 ## 版本
 
-- 当前版本：`aws-s3-upload-folder/v1.0.1`
+- `v1.0.2`：补充独立 RELEASE.md 发布记录。
+- 当前版本：`aws-s3-upload-folder/v1.0.2`
 - `v1.0.1`：支持多个 `--s3-uri` 目标。
 - `v1.0.0`：新增 AWS CLI S3 上传 skill。

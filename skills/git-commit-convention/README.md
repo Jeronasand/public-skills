@@ -19,7 +19,7 @@
 skills:
   - name: git-commit-convention
     repo: git@github.com:Jeronasand/public-skills.git
-    ref: git-commit-convention/v1.0.2
+    ref: git-commit-convention/v1.0.3
 ```
 
 ## 常用输出
@@ -44,7 +44,8 @@ fix: correct validation command
 
 ## 版本
 
-- 当前版本：`git-commit-convention/v1.0.2`
+- `v1.0.3`：补充独立 RELEASE.md 发布记录。
+- 当前版本：`git-commit-convention/v1.0.3`
 - `v1.0.2`：补充中文 README。
 - `v1.0.1`：补充来源记录。
 - `v1.0.0`：新增 git 提交规范 skill。

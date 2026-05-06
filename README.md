@@ -18,6 +18,7 @@ public-skills/
         ├── SKILL.md
         ├── README.md
         ├── SOURCE.md
+        ├── RELEASE.md
         ├── scripts/
         ├── references/
         └── examples/
@@ -117,14 +118,16 @@ skills:
 1. 在 `skills/<skill-name>/` 下创建 `SKILL.md`。
 2. 在 `skills/<skill-name>/README.md` 下写中文使用说明。
 3. 在 `skills/<skill-name>/SOURCE.md` 下记录作者和来源。
-4. 如需脚本，放到 `scripts/`；如需补充文档，放到 `references/`。
-5. 如果需要环境变量，在 skill 目录内创建 `skills/<skill-name>/.env.<skill-name>.example`。
-6. 如果 skill 会产生本地 env、临时文件、测试输出或工具缓存，在 skill 目录内创建 `.gitignore`。
-7. 如果涉及测试或人工验证，在 `skills/<skill-name>/examples/` 下补充测试记录。
-8. 确认内容不包含密钥、账号、私有 payload 或不可公开的内部信息。
-9. 更新 `skills/README.md` 索引和版本记录。
-10. 按仓库提交规范提交。
-11. 使用 `<skill-name>/v<major>.<minor>.<patch>` 打 tag 并推送。
+4. 在 `skills/<skill-name>/RELEASE.md` 下记录独立发布信息。
+5. 如需脚本，放到 `scripts/`；如需补充文档，放到 `references/`。
+6. 如果需要环境变量，在 skill 目录内创建 `skills/<skill-name>/.env.<skill-name>.example`。
+7. 如果 skill 会产生本地 env、临时文件、测试输出或工具缓存，在 skill 目录内创建 `.gitignore`。
+8. 如果涉及测试或人工验证，在 `skills/<skill-name>/examples/` 下补充测试记录。
+9. 确认内容不包含密钥、账号、私有 payload 或不可公开的内部信息。
+10. 更新 `skills/README.md` 索引和版本记录。
+11. 按仓库提交规范提交。
+12. 使用 `<skill-name>/v<major>.<minor>.<patch>` 打 tag 并推送。
+13. 如果 GitHub Release 可用，为该 tag 单独创建 GitHub Release。
 
 ## Skill README 约定
 
@@ -151,6 +154,22 @@ Jeronasand & Codex
 ```
 
 如果 skill 来自其他作者、其他仓库或其他 skill 源，必须记录原作者、源地址、原始版本或引用时间。目标仓库使用时，应优先使用源 skill；本仓库只维护清晰注明来源的公开副本或索引，不把外部来源不明的 skill 当作自建内容。
+
+## Release 约定
+
+每个 skill 必须提供：
+
+```text
+skills/<skill-name>/RELEASE.md
+```
+
+每次发布 skill 版本时，都要同步更新：
+
+- `skills/<skill-name>/RELEASE.md`
+- `skills/<skill-name>/README.md` 中的当前版本
+- `skills/README.md` 中的索引和版本记录
+
+每个 skill 独立使用 `<skill-name>/v<major>.<minor>.<patch>` tag。不要用一个全局 release 代替多个 skill 的独立 release。如果 GitHub CLI 已登录或 GitHub Release API 可用，Codex 还要为每个 tag 单独创建 GitHub Release；如果不可用，应在 `RELEASE.md` 和最终回复中说明阻塞原因。
 
 ## 测试记录约定
 
