@@ -133,6 +133,47 @@ skills/<skill-name>/examples/
 
 该目录用于记录人工测试样例、输入输出、执行步骤、预期结果、实际结果和必要备注。测试记录必须脱敏，不能包含真实密钥、账号、私有 payload 或不可公开的业务数据。
 
+## Artifact 上传约定
+
+如果 skill 涉及 PDF、图片、视频、压缩包、二进制样例或较大的非代码/非 Markdown 文档资产，不要直接提交到仓库。默认上传到对象存储，并在仓库中保留 manifest。
+
+本仓库默认 OSS 目标：
+
+```text
+地区: oss-cn-shenzhen
+Bucket: public-skills
+域名: publick-skills.jeronasand.cn
+OSS URI: oss://public-skills/
+```
+
+推荐路径：
+
+```text
+oss://public-skills/skills/<skill-name>/<version>/
+https://publick-skills.jeronasand.cn/skills/<skill-name>/<version>/
+```
+
+OSS 上传使用 `oss-upload-folder` skill。密钥通过本机 OSS CLI 配置，例如：
+
+```bash
+ossutil config
+```
+
+配置通常保存在用户目录的本地文件中，例如：
+
+```text
+~/.ossutilconfig
+```
+
+如果使用的 OSS CLI 版本不同，以该 CLI 的 `config` / `help` 输出为准。密钥只保留在本机，不提交到 git。
+
+S3 上传使用 `aws-s3-upload-folder` skill，密钥使用本机 AWS CLI 配置：
+
+```text
+~/.aws/credentials
+~/.aws/config
+```
+
 ## 环境变量约定
 
 如果 skill 需要环境变量，必须在对应 skill 目录内提供 example 文件：

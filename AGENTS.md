@@ -17,6 +17,8 @@
 - 每个 skill 必须能独立理解用途、触发条件、输入要求、输出预期和注意事项。
 - 优先沉淀通用工作流，例如部署、文档处理、批处理、仓库维护、第三方工具集成。
 - 和单个私有项目强绑定、无法脱敏复用的内容不要直接放入本仓库；需要先抽象为公开版。
+- 如果 skill 涉及 PDF、图片、视频、压缩包、二进制样例或较大的非代码/非 Markdown 文档资产，默认上传到 OSS/S3，并在仓库中只保留链接、来源、大小和校验信息。
+- 本仓库默认 OSS artifact 目标为 `oss-cn-shenzhen` 地区的 `public-skills` bucket，对外域名为 `publick-skills.jeronasand.cn`。
 
 ## 目录约定
 
@@ -60,6 +62,15 @@
 - `SKILL.md` 必须明确要求使用者在目标仓库的 skill 目录复制一份本地配置，例如 `cp .codex/skills/<skill-name>/.env.<skill-name>.example .codex/skills/<skill-name>/.env.<skill-name>`。
 - skill 执行时应优先读取目标仓库 `.codex/skills/<skill-name>/.env.<skill-name>`，避免直接使用宿主环境或通用 `.env` 中的同名变量。
 - 如果缺少必需变量，skill 应停止并提示用户补全 `.env.<skill-name>`，不要静默回退到宿主环境。
+
+## Artifact 上传约定
+
+- 非代码、非 Markdown 文档的大文件或二进制文件不要直接提交到仓库。
+- 优先使用 `bucket-upload-policy` 判断是否需要上传到对象存储。
+- OSS 上传优先使用 `oss-upload-folder` skill，目标默认是 `oss://public-skills/skills/<skill-name>/<version>/`，endpoint 使用 `oss-cn-shenzhen.aliyuncs.com`。
+- S3 上传优先使用 `aws-s3-upload-folder` skill，目标路径同样使用 `skills/<skill-name>/<version>/` 结构。
+- OSS 密钥通过本机 OSS CLI 配置，例如 `ossutil config` 生成的用户目录配置；AWS 密钥通过本机 AWS CLI profile/config。任何密钥都不能写入仓库。
+- 上传后在对应 skill 的 `references/` 或 `examples/` 中记录 artifact manifest，而不是提交原始大文件。
 
 ## Git 提交规范
 
