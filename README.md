@@ -16,7 +16,8 @@ public-skills/
         ├── .env.<skill-name>.example
         ├── SKILL.md
         ├── scripts/
-        └── references/
+        ├── references/
+        └── examples/
 ```
 
 ## 其他项目如何引用
@@ -84,10 +85,21 @@ skills:
 1. 在 `skills/<skill-name>/` 下创建 `SKILL.md`。
 2. 如需脚本，放到 `scripts/`；如需补充文档，放到 `references/`。
 3. 如果需要环境变量，在 skill 目录内创建 `skills/<skill-name>/.env.<skill-name>.example`。
-4. 确认内容不包含密钥、账号、私有 payload 或不可公开的内部信息。
-5. 更新 `skills/README.md` 索引和版本记录。
-6. 按仓库提交规范提交。
-7. 使用 `<skill-name>/v<major>.<minor>.<patch>` 打 tag 并推送。
+4. 如果涉及测试或人工验证，在 `skills/<skill-name>/examples/` 下补充测试记录。
+5. 确认内容不包含密钥、账号、私有 payload 或不可公开的内部信息。
+6. 更新 `skills/README.md` 索引和版本记录。
+7. 按仓库提交规范提交。
+8. 使用 `<skill-name>/v<major>.<minor>.<patch>` 打 tag 并推送。
+
+## 测试记录约定
+
+如果 skill 涉及测试、验证或人工确认流程，必须提供：
+
+```text
+skills/<skill-name>/examples/
+```
+
+该目录用于记录人工测试样例、输入输出、执行步骤、预期结果、实际结果和必要备注。测试记录必须脱敏，不能包含真实密钥、账号、私有 payload 或不可公开的业务数据。
 
 ## 环境变量约定
 

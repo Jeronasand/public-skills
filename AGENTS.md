@@ -23,6 +23,7 @@
 - `skills/<skill-name>/SKILL.md`：每个 skill 的主说明文件。
 - `skills/<skill-name>/scripts/`：可选，放置该 skill 需要复用的脚本。
 - `skills/<skill-name>/references/`：可选，放置该 skill 的补充参考文档。
+- `skills/<skill-name>/examples/`：可选但涉及测试时必需，放置人工测试记录、样例输入输出和验证说明。
 - `skills/<skill-name>/.env.<skill-name>.example`：可选但有环境变量时必需，记录该 skill 需要的环境变量模板。
 - `skills/README.md`：公开 skill 索引，新增 skill 时同步更新。
 
@@ -40,6 +41,8 @@
 - 示例命令使用占位符，不能包含真实 token、私钥、cookie、账号或内部 URL。
 - 如果 skill 依赖本地工具，写清楚依赖名称、检查命令和失败时的处理方式。
 - 如果 skill 包含脚本，脚本默认先提供 dry-run 或预览能力，再执行有副作用操作。
+- 如果 skill 涉及测试、验证或人工确认流程，必须补充 `examples/` 目录记录测试样例、人工测试结果和必要的复现步骤。
+- `examples/` 中的记录必须脱敏，不写真实密钥、账号、私有 payload 或不可公开的业务数据。
 
 ## 环境变量约定
 
