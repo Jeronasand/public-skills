@@ -1,0 +1,32 @@
+# macOS and editor files
+.DS_Store
+*.swp
+*.swo
+*~
+.idea/
+.vscode/
+
+# Local environment files.
+# Skill env templates are intentionally tracked inside each skill directory.
+.env
+.env.*
+!skills/*/.env.*.example
+
+# Dependency and build outputs
+node_modules/
+dist/
+build/
+coverage/
+
+# Python caches
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Logs and temporary files
+*.log
+tmp/
+temp/
+.cache/
