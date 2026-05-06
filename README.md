@@ -43,6 +43,12 @@ https://public-skills.jeronasand.cn/skills-dna/data/skill-previews.json
 https://public-skills.jeronasand.cn/skills-dna/data/skill-scores.json
 ```
 
+每个 skill 的详情页使用子路径预览，例如：
+
+```text
+https://public-skills.jeronasand.cn/skills/git-commit-convention
+```
+
 本地运行：
 
 ```bash

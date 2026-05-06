@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
 import {
+  ArrowLeft,
   Boxes,
   Braces,
   Check,
@@ -140,6 +141,8 @@ type SkillScore = {
   updatedAt: string;
   issues: SkillIssue[];
 };
+
+type ViewMode = "list" | "detail";
 
 type SkillScores = {
   version: number;
@@ -336,6 +339,15 @@ function githubIssueUrl(skill: Skill) {
   return `https://github.com/Jeronasand/public-skills/issues/new?title=${encodeURIComponent(title)}&body=${encodeURIComponent(body)}`;
 }
 
+function skillPath(name: string) {
+  return `/skills/${encodeURIComponent(name)}`;
+}
+
+function skillNameFromPath(pathname: string) {
+  const match = pathname.match(/^\/skills\/([^/]+)\/?$/);
+  return match ? decodeURIComponent(match[1]) : "";
+}
+
 function scoreClass(score?: number) {
   if (score === undefined) return "";
   if (score >= 90) return "good";
@@ -374,6 +386,16 @@ function SkillCard({
         <span className="tag">{skill.tag}</span>
       </div>
 
+      <div className={`scoreBar ${scoreClass(score?.score)}`}>
+        <div>
+          <strong>{score?.score ?? 100}</strong>
+          <span>/100</span>
+        </div>
+        <p>
+          {score?.method === "deepseek" ? "DeepSeek V4 Pro" : "Issue fallback"} · {score?.openIssueCount || 0} open
+        </p>
+      </div>
+
       <p className="description">{skill.description}</p>
 
       <div className="chips">
@@ -397,25 +419,20 @@ function SkillCard({
         <span className="flag inherit">可继承</span>
       </div>
 
-      <div className={`scoreBar ${scoreClass(score?.score)}`}>
-        <div>
-          <strong>{score?.score ?? 100}</strong>
-          <span>/100</span>
-        </div>
-        <p>
-          {score?.openIssueCount || 0} open issue · 已修复 {score?.closedIssueCount || 0}
-        </p>
+      <div className="cardTelemetry">
+        <span>
+          <strong>{skill.createdAt || "未知"}</strong>
+          创建
+        </span>
+        <span>
+          <strong>{skill.updatedAt || "未知"}</strong>
+          更新
+        </span>
+        <span>
+          <strong>{score?.closedIssueCount || 0}</strong>
+          已修复
+        </span>
       </div>
-
-      <div className="dateGrid">
-        <span>创建 {skill.createdAt || "未知"}</span>
-        <span>更新 {skill.updatedAt || "未知"}</span>
-      </div>
-
-      <label className="promptBox">
-        <span>Agent 安装 Prompt</span>
-        <textarea readOnly value={skill.installPrompt} />
-      </label>
 
       <div className="cardActions">
         <button className="copyButton" type="button" onClick={copyPrompt}>
@@ -424,7 +441,7 @@ function SkillCard({
         </button>
         <button className="selectButton" type="button" onClick={() => onPreview(skill.name)}>
           <FileText size={16} aria-hidden="true" />
-          {active ? "正在预览" : "预览内容"}
+          {active ? "正在预览" : "查看详情"}
         </button>
         <a className="issueButton" href={githubIssueUrl(skill)} target="_blank" rel="noreferrer">
           <ExternalLink size={16} aria-hidden="true" />
@@ -440,7 +457,17 @@ function formatBytes(size: number) {
   return `${(size / 1024).toFixed(1)} KB`;
 }
 
-function SkillPreviewPanel({ skill, preview, score }: { skill: Skill; preview?: SkillPreview; score?: SkillScore }) {
+function SkillPreviewPanel({
+  skill,
+  preview,
+  score,
+  onBack,
+}: {
+  skill: Skill;
+  preview?: SkillPreview;
+  score?: SkillScore;
+  onBack: () => void;
+}) {
   const [mode, setMode] = useState<"latest" | "history">("latest");
   const [activeHistoryTag, setActiveHistoryTag] = useState("");
   const [activeFilePath, setActiveFilePath] = useState("");
@@ -464,6 +491,10 @@ function SkillPreviewPanel({ skill, preview, score }: { skill: Skill; preview?: 
     <section className="panel previewPanel">
       <div className="panelHeader">
         <div>
+          <button className="backButton" type="button" onClick={onBack}>
+            <ArrowLeft size={16} aria-hidden="true" />
+            返回技能库
+          </button>
           <h2>{skill.title}</h2>
           <p>
             {skill.name} · {skill.tag} · 创建 {preview?.createdAt || skill.createdAt || "未知"} · 更新{" "}
@@ -617,7 +648,16 @@ function App() {
   const [envOnly, setEnvOnly] = useState(false);
   const [scriptsOnly, setScriptsOnly] = useState(false);
   const [examplesOnly, setExamplesOnly] = useState(false);
-  const [activeSkillName, setActiveSkillName] = useState("");
+  const [activeSkillName, setActiveSkillName] = useState(() => skillNameFromPath(window.location.pathname));
+  const viewMode: ViewMode = activeSkillName ? "detail" : "list";
+
+  useEffect(() => {
+    function handlePopstate() {
+      setActiveSkillName(skillNameFromPath(window.location.pathname));
+    }
+    window.addEventListener("popstate", handlePopstate);
+    return () => window.removeEventListener("popstate", handlePopstate);
+  }, []);
 
   const filteredSkills = useMemo(() => {
     if (data.status !== "ready") return [];
@@ -652,11 +692,24 @@ function App() {
     setExamplesOnly(false);
   }
 
+  function previewSkill(name: string) {
+    setActiveSkillName(name);
+    const nextPath = skillPath(name);
+    if (window.location.pathname !== nextPath) {
+      window.history.pushState(null, "", nextPath);
+    }
+  }
+
+  function backToList() {
+    setActiveSkillName("");
+    if (window.location.pathname !== "/") {
+      window.history.pushState(null, "", "/");
+    }
+  }
+
   const isReady = data.status === "ready";
   const statusText = data.status === "ready" ? "目录已加载" : data.status === "error" ? "加载失败" : "正在加载";
-  const activeSkill = isReady
-    ? data.catalog.skills.find((skill) => skill.name === activeSkillName) || filteredSkills[0] || data.catalog.skills[0]
-    : undefined;
+  const activeSkill = isReady && activeSkillName ? data.catalog.skills.find((skill) => skill.name === activeSkillName) : undefined;
   const activePreview =
     isReady && activeSkill ? data.previews.skills.find((preview) => preview.name === activeSkill.name) : undefined;
   const activeScore =
@@ -669,7 +722,7 @@ function App() {
   return (
     <>
       <DnaCanvas />
-      <div className="shell">
+      <div className={`shell view-${viewMode}`}>
         <header className="topbar">
           <div className="brandBlock">
             <img
@@ -691,7 +744,7 @@ function App() {
           </div>
         </header>
 
-        <main className="layout">
+        <main className={`layout ${viewMode === "detail" ? "detailLayout" : ""}`}>
           <aside className="sidebar" aria-label="Skills filters">
             <label className="search">
               <span>
@@ -767,63 +820,75 @@ function App() {
                   <Metric value={openIssueCount} label={metricLabels.openIssues} icon={Link2} />
                 </section>
 
-                {activeSkill && <SkillPreviewPanel skill={activeSkill} preview={activePreview} score={activeScore} />}
+                {viewMode === "detail" && activeSkill ? (
+                  <SkillPreviewPanel skill={activeSkill} preview={activePreview} score={activeScore} onBack={backToList} />
+                ) : null}
 
-                <section className="panel">
-                  <div className="panelHeader">
-                    <div>
-                      <h2>Skill 分子</h2>
-                      <p>匹配到 {filteredSkills.length} 个 skill</p>
+                {viewMode === "detail" && !activeSkill ? (
+                  <div className="empty">路径中的 skill 不存在，请从下方卡片重新选择。</div>
+                ) : null}
+
+                {viewMode === "list" || !activeSkill ? (
+                  <section className="panel skillListPanel">
+                    <div className="panelHeader">
+                      <div>
+                        <h2>Skill 分子</h2>
+                        <p>匹配到 {filteredSkills.length} 个 skill</p>
+                      </div>
+                      <button className="ghostButton" type="button" onClick={resetFilters}>
+                        <RefreshCcw size={16} aria-hidden="true" />
+                        重置
+                      </button>
                     </div>
-                    <button className="ghostButton" type="button" onClick={resetFilters}>
-                      <RefreshCcw size={16} aria-hidden="true" />
-                      重置
-                    </button>
-                  </div>
 
-                  <div className="skillsGrid">
-                    {filteredSkills.length ? (
-                      filteredSkills.map((skill) => (
-                        <SkillCard
-                          skill={skill}
-                          categories={data.categories}
-                          active={activeSkill?.name === skill.name}
-                          score={data.scores.skills.find((score) => score.name === skill.name)}
-                          onPreview={setActiveSkillName}
-                          key={skill.name}
-                        />
-                      ))
-                    ) : (
-                      <div className="empty">当前筛选条件下没有匹配的 skill。</div>
-                    )}
-                  </div>
-                </section>
-
-                <section className="panel">
-                  <div className="panelHeader">
-                    <div>
-                      <h2>关联链路</h2>
-                      <p>可选安装、后续动作、同类能力和业务链路。</p>
+                    <div className="skillsGrid">
+                      {filteredSkills.length ? (
+                        filteredSkills.map((skill) => (
+                          <SkillCard
+                            skill={skill}
+                            categories={data.categories}
+                            active={activeSkill?.name === skill.name}
+                            score={data.scores.skills.find((score) => score.name === skill.name)}
+                            onPreview={previewSkill}
+                            key={skill.name}
+                          />
+                        ))
+                      ) : (
+                        <div className="empty">当前筛选条件下没有匹配的 skill。</div>
+                      )}
                     </div>
-                    <GitBranch size={22} aria-hidden="true" />
-                  </div>
-                  <AssociationList associations={data.associations} />
-                </section>
+                  </section>
+                ) : null}
 
-                <section className="panel">
-                  <div className="panelHeader">
-                    <div>
-                      <h2>目录数据源</h2>
-                      <p>官网优先读取 OSS 数据，失败后回退到本地快照。</p>
+                {viewMode === "list" ? (
+                  <section className="panel">
+                    <div className="panelHeader">
+                      <div>
+                        <h2>关联链路</h2>
+                        <p>可选安装、后续动作、同类能力和业务链路。</p>
+                      </div>
+                      <GitBranch size={22} aria-hidden="true" />
                     </div>
-                    <TerminalSquare size={22} aria-hidden="true" />
-                  </div>
-                  <div className="sourceGrid">
-                    {Object.entries(jsonFiles).map(([name, file]) => (
-                      <code key={name}>{`${remoteDataBase}/${file}`}</code>
-                    ))}
-                  </div>
-                </section>
+                    <AssociationList associations={data.associations} />
+                  </section>
+                ) : null}
+
+                {viewMode === "list" ? (
+                  <section className="panel">
+                    <div className="panelHeader">
+                      <div>
+                        <h2>目录数据源</h2>
+                        <p>官网优先读取 OSS 数据，失败后回退到本地快照。</p>
+                      </div>
+                      <TerminalSquare size={22} aria-hidden="true" />
+                    </div>
+                    <div className="sourceGrid">
+                      {Object.entries(jsonFiles).map(([name, file]) => (
+                        <code key={name}>{`${remoteDataBase}/${file}`}</code>
+                      ))}
+                    </div>
+                  </section>
+                ) : null}
               </>
             )}
           </section>

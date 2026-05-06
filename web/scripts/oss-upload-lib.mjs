@@ -1,5 +1,5 @@
 import { readFileSync, readdirSync, statSync } from "node:fs";
-import { extname, resolve } from "node:path";
+import { basename, extname, resolve } from "node:path";
 
 export function loadSkillEnv(envFile) {
   try {
@@ -40,6 +40,7 @@ export function listFiles(dir) {
 
 function guessMime(file) {
   const ext = extname(file).toLowerCase();
+  if (!ext && basename(file) !== file) return "text/html; charset=utf-8";
   const mimeByExt = {
     ".css": "text/css; charset=utf-8",
     ".html": "text/html; charset=utf-8",

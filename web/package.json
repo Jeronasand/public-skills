@@ -8,7 +8,7 @@
     "sync:data": "node scripts/sync-data.mjs",
     "upload:data:dry-run": "node scripts/sync-data.mjs --dry-run",
     "upload:data": "node scripts/sync-data.mjs --upload",
-    "build": "vite build",
+    "build": "vite build && node scripts/prepare-routes.mjs",
     "upload:web:dry-run": "node scripts/upload-web.mjs --dry-run",
     "upload:web": "node scripts/upload-web.mjs --upload",
     "configure:website": "node scripts/configure-website.mjs",
