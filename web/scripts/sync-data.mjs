@@ -12,7 +12,14 @@ const publicDataDir = resolve(webDir, "public", "data");
 const uploadDir = resolve(repoDir, "artifact-upload", "skills-dna", "data");
 const envFile = resolve(repoDir, "skills", "oss-upload-folder", ".env.oss-upload-folder");
 const scoringEnvFile = resolve(webDir, ".env.skills-dna-scoring");
-const files = ["catalog.json", "categories.json", "associations.json", "skill-previews.json", "skill-scores.json"];
+const files = [
+  "catalog.json",
+  "categories.json",
+  "associations.json",
+  "skill-previews.json",
+  "skill-scores.json",
+  "skill-search-recommendations.json",
+];
 const githubRepo = "Jeronasand/public-skills";
 
 const textExtensions = new Set([
@@ -336,6 +343,40 @@ async function scoreWithDeepSeek({ skill, preview, issues }) {
   };
 }
 
+async function completeWithDeepSeek({ system, prompt, maxTokens = 1800 }) {
+  const apiKey = process.env.DEEPSEEK_API_KEY;
+  if (!apiKey) return null;
+  const model = process.env.DEEPSEEK_MODEL || "deepseek-v4-pro";
+  const response = await fetch(deepseekUrl(), {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      model,
+      messages: [
+        { role: "system", content: system },
+        { role: "user", content: JSON.stringify(prompt) },
+      ],
+      temperature: 0.1,
+      max_tokens: maxTokens,
+      thinking: { type: "disabled" },
+      response_format: { type: "json_object" },
+    }),
+  });
+
+  if (!response.ok) {
+    throw new Error(`DeepSeek request failed: ${response.status} ${await response.text()}`);
+  }
+  const data = await response.json();
+  const content = data.choices?.[0]?.message?.content || "";
+  return {
+    model,
+    result: parseJsonObject(content),
+  };
+}
+
 function fallbackScore(skill, matched, generatedAt) {
   const openIssues = matched.filter((issue) => issue.state === "OPEN");
   const closedIssues = matched.filter((issue) => issue.state === "CLOSED");
@@ -424,6 +465,93 @@ async function buildScoreData(catalog, previews) {
   };
 }
 
+function uniqueList(items, limit = 10) {
+  return [...new Set(items.map((item) => String(item || "").trim()).filter(Boolean))].slice(0, limit);
+}
+
+function fallbackSearchRecommendation(skill) {
+  return {
+    method: "fallback",
+    model: null,
+    aliases: uniqueList([skill.title, skill.name, ...skill.keywords], 8),
+    intents: uniqueList([skill.description, ...skill.categories], 6),
+    useCases: uniqueList([skill.description], 4),
+    priorityTerms: uniqueList([...skill.keywords, skill.name, skill.title, ...skill.categories], 12),
+  };
+}
+
+async function recommendWithDeepSeek({ skill, preview }) {
+  const files = (preview?.latest.files || [])
+    .filter((file) => ["SKILL.md", "README.md"].includes(file.path))
+    .map((file) => ({ path: file.path, content: file.content.slice(0, 6000) }));
+  const response = await completeWithDeepSeek({
+    system:
+      "You generate search recommendation metadata for a public Codex skill catalog. Return only valid JSON matching the requested schema.",
+    prompt: {
+      task: "Create Chinese and English search recommendation metadata for this reusable skill.",
+      rules: [
+        "Generate terms users are likely to search for when they need this skill.",
+        "Include Chinese aliases, English aliases, task intents, and concrete use cases.",
+        "Do not invent private project names or secrets.",
+        "Return strict JSON only.",
+      ],
+      outputSchema: {
+        aliases: ["short search alias"],
+        intents: ["user intent phrase"],
+        useCases: ["one concrete use case sentence"],
+        priorityTerms: ["high value keyword"],
+      },
+      skill: {
+        name: skill.name,
+        title: skill.title,
+        categories: skill.categories,
+        keywords: skill.keywords,
+        description: skill.description,
+        files,
+      },
+    },
+    maxTokens: 1800,
+  });
+  if (!response) return null;
+  const result = response.result;
+  return {
+    method: "deepseek",
+    model: response.model,
+    aliases: uniqueList(Array.isArray(result.aliases) ? result.aliases : [], 10),
+    intents: uniqueList(Array.isArray(result.intents) ? result.intents : [], 8),
+    useCases: uniqueList(Array.isArray(result.useCases) ? result.useCases : [], 6),
+    priorityTerms: uniqueList(Array.isArray(result.priorityTerms) ? result.priorityTerms : [], 12),
+  };
+}
+
+async function buildSearchRecommendationData(catalog, previews) {
+  loadLocalEnv(scoringEnvFile);
+  const generatedAt = new Date().toISOString();
+  return {
+    version: 1,
+    generatedAt,
+    repository: githubRepo,
+    skills: await Promise.all(
+      catalog.skills.map(async (skill) => {
+        const preview = previews.skills.find((item) => item.name === skill.name);
+        let recommendation = fallbackSearchRecommendation(skill);
+        try {
+          const deepseekRecommendation = await recommendWithDeepSeek({ skill, preview });
+          if (deepseekRecommendation) recommendation = deepseekRecommendation;
+        } catch (error) {
+          console.warn(`DeepSeek search recommendation fallback for ${skill.name}: ${error.message}`);
+        }
+        return {
+          name: skill.name,
+          tag: skill.tag,
+          ...recommendation,
+          updatedAt: generatedAt,
+        };
+      }),
+    ),
+  };
+}
+
 mkdirSync(publicDataDir, { recursive: true });
 mkdirSync(uploadDir, { recursive: true });
 
@@ -432,9 +560,11 @@ const catalog = JSON.parse(readFileSync(catalogPath, "utf8"));
 const previews = buildPreviewData(catalog);
 const nextCatalog = syncCatalogTimestamps(catalog, previews);
 const scores = await buildScoreData(nextCatalog, previews);
+const recommendations = await buildSearchRecommendationData(nextCatalog, previews);
 writeFileSync(catalogPath, `${JSON.stringify(nextCatalog, null, 2)}\n`);
 writeFileSync(resolve(sourceDir, "skill-previews.json"), `${JSON.stringify(previews, null, 2)}\n`);
 writeFileSync(resolve(sourceDir, "skill-scores.json"), `${JSON.stringify(scores, null, 2)}\n`);
+writeFileSync(resolve(sourceDir, "skill-search-recommendations.json"), `${JSON.stringify(recommendations, null, 2)}\n`);
 
 for (const file of files) {
   copyFileSync(resolve(sourceDir, file), resolve(publicDataDir, file));

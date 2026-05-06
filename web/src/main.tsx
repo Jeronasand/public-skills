@@ -142,6 +142,28 @@ type SkillScore = {
   issues: SkillIssue[];
 };
 
+type SkillSearchRecommendation = {
+  name: string;
+  method: "deepseek" | "fallback";
+  model: string | null;
+  aliases: string[];
+  intents: string[];
+  useCases: string[];
+  priorityTerms: string[];
+};
+
+type SkillSearchRecommendations = {
+  version: number;
+  generatedAt: string;
+  repository: string;
+  skills: SkillSearchRecommendation[];
+};
+
+type LiveSearchSuggestion = {
+  name: string;
+  reason: string;
+};
+
 type ViewMode = "list" | "detail";
 
 type SkillScores = {
@@ -166,6 +188,7 @@ type SkillsData =
       associations: Associations;
       previews: SkillPreviews;
       scores: SkillScores;
+      recommendations: SkillSearchRecommendations;
       error: null;
     };
 
@@ -184,6 +207,7 @@ const jsonFiles = {
   associations: "associations.json",
   previews: "skill-previews.json",
   scores: "skill-scores.json",
+  recommendations: "skill-search-recommendations.json",
 };
 
 const remoteDataBase =
@@ -283,9 +307,12 @@ function useSkillsData() {
       loadJson<Associations>(jsonFiles.associations),
       loadJson<SkillPreviews>(jsonFiles.previews),
       loadJson<SkillScores>(jsonFiles.scores),
+      loadJson<SkillSearchRecommendations>(jsonFiles.recommendations),
     ])
-      .then(([catalog, categories, associations, previews, scores]) => {
-        if (alive) setData({ status: "ready", catalog, categories, associations, previews, scores, error: null });
+      .then(([catalog, categories, associations, previews, scores, recommendations]) => {
+        if (alive) {
+          setData({ status: "ready", catalog, categories, associations, previews, scores, recommendations, error: null });
+        }
       })
       .catch((error) => {
         if (alive) setData({ status: "error", error });
@@ -348,6 +375,109 @@ function skillNameFromPath(pathname: string) {
   return match ? decodeURIComponent(match[1]) : "";
 }
 
+function displayVersion(tag: string) {
+  return tag.split("/").pop() || tag;
+}
+
+function searchTextFor(skill: Skill, recommendation?: SkillSearchRecommendation) {
+  return [
+    skill.name,
+    skill.title,
+    skill.tag,
+    displayVersion(skill.tag),
+    skill.description,
+    skill.author,
+    skill.sourceType,
+    ...(skill.categories || []),
+    ...(skill.keywords || []),
+    ...(recommendation?.aliases || []),
+    ...(recommendation?.intents || []),
+    ...(recommendation?.useCases || []),
+    ...(recommendation?.priorityTerms || []),
+  ]
+    .join(" ")
+    .toLowerCase();
+}
+
+function searchRank(skill: Skill, query: string, recommendation?: SkillSearchRecommendation) {
+  if (!query) return 0;
+  let rank = 0;
+  if (skill.name.toLowerCase().includes(query)) rank += 80;
+  if (skill.title.toLowerCase().includes(query)) rank += 70;
+  if ((recommendation?.priorityTerms || []).join(" ").toLowerCase().includes(query)) rank += 55;
+  if ((recommendation?.intents || []).join(" ").toLowerCase().includes(query)) rank += 40;
+  if ((recommendation?.useCases || []).join(" ").toLowerCase().includes(query)) rank += 30;
+  if (searchTextFor(skill, recommendation).includes(query)) rank += 10;
+  return rank;
+}
+
+async function fetchDeepSeekSearchSuggestions({
+  apiKey,
+  query,
+  skills,
+  recommendations,
+}: {
+  apiKey: string;
+  query: string;
+  skills: Skill[];
+  recommendations: SkillSearchRecommendation[];
+}) {
+  const catalog = skills.map((skill) => {
+    const recommendation = recommendations.find((item) => item.name === skill.name);
+    return {
+      name: skill.name,
+      title: skill.title,
+      version: displayVersion(skill.tag),
+      categories: skill.categories,
+      description: skill.description,
+      keywords: skill.keywords,
+      aliases: recommendation?.aliases || [],
+      intents: recommendation?.intents || [],
+      useCases: recommendation?.useCases || [],
+      priorityTerms: recommendation?.priorityTerms || [],
+    };
+  });
+  const response = await fetch("https://api.deepseek.com/chat/completions", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      model: "deepseek-v4-pro",
+      messages: [
+        {
+          role: "system",
+          content:
+            "You recommend the best public Codex skills for a user search query. Return only valid JSON. Do not include secrets.",
+        },
+        {
+          role: "user",
+          content: JSON.stringify({
+            query,
+            rules: [
+              "Pick at most 3 skills from the given catalog.",
+              "Only return skill names that exist in the catalog.",
+              "Explain each recommendation in short Chinese.",
+              "Return JSON schema: {\"suggestions\":[{\"name\":\"skill-name\",\"reason\":\"中文理由\"}]}",
+            ],
+            catalog,
+          }),
+        },
+      ],
+      temperature: 0.1,
+      max_tokens: 1200,
+      thinking: { type: "disabled" },
+      response_format: { type: "json_object" },
+    }),
+  });
+  if (!response.ok) throw new Error(`DeepSeek search failed: ${response.status}`);
+  const data = await response.json();
+  const content = data.choices?.[0]?.message?.content || "";
+  const parsed = JSON.parse(content);
+  return Array.isArray(parsed.suggestions) ? (parsed.suggestions as LiveSearchSuggestion[]) : [];
+}
+
 function scoreClass(score?: number) {
   if (score === undefined) return "";
   if (score >= 90) return "good";
@@ -368,22 +498,22 @@ function SkillCard({
   score?: SkillScore;
   onPreview: (name: string) => void;
 }) {
-  const [copied, setCopied] = useState(false);
-
-  async function copyPrompt() {
-    await navigator.clipboard.writeText(skill.installPrompt);
-    setCopied(true);
-    window.setTimeout(() => setCopied(false), 1200);
-  }
-
   return (
-    <article className={`skillCard ${active ? "activeSkill" : ""}`}>
+    <article
+      className={`skillCard ${active ? "activeSkill" : ""}`}
+      role="button"
+      tabIndex={0}
+      onClick={() => onPreview(skill.name)}
+      onKeyDown={(event) => {
+        if (event.key === "Enter" || event.key === " ") onPreview(skill.name);
+      }}
+    >
       <div className="cardTop">
         <div>
           <h3>{skill.title}</h3>
           <p className="skillName">{skill.name}</p>
         </div>
-        <span className="tag">{skill.tag}</span>
+        <span className="tag">{displayVersion(skill.tag)}</span>
       </div>
 
       <div className={`scoreBar ${scoreClass(score?.score)}`}>
@@ -435,15 +565,24 @@ function SkillCard({
       </div>
 
       <div className="cardActions">
-        <button className="copyButton" type="button" onClick={copyPrompt}>
-          {copied ? <Check size={16} /> : <Copy size={16} />}
-          {copied ? "已复制" : "复制 Prompt"}
-        </button>
-        <button className="selectButton" type="button" onClick={() => onPreview(skill.name)}>
+        <button
+          className="selectButton"
+          type="button"
+          onClick={(event) => {
+            event.stopPropagation();
+            onPreview(skill.name);
+          }}
+        >
           <FileText size={16} aria-hidden="true" />
           {active ? "正在预览" : "查看详情"}
         </button>
-        <a className="issueButton" href={githubIssueUrl(skill)} target="_blank" rel="noreferrer">
+        <a
+          className="issueButton"
+          href={githubIssueUrl(skill)}
+          target="_blank"
+          rel="noreferrer"
+          onClick={(event) => event.stopPropagation()}
+        >
           <ExternalLink size={16} aria-hidden="true" />
           提交 Issue
         </a>
@@ -617,6 +756,7 @@ function SkillPreviewPanel({
   score?: SkillScore;
   onBack: () => void;
 }) {
+  const [copiedPrompt, setCopiedPrompt] = useState(false);
   const [mode, setMode] = useState<"latest" | "history">("latest");
   const [activeHistoryTag, setActiveHistoryTag] = useState("");
   const [activeFilePath, setActiveFilePath] = useState("");
@@ -636,6 +776,12 @@ function SkillPreviewPanel({
     setActiveFilePath("");
   }, [mode, activeHistoryTag]);
 
+  async function copyPrompt() {
+    await navigator.clipboard.writeText(skill.installPrompt);
+    setCopiedPrompt(true);
+    window.setTimeout(() => setCopiedPrompt(false), 1200);
+  }
+
   return (
     <section className="panel previewPanel">
       <div className="panelHeader">
@@ -646,7 +792,7 @@ function SkillPreviewPanel({
           </button>
           <h2>{skill.title}</h2>
           <p>
-            {skill.name} · {skill.tag} · 创建 {preview?.createdAt || skill.createdAt || "未知"} · 更新{" "}
+            {skill.name} · {displayVersion(skill.tag)} · 创建 {preview?.createdAt || skill.createdAt || "未知"} · 更新{" "}
             {preview?.updatedAt || skill.updatedAt || "未知"}
           </p>
         </div>
@@ -715,6 +861,17 @@ function SkillPreviewPanel({
             </div>
           ) : null}
 
+          <div className="promptAction">
+            <div>
+              <strong>Agent 安装 Prompt</strong>
+              <span>{skill.installPrompt}</span>
+            </div>
+            <button className="copyButton" type="button" onClick={copyPrompt}>
+              {copiedPrompt ? <Check size={16} aria-hidden="true" /> : <Copy size={16} aria-hidden="true" />}
+              {copiedPrompt ? "已复制" : "复制 Prompt"}
+            </button>
+          </div>
+
           <div className="previewLayout">
             <aside className="fileRail">
               {mode === "history" && (
@@ -723,7 +880,7 @@ function SkillPreviewPanel({
                   <select value={activeHistory?.tag || ""} onChange={(event) => setActiveHistoryTag(event.target.value)}>
                     {preview.history.map((item) => (
                       <option key={item.tag} value={item.tag}>
-                        {item.tag} · {item.createdAt}
+                        {displayVersion(item.tag)} · {item.createdAt}
                       </option>
                     ))}
                   </select>
@@ -750,7 +907,7 @@ function SkillPreviewPanel({
                 <>
                   <div className="filePreviewHeader">
                     <strong>{activeFile.path}</strong>
-                    <span>{mode === "latest" ? "latest" : activeHistory?.tag}</span>
+                    <span>{mode === "latest" ? "latest" : activeHistory ? displayVersion(activeHistory.tag) : ""}</span>
                   </div>
                   {isMarkdownFile(activeFile) ? (
                     <MarkdownPreview content={activeFile.content} />
@@ -802,6 +959,9 @@ function App() {
   const [scriptsOnly, setScriptsOnly] = useState(false);
   const [examplesOnly, setExamplesOnly] = useState(false);
   const [activeSkillName, setActiveSkillName] = useState(() => skillNameFromPath(window.location.pathname));
+  const [deepSeekKey, setDeepSeekKey] = useState(() => window.localStorage.getItem("skills-dna-deepseek-key") || "");
+  const [liveSuggestions, setLiveSuggestions] = useState<LiveSearchSuggestion[]>([]);
+  const [liveSearchState, setLiveSearchState] = useState<"idle" | "loading" | "error">("idle");
   const viewMode: ViewMode = activeSkillName ? "detail" : "list";
 
   useEffect(() => {
@@ -812,30 +972,103 @@ function App() {
     return () => window.removeEventListener("popstate", handlePopstate);
   }, []);
 
+  useEffect(() => {
+    if (deepSeekKey) window.localStorage.setItem("skills-dna-deepseek-key", deepSeekKey);
+    else window.localStorage.removeItem("skills-dna-deepseek-key");
+  }, [deepSeekKey]);
+
+  useEffect(() => {
+    if (data.status !== "ready") return undefined;
+    const normalizedQuery = query.trim();
+    if (!deepSeekKey || normalizedQuery.length < 2) {
+      setLiveSuggestions([]);
+      setLiveSearchState("idle");
+      return undefined;
+    }
+    let cancelled = false;
+    setLiveSearchState("loading");
+    const timer = window.setTimeout(() => {
+      fetchDeepSeekSearchSuggestions({
+        apiKey: deepSeekKey,
+        query: normalizedQuery,
+        skills: data.catalog.skills,
+        recommendations: data.recommendations.skills,
+      })
+        .then((suggestions) => {
+          if (!cancelled) {
+            setLiveSuggestions(suggestions);
+            setLiveSearchState("idle");
+          }
+        })
+        .catch((error) => {
+          console.warn(error);
+          if (!cancelled) {
+            setLiveSuggestions([]);
+            setLiveSearchState("error");
+          }
+        });
+    }, 450);
+    return () => {
+      cancelled = true;
+      window.clearTimeout(timer);
+    };
+  }, [data, deepSeekKey, query]);
+
   const filteredSkills = useMemo(() => {
     if (data.status !== "ready") return [];
     const normalizedQuery = query.trim().toLowerCase();
-    return data.catalog.skills.filter((skill) => {
-      if (activeCategory !== "all" && !skill.categories.includes(activeCategory)) return false;
-      if (envOnly && !skill.requiresEnv) return false;
-      if (scriptsOnly && !skill.hasScripts) return false;
-      if (examplesOnly && !skill.hasExamples) return false;
-      if (!normalizedQuery) return true;
-      return [
-        skill.name,
-        skill.title,
-        skill.tag,
-        skill.description,
-        skill.author,
-        skill.sourceType,
-        ...(skill.categories || []),
-        ...(skill.keywords || []),
-      ]
-        .join(" ")
-        .toLowerCase()
-        .includes(normalizedQuery);
-    });
+    const recommendationByName = new Map(data.recommendations.skills.map((item) => [item.name, item]));
+    return data.catalog.skills
+      .filter((skill) => {
+        if (activeCategory !== "all" && !skill.categories.includes(activeCategory)) return false;
+        if (envOnly && !skill.requiresEnv) return false;
+        if (scriptsOnly && !skill.hasScripts) return false;
+        if (examplesOnly && !skill.hasExamples) return false;
+        if (!normalizedQuery) return true;
+        return searchTextFor(skill, recommendationByName.get(skill.name)).includes(normalizedQuery);
+      })
+      .sort((a, b) => {
+        if (!normalizedQuery) return 0;
+        return (
+          searchRank(b, normalizedQuery, recommendationByName.get(b.name)) -
+          searchRank(a, normalizedQuery, recommendationByName.get(a.name))
+        );
+      });
   }, [activeCategory, data, envOnly, examplesOnly, query, scriptsOnly]);
+
+  const suggestedSkills = useMemo(() => {
+    if (data.status !== "ready") return [];
+    const normalizedQuery = query.trim().toLowerCase();
+    if (!normalizedQuery) return [];
+    const recommendationByName = new Map(data.recommendations.skills.map((item) => [item.name, item]));
+    if (liveSuggestions.length) {
+      return liveSuggestions
+        .map((suggestion) => {
+          const skill = data.catalog.skills.find((item) => item.name === suggestion.name);
+          return skill
+            ? {
+                skill,
+                rank: 100,
+                recommendation: recommendationByName.get(skill.name),
+                reason: suggestion.reason,
+                source: "live" as const,
+              }
+            : null;
+        })
+        .filter((item): item is NonNullable<typeof item> => Boolean(item))
+        .slice(0, 3);
+    }
+    return filteredSkills
+      .map((skill) => ({
+        skill,
+        rank: searchRank(skill, normalizedQuery, recommendationByName.get(skill.name)),
+        recommendation: recommendationByName.get(skill.name),
+        reason: recommendationByName.get(skill.name)?.useCases[0] || skill.description,
+        source: "local" as const,
+      }))
+      .filter((item) => item.rank > 0)
+      .slice(0, 3);
+  }, [data, filteredSkills, liveSuggestions, query]);
 
   function resetFilters() {
     setActiveCategory("all");
@@ -899,19 +1132,6 @@ function App() {
 
         <main className={`layout ${viewMode === "detail" ? "detailLayout" : ""}`}>
           <aside className="sidebar" aria-label="Skills filters">
-            <label className="search">
-              <span>
-                <Search size={14} aria-hidden="true" />
-                搜索
-              </span>
-              <input
-                type="search"
-                placeholder="skill、tag、关键词..."
-                value={query}
-                onChange={(event) => setQuery(event.target.value)}
-              />
-            </label>
-
             <section className="filterGroup">
               <h2>分类</h2>
               <div className="categoryList">
@@ -965,6 +1185,51 @@ function App() {
 
             {isReady && (
               <>
+                {viewMode === "list" ? (
+                  <section className="searchDock">
+                    <div className="searchDockInner">
+                      <label className="search searchHero">
+                        <span>
+                          <Search size={16} aria-hidden="true" />
+                          搜索 Skills DNA
+                        </span>
+                        <input
+                          type="search"
+                          placeholder="输入目标，例如：git 提交、OSS 上传、刷新 CDN..."
+                          value={query}
+                          onChange={(event) => setQuery(event.target.value)}
+                        />
+                      </label>
+                      <label className="search dsKey">
+                        <span>{deepSeekKey ? "DeepSeek 实时推荐已启用" : "可选：输入 DeepSeek API Key 启用实时推荐"}</span>
+                        <input
+                          type="password"
+                          placeholder="留空则使用已打包的 DS 推荐数据"
+                          value={deepSeekKey}
+                          onChange={(event) => setDeepSeekKey(event.target.value)}
+                        />
+                      </label>
+                      {suggestedSkills.length ? (
+                        <div className="searchSuggest">
+                          <div className="suggestHeader">
+                            <strong>{liveSuggestions.length ? "DS 实时推荐" : "已打包推荐"}</strong>
+                            {liveSearchState === "loading" ? <span>DeepSeek 正在检索...</span> : null}
+                            {liveSearchState === "error" ? <span>DeepSeek 请求失败，已回退本地推荐。</span> : null}
+                          </div>
+                          <div className="suggestList">
+                            {suggestedSkills.map(({ skill, reason }) => (
+                              <button type="button" key={skill.name} onClick={() => previewSkill(skill.name)}>
+                                <strong>{skill.title}</strong>
+                                <span>{reason}</span>
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      ) : null}
+                    </div>
+                  </section>
+                ) : null}
+
                 <section className="metrics">
                   <Metric value={data.catalog.skills.length} label={metricLabels.total} icon={Boxes} />
                   <Metric value={data.categories.categories.length} label={metricLabels.categories} icon={Braces} />

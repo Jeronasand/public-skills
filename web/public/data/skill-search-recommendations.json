@@ -1,0 +1,298 @@
+{
+  "version": 1,
+  "generatedAt": "2026-05-06T21:15:47.551Z",
+  "repository": "Jeronasand/public-skills",
+  "skills": [
+    {
+      "name": "git-commit-convention",
+      "tag": "git-commit-convention/v1.0.6",
+      "method": "deepseek",
+      "model": "deepseek-v4-pro",
+      "aliases": [
+        "git commit convention",
+        "commit message generator",
+        "conventional commits",
+        "git提交规范",
+        "提交信息生成",
+        "约定式提交"
+      ],
+      "intents": [
+        "generate a commit message from git diff",
+        "follow repository commit conventions",
+        "split mixed changes into separate commits",
+        "create conventional commit style message",
+        "根据仓库规范生成提交信息",
+        "将改动拆分为多个提交",
+        "生成约定式提交格式的信息"
+      ],
+      "useCases": [
+        "User wants to commit staged changes and needs a message that follows the repo's CONTRIBUTING.md rules.",
+        "User has a diff mixing feature work and formatting fixes and needs guidance on splitting commits.",
+        "User asks Codex to commit all changes and wants the commit message to match the project's conventional commit standard.",
+        "用户要求根据仓库的AGENTS.md规范为暂存区改动生成提交信息。",
+        "用户需要将包含功能开发和文档更新的混合改动拆分为两个独立的提交。"
+      ],
+      "priorityTerms": [
+        "conventional commit",
+        "git commit message",
+        "commit splitting",
+        "repository convention",
+        "约定式提交",
+        "提交信息生成",
+        "提交拆分"
+      ],
+      "updatedAt": "2026-05-06T21:15:47.551Z"
+    },
+    {
+      "name": "oss-upload-folder",
+      "tag": "oss-upload-folder/v1.0.3",
+      "method": "deepseek",
+      "model": "deepseek-v4-pro",
+      "aliases": [
+        "oss upload",
+        "oss sync",
+        "upload to oss",
+        "oss folder upload",
+        "ossutil upload",
+        "osscli upload",
+        "阿里云OSS上传",
+        "OSS上传文件夹",
+        "OSS同步",
+        "静态网站部署到OSS"
+      ],
+      "intents": [
+        "upload a local folder to Alibaba Cloud OSS",
+        "sync a directory to OSS bucket",
+        "deploy static site to OSS",
+        "mirror local files to OSS",
+        "publish dist folder to OSS",
+        "use ossutil to upload folder",
+        "use osscli to sync directory",
+        "upload to multiple OSS buckets"
+      ],
+      "useCases": [
+        "Upload a static website's dist/ folder to an OSS bucket for hosting.",
+        "Sync a local backup directory to OSS for offsite storage.",
+        "Deploy frontend build output to multiple OSS buckets for multi-region distribution.",
+        "Preview which files will be uploaded to OSS before performing the actual upload.",
+        "Mirror a local media library to OSS using the CLI tool.",
+        "将静态网站的dist文件夹上传到OSS存储桶用于托管。"
+      ],
+      "priorityTerms": [
+        "oss upload folder",
+        "ossutil upload",
+        "osscli sync",
+        "aliyun oss upload",
+        "static site deploy oss",
+        "OSS上传文件夹",
+        "阿里云OSS上传",
+        "ossutil上传",
+        "静态网站部署OSS"
+      ],
+      "updatedAt": "2026-05-06T21:15:47.551Z"
+    },
+    {
+      "name": "aws-s3-upload-folder",
+      "tag": "aws-s3-upload-folder/v1.0.3",
+      "method": "deepseek",
+      "model": "deepseek-v4-pro",
+      "aliases": [
+        "s3 upload folder",
+        "s3 sync directory",
+        "aws s3 deploy",
+        "S3 文件夹上传",
+        "S3 同步目录",
+        "AWS S3 部署"
+      ],
+      "intents": [
+        "upload local folder to S3",
+        "sync static site to S3",
+        "deploy dist to S3",
+        "将本地文件夹上传到 S3",
+        "同步静态网站到 S3",
+        "部署 dist 到 S3"
+      ],
+      "useCases": [
+        "Publish a static website by syncing the build output folder to an S3 bucket.",
+        "Upload a directory of assets to multiple S3 buckets for redundancy.",
+        "通过同步构建输出文件夹到 S3 存储桶来发布静态网站。",
+        "将资产目录上传到多个 S3 存储桶以实现冗余。"
+      ],
+      "priorityTerms": [
+        "aws s3 sync",
+        "s3 upload",
+        "static site deploy",
+        "s3 cp recursive",
+        "S3 上传",
+        "静态网站部署"
+      ],
+      "updatedAt": "2026-05-06T21:15:47.551Z"
+    },
+    {
+      "name": "aws-cloudfront-invalidate",
+      "tag": "aws-cloudfront-invalidate/v1.0.2",
+      "method": "deepseek",
+      "model": "deepseek-v4-pro",
+      "aliases": [
+        "cloudfront invalidate",
+        "CDN cache refresh",
+        "aws cloudfront invalidation",
+        "刷新CDN",
+        "CloudFront缓存刷新",
+        "CDN缓存失效"
+      ],
+      "intents": [
+        "invalidate CloudFront cache",
+        "refresh CDN after S3 upload",
+        "clear CloudFront cache for specific paths",
+        "verify distribution alias before invalidation",
+        "create CloudFront invalidation with AWS CLI",
+        "刷新CloudFront缓存",
+        "清除CDN缓存",
+        "使CloudFront路径失效"
+      ],
+      "useCases": [
+        "After deploying a static site to S3, invalidate /index.html and /assets/* on CloudFront to serve the latest content.",
+        "Before invalidating, verify that the CloudFront distribution is associated with the domain example.com using the --alias flag.",
+        "Preview an invalidation for /images/* on distribution E1234567890ABC using --dry-run to avoid accidental cache clearing.",
+        "Invalidate multiple paths like /about.html and /contact.html on a CloudFront distribution after a content update.",
+        "Use the skill to automate CDN cache refresh in a CI/CD pipeline after uploading new assets to S3."
+      ],
+      "priorityTerms": [
+        "CloudFront invalidation",
+        "CDN cache refresh",
+        "aws cloudfront create-invalidation",
+        "S3 static site deploy",
+        "CloudFront缓存刷新",
+        "CDN失效",
+        "AWS CLI invalidate"
+      ],
+      "updatedAt": "2026-05-06T21:15:47.551Z"
+    },
+    {
+      "name": "ai-cli-context-governance",
+      "tag": "ai-cli-context-governance/v1.0.5",
+      "method": "deepseek",
+      "model": "deepseek-v4-pro",
+      "aliases": [
+        "context governance",
+        "上下文治理",
+        "长上下文优化",
+        "AI CLI 上下文管理",
+        "context compaction",
+        "上下文压缩",
+        "幻觉治理",
+        "hallucination control",
+        "prompt 结构优化",
+        "prompt caching"
+      ],
+      "intents": [
+        "优化 AI CLI 长上下文性能",
+        "减少模型幻觉",
+        "设计上下文分层架构",
+        "实现 /compact /pin /forget 命令",
+        "制定 token 预算",
+        "构建证据驱动的生成流程",
+        "排查上下文污染问题",
+        "提升 prompt caching 效率"
+      ],
+      "useCases": [
+        "当 AI CLI 对话轮次增加后响应变慢，需要压缩上下文并引入检索机制",
+        "模型在长上下文中引用过时信息或编造不存在的文件，需要实施证据约束",
+        "设计新的 AI CLI 工具时，规划 hot/warm/cold 三层上下文架构",
+        "为现有 CLI 添加 /compact 命令以将对话压缩为结构化状态",
+        "排查 prompt 中重复发送完整历史导致 token 超限的问题",
+        "需要固定关键约束或文件到每轮上下文，防止模型偏离目标"
+      ],
+      "priorityTerms": [
+        "上下文治理",
+        "context governance",
+        "长上下文优化",
+        "幻觉治理",
+        "evidence-driven",
+        "prompt caching",
+        "token budget",
+        "context compaction",
+        "检索增强生成",
+        "AI CLI 架构"
+      ],
+      "updatedAt": "2026-05-06T21:15:47.551Z"
+    },
+    {
+      "name": "bucket-upload-policy",
+      "tag": "bucket-upload-policy/v1.0.3",
+      "method": "deepseek",
+      "model": "deepseek-v4-pro",
+      "aliases": [
+        "bucket-upload-policy",
+        "upload-policy",
+        "artifact-upload-policy",
+        "大文件上传策略",
+        "制品上传规范",
+        "OSS上传策略",
+        "S3上传策略"
+      ],
+      "intents": [
+        "判断大文件是否应上传到对象存储",
+        "生成制品清单而非提交二进制文件",
+        "配置OSS或S3上传策略",
+        "保持仓库轻量避免提交大文件",
+        "管理技能相关的外部资产引用"
+      ],
+      "useCases": [
+        "当技能包含PDF、图片或视频等非代码资产时，使用此策略决定上传到OSS并生成manifest",
+        "需要将大型测试文件或二进制样例存储到S3，并在仓库中仅保留链接和校验信息",
+        "在公共技能仓库中，通过OSS公开访问技能相关截图和文档，避免仓库膨胀"
+      ],
+      "priorityTerms": [
+        "bucket-upload-policy",
+        "artifact manifest",
+        "OSS upload",
+        "S3 upload",
+        "大文件上传",
+        "对象存储策略",
+        "制品清单"
+      ],
+      "updatedAt": "2026-05-06T21:15:47.551Z"
+    },
+    {
+      "name": "public-skills-catalog",
+      "tag": "public-skills-catalog/v1.0.2",
+      "method": "deepseek",
+      "model": "deepseek-v4-pro",
+      "aliases": [
+        "public-skills-catalog",
+        "技能目录",
+        "技能索引",
+        "skill catalog",
+        "skill index"
+      ],
+      "intents": [
+        "查看所有公开技能",
+        "按分类查找技能",
+        "了解技能安装方式",
+        "发现相关技能",
+        "维护技能目录元数据"
+      ],
+      "useCases": [
+        "用户询问“这个仓库有哪些技能”时，读取并渲染技能目录",
+        "需要按分类（如代码生成、文档处理）筛选技能",
+        "安装某个技能前，检查是否有推荐的关联技能",
+        "新增或更新技能后，自动更新目录、分类和关联JSON文件"
+      ],
+      "priorityTerms": [
+        "技能目录",
+        "skill catalog",
+        "技能发现",
+        "skill discovery",
+        "安装提示",
+        "install prompt",
+        "分类",
+        "categories",
+        "关联",
+        "associations"
+      ],
+      "updatedAt": "2026-05-06T21:15:47.551Z"
+    }
+  ]
+}

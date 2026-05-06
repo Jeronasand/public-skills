@@ -219,6 +219,10 @@ h1 {
   padding: 0 12px;
 }
 
+.dsKey {
+  margin-top: 12px;
+}
+
 .search input:focus,
 .versionSelect select:focus,
 .promptBox textarea:focus {
@@ -241,6 +245,54 @@ h1 {
 .categoryList {
   display: grid;
   gap: 8px;
+}
+
+.suggestList {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.suggestList button {
+  display: grid;
+  gap: 4px;
+  width: 100%;
+  border: 1px solid rgba(0, 229, 255, 0.18);
+  border-radius: 8px;
+  background: rgba(0, 229, 255, 0.07);
+  color: var(--ink);
+  padding: 10px;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    border-color 160ms ease,
+    transform 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.suggestList button:hover {
+  border-color: rgba(0, 229, 255, 0.52);
+  box-shadow: 0 0 22px rgba(0, 229, 255, 0.12);
+  transform: translateY(-2px);
+}
+
+.suggestList strong {
+  font-size: 13px;
+}
+
+.suggestList span {
+  display: -webkit-box;
+  overflow: hidden;
+  color: var(--muted);
+  font-size: 12px;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.suggestState {
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 12px;
 }
 
 .categoryButton,
@@ -313,6 +365,56 @@ h1 {
   display: grid;
   gap: 20px;
   min-width: 0;
+}
+
+.searchDock {
+  display: flex;
+  justify-content: center;
+}
+
+.searchDockInner {
+  width: min(820px, 100%);
+  border: 1px solid rgba(0, 229, 255, 0.22);
+  border-radius: 8px;
+  background:
+    linear-gradient(135deg, rgba(0, 229, 255, 0.12), rgba(157, 124, 255, 0.08) 48%, rgba(19, 240, 166, 0.08)),
+    rgba(5, 14, 25, 0.86);
+  box-shadow: var(--shadow), 0 0 34px rgba(0, 229, 255, 0.12);
+  padding: 16px;
+  animation: panelRise 420ms ease both;
+}
+
+.searchHero input {
+  height: 52px;
+  border-color: rgba(0, 229, 255, 0.28);
+  background: rgba(2, 8, 15, 0.84);
+  font-size: 16px;
+}
+
+.searchDock .dsKey {
+  margin-top: 10px;
+}
+
+.searchDock .dsKey input {
+  height: 38px;
+}
+
+.searchDock .searchSuggest {
+  margin-top: 12px;
+}
+
+.suggestHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+  color: var(--accent);
+  font-size: 12px;
+}
+
+.suggestHeader span {
+  color: var(--muted);
 }
 
 .metrics {
@@ -414,6 +516,17 @@ h1 {
   min-width: 0;
   overflow: hidden;
   padding: 17px;
+  cursor: pointer;
+  transition:
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    transform 180ms ease;
+}
+
+.skillCard:hover {
+  border-color: rgba(0, 229, 255, 0.5);
+  box-shadow: var(--shadow), 0 0 38px rgba(0, 229, 255, 0.16);
+  transform: translateY(-3px);
 }
 
 .skillCard::before {
@@ -593,6 +706,8 @@ h1 {
   height: 2px;
   background: linear-gradient(90deg, currentColor, transparent);
   opacity: 0.48;
+  transform-origin: left;
+  animation: scanLine 2.8s ease-in-out infinite;
 }
 
 .scoreBar div,
@@ -663,7 +778,7 @@ h1 {
 
 .cardActions {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 8px;
 }
 
@@ -680,6 +795,37 @@ h1 {
 
 .issueButton {
   color: #ffd08f;
+}
+
+.promptAction {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 14px;
+  border: 1px solid rgba(111, 244, 255, 0.16);
+  border-radius: 8px;
+  background: rgba(3, 9, 17, 0.76);
+  padding: 12px;
+}
+
+.promptAction div {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+
+.promptAction strong {
+  color: #ffffff;
+  font-size: 13px;
+}
+
+.promptAction span {
+  overflow: hidden;
+  color: var(--muted);
+  font: 12px/1.45 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .previewPanel {
@@ -862,6 +1008,15 @@ h1 {
   padding: 8px;
   text-align: left;
   cursor: pointer;
+  transition:
+    border-color 160ms ease,
+    background 160ms ease,
+    transform 160ms ease;
+}
+
+.fileList button:hover {
+  border-color: rgba(0, 229, 255, 0.46);
+  transform: translateX(2px);
 }
 
 .fileList button.active {
@@ -897,7 +1052,7 @@ h1 {
   overflow-wrap: anywhere;
 }
 
-.filePreview pre {
+.filePreview > pre {
   min-height: 520px;
   max-height: 720px;
   margin: 0;
@@ -1018,12 +1173,14 @@ h1 {
 }
 
 .markdownCode {
+  display: block;
   min-height: 0;
   max-height: none;
   margin: 0 0 16px;
   padding: 14px;
   color: #d9faff;
   font: 12px/1.65 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  overflow: auto;
   white-space: pre-wrap;
 }
 
@@ -1069,6 +1226,27 @@ h1 {
 .empty {
   padding: 22px;
   color: var(--muted);
+}
+
+@keyframes panelRise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scanLine {
+  0%,
+  100% {
+    transform: scaleX(0.26);
+  }
+  50% {
+    transform: scaleX(1);
+  }
 }
 
 @media (max-width: 1180px) {
@@ -1120,6 +1298,10 @@ h1 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  .suggestList {
+    grid-template-columns: 1fr;
+  }
+
   .association {
     grid-template-columns: 1fr;
   }
@@ -1140,7 +1322,7 @@ h1 {
     flex: 0 0 min(220px, 72vw);
   }
 
-  .filePreview pre {
+  .filePreview > pre {
     min-height: 360px;
     max-height: 58vh;
   }
@@ -1230,8 +1412,9 @@ h1 {
     grid-template-columns: 1fr;
   }
 
-  .cardActions {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+  .cardActions,
+  .promptAction {
+    grid-template-columns: 1fr;
   }
 
   .modeSwitch {
