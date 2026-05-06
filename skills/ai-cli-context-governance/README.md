@@ -19,7 +19,7 @@
 skills:
   - name: ai-cli-context-governance
     repo: git@github.com:Jeronasand/public-skills.git
-    ref: ai-cli-context-governance/v1.0.0
+    ref: ai-cli-context-governance/v1.0.1
 ```
 
 ## 使用场景
@@ -63,6 +63,21 @@ skills:
 examples/manual-test.md
 ```
 
+## 外部文件
+
+原始 PDF 不直接提交到仓库，应上传到 OSS 并在仓库内保留 manifest：
+
+```text
+references/artifact-manifest.md
+```
+
+目标地址：
+
+```text
+oss://public-skills/skills/ai-cli-context-governance/v1.0.1/AI_CLI_context_solution.pdf
+https://publick-skills.jeronasand.cn/skills/ai-cli-context-governance/v1.0.1/AI_CLI_context_solution.pdf
+```
+
 ## 作者和来源
 
 - 来源：社群「新•AI游戏开发」未来游戏人交流中的 PDF《AI CLI 长上下文性能与幻觉治理方案》
@@ -72,4 +87,6 @@ examples/manual-test.md
 
 ## 版本
 
-- 当前版本：`ai-cli-context-governance/v1.0.0`
+- 当前版本：`ai-cli-context-governance/v1.0.1`
+- `v1.0.1`：补充原始 PDF 的 OSS artifact manifest。
+- `v1.0.0`：新增 AI CLI 上下文治理 skill。

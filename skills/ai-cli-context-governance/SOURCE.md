@@ -27,6 +27,14 @@ Local source file read during creation:
 
 The original PDF is not committed into this repository. This public skill contains a summarized and operationalized workflow with attribution.
 
+## Artifact
+
+The source PDF should be stored outside git. See:
+
+```text
+references/artifact-manifest.md
+```
+
 ## Maintainer
 
 Jeronasand & Codex

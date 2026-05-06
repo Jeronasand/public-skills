@@ -56,6 +56,25 @@ Expected:
 - Required skill files exist.
 - `SKILL.md` frontmatter is valid enough for package checks.
 
+## Artifact Manifest Check
+
+Commands:
+
+```bash
+shasum -a 256 artifact-upload/ai-cli-context-governance/v1.0.1/AI_CLI_context_solution.pdf
+/Users/Jeronasand/.codex/skills/oss-upload-folder/scripts/upload_folder_to_oss.sh \
+  --local-dir artifact-upload/ai-cli-context-governance/v1.0.1 \
+  --oss-url oss://public-skills/skills/ai-cli-context-governance/v1.0.1/ \
+  --endpoint oss-cn-shenzhen.aliyuncs.com \
+  --dry-run
+```
+
+Result:
+
+- SHA-256: `2b852917429f455c1d6cdd19620c5b5722ecc1df6bf006382681a190ea7f5c4e`
+- Upload dry-run was blocked because local `ossutil`/`osscli` was not installed during verification.
+- Artifact manifest was added with status `Pending upload`.
+
 ## Result
 
 Passed current-run verification.
