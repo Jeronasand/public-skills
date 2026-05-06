@@ -36,13 +36,41 @@ cp -R skills/<skill-name> ~/.codex/skills/
 ls ~/.codex/skills/<skill-name>/SKILL.md
 ```
 
+## 指定版本引用
+
+公开 skill 使用 tag 记录版本，tag 格式：
+
+```text
+<skill-name>/v<major>.<minor>.<patch>
+```
+
+例如：
+
+```text
+git-commit-convention/v1.0.0
+```
+
+其他仓库需要固定引用某个版本时，建议把本仓库作为 submodule 放到 `.codex/vendor/public-skills`，再把目标 skill 链接到 `.codex/skills`：
+
+```bash
+git submodule add git@github.com:Jeronasand/public-skills.git .codex/vendor/public-skills
+cd .codex/vendor/public-skills
+git fetch --tags
+git checkout git-commit-convention/v1.0.0
+cd -
+
+mkdir -p .codex/skills
+ln -s ../vendor/public-skills/skills/git-commit-convention .codex/skills/git-commit-convention
+```
+
 ## 新增 skill 流程
 
 1. 在 `skills/<skill-name>/` 下创建 `SKILL.md`。
 2. 如需脚本，放到 `scripts/`；如需补充文档，放到 `references/`。
 3. 确认内容不包含密钥、账号、私有 payload 或不可公开的内部信息。
-4. 更新 `skills/README.md` 索引。
+4. 更新 `skills/README.md` 索引和版本记录。
 5. 按仓库提交规范提交。
+6. 使用 `<skill-name>/v<major>.<minor>.<patch>` 打 tag 并推送。
 
 ## 提交规范
 
