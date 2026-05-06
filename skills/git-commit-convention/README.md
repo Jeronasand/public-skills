@@ -19,7 +19,7 @@
 skills:
   - name: git-commit-convention
     repo: git@github.com:Jeronasand/public-skills.git
-    ref: git-commit-convention/v1.0.3
+    ref: git-commit-convention/v1.0.4
 ```
 
 ## 常用输出
@@ -31,6 +31,12 @@ feat: add git commit convention skill
 docs: update repository usage guide
 fix: correct validation command
 ```
+
+## 混乱改动处理
+
+如果当前 diff 同时包含多个不相关目的，例如功能改动、bug 修复、格式化、生成文件、文档调整混在一起，Codex 不能直接合成一个 commit。
+
+Codex 应先说明建议拆分的提交组，并询问用户是否分开提交。只有用户确认后，才可以按组分别 stage 和 commit；如果用户明确要求一个 commit，则使用一个能准确覆盖整体范围的提交信息。
 
 ## 环境变量
 
@@ -44,8 +50,9 @@ fix: correct validation command
 
 ## 版本
 
+- 当前版本：`git-commit-convention/v1.0.4`
+- `v1.0.4`：当改动内容混乱或跨多个主题时，先提示用户是否分开提交。
 - `v1.0.3`：补充独立 RELEASE.md 发布记录。
-- 当前版本：`git-commit-convention/v1.0.3`
 - `v1.0.2`：补充中文 README。
 - `v1.0.1`：补充来源记录。
 - `v1.0.0`：新增 git 提交规范 skill。

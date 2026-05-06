@@ -20,19 +20,27 @@ Use this skill to turn real repository changes into a commit message that follow
    - Use `git diff` for unstaged changes and `git diff --cached` for staged changes when composing a real commit.
    - Do not include unrelated dirty files in the message unless they are part of the requested commit.
 
-3. Choose the commit type from the repo convention.
+3. Decide whether the change set should be split.
+   - If the diff mixes unrelated purposes, unrelated modules, generated files plus source edits, formatting-only churn plus behavior changes, or multiple commit types such as `feat` and `fix`, pause before composing a single message.
+   - Explain the likely split groups in concrete file or behavior terms.
+   - Ask the user whether they want separate commits.
+   - Do not split or partially stage without user confirmation.
+   - If the user confirms, create one focused message per group and stage/commit each group separately.
+   - If the user wants one commit anyway, write a single message that honestly describes the combined scope.
+
+4. Choose the commit type from the repo convention.
    - Common types: `feat`, `fix`, `docs`, `chore`, `refactor`, `test`, `build`, `ci`, `perf`.
    - For documentation-only changes, prefer `docs`.
    - For new reusable skill content, prefer `feat` unless the repo treats skills as documentation.
    - For repository setup, formatting, or metadata, prefer `chore`.
 
-4. Write the subject.
+5. Write the subject.
    - Keep it concise, imperative, and specific.
    - Use lowercase after the type unless the repo's convention differs.
    - Avoid trailing punctuation.
    - Mention the user-visible outcome, not every file touched.
 
-5. Add a body only when it helps.
+6. Add a body only when it helps.
    - Use a body for multi-part changes, behavior changes, migrations, or important validation notes.
    - Skip the body for small obvious changes.
 
