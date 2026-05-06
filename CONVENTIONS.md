@@ -10,6 +10,45 @@
 - 和单个私有项目强绑定、无法脱敏复用的内容不要直接放入本仓库；需要先抽象为公开版。
 - 如果 skill 涉及 PDF、图片、视频、压缩包、二进制样例或较大的非代码/非 Markdown 文档资产，默认上传到 OSS/S3，并在仓库中只保留链接、来源、大小和校验信息。
 
+## 仓库与 skill 边界
+
+本仓库同时包含两类内容，维护、提交和发布时必须区分：
+
+- `public-skills` 仓库自身：包括 `AGENTS.md`、`CONVENTIONS.md`、根 `README.md`、`.gitignore`、`web/`、仓库级脚本、索引 JSON 和用于展示/发布的基础设施。
+- 可被其他项目安装的 public skill：包括 `skills/<skill-name>/` 下的 `SKILL.md`、中文 `README.md`、`SOURCE.md`、`RELEASE.md`、脚本、示例、参考文档和该 skill 自己的 `.env.*.example` / `.gitignore`。
+
+提交时不能把这两类内容默认合并成一个发布单元。仓库自身能力的变更按仓库功能提交；skill 的变更按 skill 独立提交、独立版本、独立 tag、独立 GitHub Release。
+
+如果一次工作同时涉及仓库自身和一个或多个 skill，Codex 必须先按发布单元提出拆分方案，并在获得用户确认后分别 stage 和 commit。除非用户明确要求合并提交，否则不要把仓库自身变更和 skill 变更放进同一个 commit。
+
+如果一次工作涉及多个 skill，即使变更原因相同，也默认按 skill 分开提交和发布。只有纯机器索引更新（例如同一次 skill 发布后同步 `skills/catalog.json`、`skills/categories.json`、`skills/README.md` 中该 skill 的版本信息）可以跟对应 skill 的提交放在一起。
+
+## Skill 继承与本地扩展约定
+
+本仓库维护的是 public skill 的源版本和公开发布版本。所有 public skills 默认都允许被目标仓库继承。其他项目安装这些 skill 后，可以通过“继承”的方式在目标仓库增加本地能力，以适配该项目的脚本、环境、业务命令或人工测试记录。
+
+继承模型：
+
+- base skill：来自 `public-skills` 的固定 tag，是上游公共能力。
+- inherited skill：目标仓库基于 base skill 增加的本地扩展层，只在目标仓库生效。
+- public release：只有本仓库发布的 base skill 版本，才算 public skill 版本。
+
+继承和本地扩展应遵守以下边界：
+
+- 所有 skill 默认可继承，不需要单个 skill 额外声明“允许继承”。
+- 来源、作者或许可证限制只影响是否能把本地扩展回流发布到 `public-skills`，不影响目标仓库在本地继承和扩展。
+- 目标仓库可以在 `.codex/skills/<skill-name>/` 中补充本地脚本、模板、示例、项目专属说明或本地 env 文件。
+- 目标仓库应使用 `LOCAL_EXTENSION.md` 或等价本地说明文件记录继承关系，包括 base skill 名称、base tag、本地扩展内容、扩展原因和维护人。
+- 本地扩展默认属于目标仓库，不自动回流到 `public-skills`。
+- 本地扩展不能影响 public skill 的版本号、tag 或 release 记录；目标仓库仍然引用原始安装 tag。
+- 只有扩展内容被脱敏、通用化并提交回本仓库后，才允许按本仓库版本规则递增 public skill 版本。
+- 只有脱敏、通用、可公开复用的扩展，才可以整理后提交回本仓库。
+- 本地扩展不能覆盖或删除 public skill 的来源、作者、版本和安装说明；如果需要覆盖行为，应在本地新增清晰的 override 文档或脚本。
+- 需要环境变量时，仍然使用该 skill 目录内的 `.env.<skill-name>`，不要读取宿主项目根目录的通用 `.env` 作为隐式配置。
+- 目标仓库如果对 public skill 做了本地修改，应在本地记录来源 tag 和修改说明，避免后续升级时误以为仍是原始 public 版本。
+- 目标仓库如果需要标记本地扩展版本，应使用本地字段或文件，例如 `LOCAL_EXTENSION.md`，不要修改 public skill 的 `RELEASE.md`、`SOURCE.md` 或安装 prompt 中的固定 tag。
+- 当目标仓库升级 base skill tag 时，Codex 必须先阅读本地继承说明，判断本地扩展是否需要迁移、保留或废弃，不得直接覆盖本地扩展。
+
 ## 目录约定
 
 ```text
@@ -339,3 +378,13 @@ docs: add public skills repository guide
 feat: add oss upload skill
 fix: correct spreadsheet skill validation command
 ```
+
+提交拆分规则：
+
+- `web/`、根文档、仓库级配置和仓库级脚本属于 `public-skills` 仓库自身变更。
+- `skills/<skill-name>/` 下的内容属于对应 skill 变更。
+- `skills/catalog.json`、`skills/categories.json`、`skills/associations.json`、`skills/README.md` 是索引文件，应跟触发它们变化的发布单元一起提交；如果一次更新涉及多个 skill，应拆到各自 skill 的提交里，或单独使用 `docs/chore` 提交说明是批量索引维护。
+- 一个 commit 默认只包含一个发布单元：一个仓库自身变更，或一个 skill 变更。
+- 同一次任务同时包含仓库自身变更和 skill 变更时，必须先询问用户是否按发布单元拆分提交。
+- 同一次任务同时修改多个 skill 时，默认按 skill 分开提交、打 tag 和创建 release。
+- 如果用户明确要求合并提交，commit message 必须准确描述合并范围，并在最终回复里说明合并原因。
