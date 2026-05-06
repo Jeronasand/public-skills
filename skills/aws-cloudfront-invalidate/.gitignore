@@ -1,0 +1,5 @@
+.env.aws-cloudfront-invalidate
+tmp/
+temp/
+.cache/
+*.log

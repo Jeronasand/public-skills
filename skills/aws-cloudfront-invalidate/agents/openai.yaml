@@ -1,0 +1,4 @@
+interface:
+  display_name: "AWS CloudFront Invalidate"
+  short_description: "Refresh CloudFront CDN paths using AWS CLI."
+  default_prompt: "Help me refresh CloudFront CDN cache using the AWS CLI."

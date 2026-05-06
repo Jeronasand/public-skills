@@ -6,8 +6,22 @@
 | --- | --- | --- | --- | --- | --- |
 | Git Commit Convention | `v1.0.2` | `git-commit-convention/v1.0.2` | `Jeronasand & Codex` | 根据仓库规范和实际 diff 生成 git commit 内容 | `skills/git-commit-convention/` |
 | OSS Upload Folder | `v1.0.0` | `oss-upload-folder/v1.0.0` | `Jeronasand & Codex` | 使用 OSS CLI 优先的安全流程上传本地文件夹到阿里云 OSS，并提供可选 Node.js 版本 | `skills/oss-upload-folder/` |
+| AWS S3 Upload Folder | `v1.0.0` | `aws-s3-upload-folder/v1.0.0` | `Jeronasand & Codex` | 使用 AWS CLI 将本地文件夹上传或同步到 Amazon S3 | `skills/aws-s3-upload-folder/` |
+| AWS CloudFront Invalidate | `v1.0.0` | `aws-cloudfront-invalidate/v1.0.0` | `Jeronasand & Codex` | 使用 AWS CLI 刷新 CloudFront CDN 路径，并支持 alias 校验 | `skills/aws-cloudfront-invalidate/` |
 
 ## 版本记录
+
+### aws-s3-upload-folder/v1.0.0
+
+- 新增 `aws-s3-upload-folder` skill。
+- 使用本机已安装的 AWS CLI 执行 `aws s3 sync` 或 `aws s3 cp --recursive`。
+- 支持 dry-run、profile、region、include/exclude、cache-control、ACL 和危险 `--delete` 确认。
+
+### aws-cloudfront-invalidate/v1.0.0
+
+- 新增 `aws-cloudfront-invalidate` skill。
+- 使用本机已安装的 AWS CLI 执行 CloudFront invalidation。
+- 支持 dry-run、路径列表、profile、distribution alias 校验和大范围 `/*` 刷新确认。
 
 ### git-commit-convention/v1.0.2
 

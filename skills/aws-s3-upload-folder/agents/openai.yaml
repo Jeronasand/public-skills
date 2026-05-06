@@ -1,0 +1,4 @@
+interface:
+  display_name: "AWS S3 Upload Folder"
+  short_description: "Upload folders to S3 using AWS CLI with dry-run safety."
+  default_prompt: "Help me upload a local folder to Amazon S3 using the AWS CLI."
