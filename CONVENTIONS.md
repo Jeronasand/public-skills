@@ -18,6 +18,7 @@ public-skills/
 ├── CONVENTIONS.md
 ├── README.md
 └── skills/
+    ├── associations.json
     ├── README.md
     └── <skill-name>/
         ├── .env.<skill-name>.example
@@ -40,6 +41,7 @@ public-skills/
 - `skills/<skill-name>/examples/`：可选但涉及测试时必需，放置人工测试记录、样例输入输出和验证说明。
 - `skills/<skill-name>/.env.<skill-name>.example`：可选但有环境变量时必需，记录该 skill 需要的环境变量模板。
 - `skills/<skill-name>/.gitignore`：可选但有本地 env、临时产物、测试产物或工具缓存时必需，由每个 skill 自己维护忽略规则。
+- `skills/associations.json`：skill 关联清单，记录可选联动、替代实现、前置依赖、后续动作和同源关系。
 - `skills/README.md`：公开 skill 索引，新增 skill 时同步更新。
 
 ## 新增 skill 流程
@@ -53,10 +55,11 @@ public-skills/
 7. 如果 skill 会产生本地 env、临时文件、测试输出或工具缓存，在 skill 目录内创建 `.gitignore`。
 8. 如果涉及测试或人工验证，在 `skills/<skill-name>/examples/` 下补充测试记录。
 9. 确认内容不包含密钥、账号、私有 payload 或不可公开的内部信息。
-10. 更新 `skills/README.md` 索引和版本记录。
-11. 按仓库提交规范提交。
-12. 使用 `<skill-name>/v<major>.<minor>.<patch>` 打 tag 并推送。
-13. 如果 GitHub Release 可用，为该 tag 单独创建 GitHub Release。
+10. 如果和其他 skill 存在关联，更新 `skills/associations.json`。
+11. 更新 `skills/README.md` 索引和版本记录。
+12. 按仓库提交规范提交。
+13. 使用 `<skill-name>/v<major>.<minor>.<patch>` 打 tag 并推送。
+14. 如果 GitHub Release 可用，为该 tag 单独创建 GitHub Release。
 
 ## 编写约定
 
@@ -64,6 +67,7 @@ public-skills/
 - `README.md` 必须使用中文，面向人类使用者说明用途、安装/引用方式、环境变量、常用命令、版本和注意事项。
 - `SOURCE.md` 必须记录作者、来源类型、源 skill 地址或说明、当前维护者和使用要求。
 - `RELEASE.md` 必须记录当前版本、上一版本、发布类型、变更内容、artifact、验证项和 GitHub Release 状态。
+- 如果 skill 和其他 skill 指向同一类能力、同一来源、同一外部工具，或存在可选业务联动，`README.md` 和 `SKILL.md` 必须说明相关 skill 名称、关系类型和是否建议一起安装。
 - 操作步骤要可执行，避免只写概念解释。
 - 示例命令使用占位符，不能包含真实 token、私钥、cookie、账号或内部 URL。
 - 如果 skill 依赖本地工具，写清楚依赖名称、检查命令和失败时的处理方式。
@@ -93,6 +97,51 @@ original
 ```
 
 如果 skill 来自其他作者、其他仓库或其他 skill 源，必须记录原作者、源地址、原始版本或引用时间。目标仓库使用时，应优先使用源 skill；本仓库只维护清晰注明来源的公开副本或索引，不把外部来源不明的 skill 当作自建内容。
+
+## Skill 关联与可选安装约定
+
+如果出现多个 skill 指向同一个上游来源、同一类能力、同一个外部工具，或 skill 之间存在可选业务关联，必须用 `skills/associations.json` 记录。
+
+`skills/associations.json` 是机器可读清单，用于目标仓库里的 Codex 在安装前判断是否需要主动询问用户安装相关 skill。Markdown 说明可以补充背景，但自动提示以 JSON 为准。
+
+推荐结构：
+
+```json
+{
+  "version": 1,
+  "associations": [
+    {
+      "id": "object-storage-upload-policy",
+      "type": "optional-precheck",
+      "primary": "oss-upload-folder",
+      "related": ["bucket-upload-policy"],
+      "prompt": "上传对象存储前，是否同时安装 bucket-upload-policy 来判断哪些文件应该上传到 OSS/S3？",
+      "installDefault": false,
+      "reason": "bucket-upload-policy 可先判断大文件或二进制 artifact 是否应该进入对象存储。"
+    }
+  ]
+}
+```
+
+字段约定：
+
+- `id`：关联规则唯一标识，使用 kebab-case。
+- `type`：关联类型，例如 `same-capability`、`optional-precheck`、`optional-followup`、`alternative-implementation`、`shared-source`、`business-chain`。
+- `primary`：触发安装判断的主 skill。
+- `related`：需要提示用户可选安装的相关 skill 数组。
+- `prompt`：Codex 询问用户时可以直接使用或改写的问题。
+- `installDefault`：是否建议默认一起安装。即使为 `true`，也必须获得用户确认。
+- `reason`：说明关联原因和不安装的影响。
+
+安装时，Codex 不能静默只安装其中一个。只要 `skills/associations.json` 中存在匹配 `primary` 或 `related` 的规则，Codex 必须在安装前主动向用户说明：
+
+- 当前任务需要安装的主 skill。
+- 相关 skill 或 skill 组的名称。
+- JSON 中记录的关联类型。
+- 不安装相关 skill 的影响。
+- 是否建议同时安装多个 skill。
+
+用户确认后，Codex 才能把相关 skill 一起加入安装计划。未经确认，不应自动安装额外 skill。
 
 ## 版本约定
 

@@ -11,6 +11,7 @@
 - 不要求用户手动编辑仓库文件；如果需要用户在其他项目执行命令，Codex 应优先给出可复制的最小命令序列。
 - 其他仓库引用本仓库 skill 时，应由目标仓库内的 Codex 根据清单挑选需要的 skill，并固定到指定版本。
 - 如果目标任务需要使用本仓库 skill，Codex 应自动提出安装计划并请求用户授权；授权后由 Codex 执行 clone、checkout tag、symlink 和清单更新，不要求用户手动安装。
+- 提出安装计划前，Codex 必须检查 `skills/associations.json`；如果存在同源、同类能力、可选前置、可选后续或业务链路关联，必须主动询问用户是否同时安装相关 skill。
 - 未经用户授权，Codex 不应在目标仓库自动安装或更新 public skill。
 
 ## 内容边界
@@ -21,7 +22,7 @@
 ## 约定入口
 
 - `CONVENTIONS.md` 是本仓库唯一的详细约定文件。
-- 创建、修改、发布 skill 时，先按 `CONVENTIONS.md` 检查目录、README、SOURCE、RELEASE、env、examples、artifact、版本和提交规则。
+- 创建、修改、发布 skill 时，先按 `CONVENTIONS.md` 检查目录、README、SOURCE、RELEASE、env、examples、artifact、关联、版本和提交规则。
 - `README.md` 只保留仓库介绍和引用流程，不重复维护完整约定。
 
 ## 发布要求
