@@ -1,0 +1,60 @@
+{
+  "version": 1,
+  "associations": [
+    {
+      "id": "oss-upload-artifact-policy",
+      "type": "optional-precheck",
+      "primary": "oss-upload-folder",
+      "related": [
+        "bucket-upload-policy"
+      ],
+      "prompt": "上传 OSS 前，是否同时安装 bucket-upload-policy 来判断哪些文件应该上传到对象存储并生成 artifact manifest？",
+      "installDefault": false,
+      "reason": "bucket-upload-policy 可在上传前判断 PDF、图片、压缩包、二进制样例等文件是否应该进入 OSS/S3，避免仓库提交大文件。"
+    },
+    {
+      "id": "s3-upload-artifact-policy",
+      "type": "optional-precheck",
+      "primary": "aws-s3-upload-folder",
+      "related": [
+        "bucket-upload-policy"
+      ],
+      "prompt": "上传 S3 前，是否同时安装 bucket-upload-policy 来判断哪些文件应该上传到对象存储并生成 artifact manifest？",
+      "installDefault": false,
+      "reason": "bucket-upload-policy 可在上传前判断 PDF、图片、压缩包、二进制样例等文件是否应该进入 OSS/S3，避免仓库提交大文件。"
+    },
+    {
+      "id": "s3-upload-cloudfront-invalidate",
+      "type": "optional-followup",
+      "primary": "aws-s3-upload-folder",
+      "related": [
+        "aws-cloudfront-invalidate"
+      ],
+      "prompt": "如果 S3 上传的是静态站点或 CDN 资源，是否同时安装 aws-cloudfront-invalidate 用于上传后刷新 CloudFront？",
+      "installDefault": false,
+      "reason": "S3 上传静态产物后可能还需要刷新 CloudFront，否则用户可能继续访问旧缓存。"
+    },
+    {
+      "id": "object-storage-upload-alternatives",
+      "type": "same-capability",
+      "primary": "oss-upload-folder",
+      "related": [
+        "aws-s3-upload-folder"
+      ],
+      "prompt": "当前存在 OSS 和 S3 两个对象存储上传 skill。是否只安装当前云厂商对应的 skill，还是两个都安装？",
+      "installDefault": false,
+      "reason": "oss-upload-folder 和 aws-s3-upload-folder 都用于对象存储上传，但面向不同云厂商；安装前应确认目标平台。"
+    },
+    {
+      "id": "object-storage-upload-alternatives-reverse",
+      "type": "same-capability",
+      "primary": "aws-s3-upload-folder",
+      "related": [
+        "oss-upload-folder"
+      ],
+      "prompt": "当前存在 S3 和 OSS 两个对象存储上传 skill。是否只安装当前云厂商对应的 skill，还是两个都安装？",
+      "installDefault": false,
+      "reason": "aws-s3-upload-folder 和 oss-upload-folder 都用于对象存储上传，但面向不同云厂商；安装前应确认目标平台。"
+    }
+  ]
+}

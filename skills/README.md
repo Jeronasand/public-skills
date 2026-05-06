@@ -8,8 +8,8 @@
 | OSS Upload Folder | `v1.0.3` | `oss-upload-folder/v1.0.3` | `Jeronasand & Codex` | 使用 OSS CLI 优先的安全流程上传本地文件夹到一个或多个阿里云 OSS 目标，并提供可选 Node.js 版本 | `skills/oss-upload-folder/` |
 | AWS S3 Upload Folder | `v1.0.3` | `aws-s3-upload-folder/v1.0.3` | `Jeronasand & Codex` | 使用 AWS CLI 将本地文件夹上传或同步到一个或多个 Amazon S3 目标 | `skills/aws-s3-upload-folder/` |
 | AWS CloudFront Invalidate | `v1.0.2` | `aws-cloudfront-invalidate/v1.0.2` | `Jeronasand & Codex` | 使用 AWS CLI 刷新 CloudFront CDN 路径，并支持 alias 校验 | `skills/aws-cloudfront-invalidate/` |
-| AI CLI Context Governance | `v1.0.4` | `ai-cli-context-governance/v1.0.4` | 社群 PDF 来源，`Jeronasand & Codex` 整理 | AI CLI 长上下文性能、幻觉治理、检索、压缩和证据约束工作流 | `skills/ai-cli-context-governance/` |
-| Bucket Upload Policy | `v1.0.2` | `bucket-upload-policy/v1.0.2` | `Jeronasand & Codex` | 判断 skill 相关大文件或二进制资产是否应上传到 OSS/S3，并生成仓库内 artifact manifest | `skills/bucket-upload-policy/` |
+| AI CLI Context Governance | `v1.0.5` | `ai-cli-context-governance/v1.0.5` | 社群 PDF 来源，`Jeronasand & Codex` 整理 | AI CLI 长上下文性能、幻觉治理、检索、压缩和证据约束工作流 | `skills/ai-cli-context-governance/` |
+| Bucket Upload Policy | `v1.0.3` | `bucket-upload-policy/v1.0.3` | `Jeronasand & Codex` | 判断 skill 相关大文件或二进制资产是否应上传到 OSS/S3，并生成仓库内 artifact manifest | `skills/bucket-upload-policy/` |
 | Public Skills Catalog | `v1.0.2` | `public-skills-catalog/v1.0.2` | `Jeronasand & Codex` | 读取机器可读目录、分类和关联 JSON，并把仓库 skill 信息渲染给用户 | `skills/public-skills-catalog/` |
 
 ## 版本记录
@@ -30,13 +30,13 @@
 
 - 补充可复制给 agent 的安装 prompt。
 
-### ai-cli-context-governance/v1.0.4
+### ai-cli-context-governance/v1.0.5
 
-- 补充可复制给 agent 的安装 prompt。
+- 修正 OSS 公开域名为 `public-skills.jeronasand.cn`。
 
-### bucket-upload-policy/v1.0.2
+### bucket-upload-policy/v1.0.3
 
-- 补充可复制给 agent 的安装 prompt。
+- 修正 OSS 公开域名为 `public-skills.jeronasand.cn`。
 
 ### public-skills-catalog/v1.0.2
 
@@ -83,7 +83,7 @@
 ### bucket-upload-policy/v1.0.0
 
 - 新增 `bucket-upload-policy` skill。
-- 明确本仓库默认 OSS artifact 目标：`oss-cn-shenzhen`、bucket `public-skills`、域名 `publick-skills.jeronasand.cn`。
+- 明确本仓库默认 OSS artifact 目标：`oss-cn-shenzhen`、bucket `public-skills`、域名 `public-skills.jeronasand.cn`。
 - 规范 PDF、图片、视频、压缩包、二进制样例等非代码/非 Markdown 大文件上传到 OSS/S3，仓库只保留 manifest。
 
 ### ai-cli-context-governance/v1.0.2

@@ -1,0 +1,31 @@
+{
+  "name": "skills-dna",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "sync:data": "node scripts/sync-data.mjs",
+    "upload:data:dry-run": "node scripts/sync-data.mjs --dry-run",
+    "upload:data": "node scripts/sync-data.mjs --upload",
+    "build": "vite build",
+    "upload:web:dry-run": "node scripts/upload-web.mjs --dry-run",
+    "upload:web": "node scripts/upload-web.mjs --upload",
+    "configure:website": "node scripts/configure-website.mjs",
+    "deploy": "npm run sync:data && npm run build && npm run upload:data:dry-run && npm run upload:data && npm run upload:web:dry-run && npm run upload:web",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@vitejs/plugin-react": "^5.0.4",
+    "ali-oss": "^6.23.0",
+    "lucide-react": "^0.468.0",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "typescript": "^5.9.3",
+    "vite": "^7.1.12"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3"
+  }
+}

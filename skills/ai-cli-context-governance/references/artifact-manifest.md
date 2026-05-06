@@ -5,14 +5,14 @@
 - Provider: Alibaba Cloud OSS
 - Region: `oss-cn-shenzhen`
 - Bucket: `public-skills`
-- Public domain: `publick-skills.jeronasand.cn`
+- Public domain: `public-skills.jeronasand.cn`
 - Prefix: `skills/ai-cli-context-governance/v1.0.1/`
 
 ## Files
 
 | File | Public URL | Storage URI | Size | SHA-256 | Source | Status |
 | --- | --- | --- | --- | --- | --- | --- |
-| `AI_CLI_context_solution.pdf` | `https://publick-skills.jeronasand.cn/skills/ai-cli-context-governance/v1.0.1/AI_CLI_context_solution.pdf` | `oss://public-skills/skills/ai-cli-context-governance/v1.0.1/AI_CLI_context_solution.pdf` | 131103 bytes | `2b852917429f455c1d6cdd19620c5b5722ecc1df6bf006382681a190ea7f5c4e` | 社群「新•AI游戏开发」未来游戏人交流 | Uploaded and public URL verified `200 OK`. ETag `"CD254638D2C06F1ECE6BB3F00732EC24"`. |
+| `AI_CLI_context_solution.pdf` | `https://public-skills.jeronasand.cn/skills/ai-cli-context-governance/v1.0.1/AI_CLI_context_solution.pdf` | `oss://public-skills/skills/ai-cli-context-governance/v1.0.1/AI_CLI_context_solution.pdf` | 131103 bytes | `2b852917429f455c1d6cdd19620c5b5722ecc1df6bf006382681a190ea7f5c4e` | 社群「新•AI游戏开发」未来游戏人交流 | Uploaded and public URL verified `200 OK`. ETag `"CD254638D2C06F1ECE6BB3F00732EC24"`. |
 
 ## Upload Command
 

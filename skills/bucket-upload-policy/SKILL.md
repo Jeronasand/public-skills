@@ -36,7 +36,7 @@ For this repository, the default OSS artifact target is:
 ```text
 Region: oss-cn-shenzhen
 Bucket: public-skills
-Public domain: publick-skills.jeronasand.cn
+Public domain: public-skills.jeronasand.cn
 OSS URI prefix: oss://public-skills/
 ```
 
@@ -44,7 +44,7 @@ Use skill-specific prefixes:
 
 ```text
 oss://public-skills/skills/<skill-name>/<version>/
-https://publick-skills.jeronasand.cn/skills/<skill-name>/<version>/
+https://public-skills.jeronasand.cn/skills/<skill-name>/<version>/
 ```
 
 ## Credential Rule
@@ -112,7 +112,7 @@ Use this shape in `references/` or `examples/` when a skill depends on uploaded 
 
 | File | Public URL | Storage URI | Size | SHA-256 | Source |
 | --- | --- | --- | --- | --- | --- |
-| example.pdf | https://publick-skills.jeronasand.cn/skills/example/v1.0.0/example.pdf | oss://public-skills/skills/example/v1.0.0/example.pdf | 123 KB | ... | community PDF |
+| example.pdf | https://public-skills.jeronasand.cn/skills/example/v1.0.0/example.pdf | oss://public-skills/skills/example/v1.0.0/example.pdf | 123 KB | ... | community PDF |
 ```
 
 ## Related Skills

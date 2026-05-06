@@ -30,3 +30,4 @@ tmp/
 temp/
 .cache/
 artifact-upload/
+ossutil_output/

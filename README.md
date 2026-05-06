@@ -11,6 +11,7 @@ public-skills/
 ├── AGENTS.md
 ├── CONVENTIONS.md
 ├── README.md
+├── web/
 └── skills/
     ├── associations.json
     ├── catalog.json
@@ -29,6 +30,42 @@ public-skills/
 ```
 
 具体目录要求、版本规则、Release 规则、环境变量规则、artifact 上传规则、skill 分类规则和关联规则集中记录在 [CONVENTIONS.md](./CONVENTIONS.md)。机器可读目录位于 [skills/catalog.json](./skills/catalog.json)，分类清单位于 [skills/categories.json](./skills/categories.json)，关联清单位于 [skills/associations.json](./skills/associations.json)。
+
+## Skills DNA 预览
+
+网页端预览位于 [web/](./web/)，使用 React + TypeScript + Vite 构建。它优先读取 OSS 上的 JSON 数据：
+
+```text
+https://public-skills.jeronasand.cn/skills-dna/data/catalog.json
+https://public-skills.jeronasand.cn/skills-dna/data/categories.json
+https://public-skills.jeronasand.cn/skills-dna/data/associations.json
+```
+
+本地运行：
+
+```bash
+cd web
+npm install
+npm run dev
+```
+
+每次修改 `skills/*.json` 后，先同步本地预览数据并上传 OSS：
+
+```bash
+cd web
+npm run sync:data
+npm run upload:data:dry-run
+npm run upload:data
+```
+
+打包后，网页产物需要直接上传到 `public-skills` bucket 根目录：
+
+```bash
+cd web
+npm run build
+npm run upload:web:dry-run
+npm run upload:web
+```
 
 ## 其他项目如何引用
 

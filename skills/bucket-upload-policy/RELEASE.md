@@ -3,8 +3,8 @@
 ## Current Release
 
 - Skill: `bucket-upload-policy`
-- Version: `bucket-upload-policy/v1.0.2`
-- Previous version: `bucket-upload-policy/v1.0.1`
+- Version: `bucket-upload-policy/v1.0.3`
+- Previous version: `bucket-upload-policy/v1.0.2`
 - Release type: patch
 - Maintainer: `Jeronasand & Codex`
 
@@ -14,8 +14,8 @@
 
 ## Changes
 
-- 补充可复制给 agent 的安装 prompt。
-- 明确安装前需要检查 `skills/associations.json`，有相关 skill 时先询问用户是否一起安装。
+- 修正 OSS 公开域名为 `public-skills.jeronasand.cn`。
+- 同步 README、SKILL.md 和 artifact manifest 模板中的公开访问地址。
 
 ## Artifacts
 

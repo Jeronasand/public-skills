@@ -34,6 +34,6 @@ Use this template when a skill references files stored outside git.
 Provider: Alibaba Cloud OSS
 Region: oss-cn-shenzhen
 Bucket: public-skills
-Public domain: publick-skills.jeronasand.cn
+Public domain: public-skills.jeronasand.cn
 Prefix: skills/<skill-name>/<version>/
 ```
