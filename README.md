@@ -25,7 +25,9 @@ public-skills/
 
 ## 其他项目如何引用
 
-其他项目不需要引用整个 skill 集合，而是在自己的仓库里声明需要哪些 skill 和版本。推荐在目标仓库创建：
+其他项目不需要引用整个 skill 集合，而是在自己的仓库里声明需要哪些 skill 和版本。这个流程由目标仓库里的 Codex 自动完成，用户只需要授权安装计划，不需要手动 clone、checkout 或 symlink。
+
+推荐在目标仓库创建或维护：
 
 ```text
 .codex/public-skills.yaml
@@ -40,7 +42,15 @@ skills:
     ref: git-commit-convention/v1.0.0
 ```
 
-目标仓库里的 Codex 根据这个清单安装对应 skill：
+当 Codex 判断当前任务需要某个 public skill 时，应先向用户说明：
+
+- 需要安装的 skill 名称。
+- 来源仓库。
+- 固定版本 tag。
+- 将写入或创建的目标路径。
+- 是否需要 env 文件或额外本地配置。
+
+用户授权后，Codex 自动安装。安装逻辑如下，由 Codex 执行，不要求用户手动操作：
 
 ```bash
 mkdir -p .codex/vendor/public-skills/git-commit-convention .codex/skills
@@ -55,6 +65,25 @@ cd -
 ln -s ../vendor/public-skills/git-commit-convention/v1.0.0/skills/git-commit-convention \
   .codex/skills/git-commit-convention
 ```
+
+安装后，Codex 应更新 `.codex/public-skills.yaml` 并提交到目标仓库，除非用户明确只想临时使用。
+
+## 自动安装授权流程
+
+目标仓库需要使用 public skill 时，Codex 按这个流程执行：
+
+1. 检查 `.codex/skills/<skill-name>/SKILL.md` 是否已存在。
+2. 如果不存在，读取或创建 `.codex/public-skills.yaml`。
+3. 选择匹配任务的 skill 和固定版本。
+4. 向用户请求授权，说明来源、版本、安装路径和影响范围。
+5. 用户授权后自动 clone 到 `.codex/vendor/public-skills/<skill-name>/<version>/`。
+6. checkout 指定 tag。
+7. symlink 到 `.codex/skills/<skill-name>`。
+8. 如有 `.env.<skill-name>.example`，提示用户是否需要复制本地 env；真实 env 不提交。
+9. 更新 `.codex/public-skills.yaml`。
+10. 继续执行原任务。
+
+如果用户拒绝授权，Codex 不安装该 skill，并用当前已有能力继续处理或说明缺失能力。
 
 ## 指定版本引用
 
