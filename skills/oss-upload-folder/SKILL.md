@@ -53,7 +53,7 @@ command -v ossutil || command -v osscli
 ## Supported CLI Options
 
 - `--local-dir <path>`: local folder to upload.
-- `--oss-url <oss://bucket/prefix/>`: OSS destination.
+- `--oss-url <oss://bucket/prefix/>`: OSS destination, repeatable for multiple buckets or prefixes.
 - `--cli <ossutil|osscli>`: force CLI command; otherwise auto-detect.
 - `--endpoint <endpoint>`: OSS endpoint.
 - `--include <pattern>`: include filter, repeatable.
@@ -85,6 +85,7 @@ Remove `--dry-run` for the real upload.
 ## Safety Rules
 
 - Always run `--dry-run` before the first real upload to a new prefix.
+- For multi-bucket uploads, pass multiple `--oss-url` values and verify every target in dry-run output.
 - Avoid bucket-root uploads unless the user explicitly requests them.
 - Keep a trailing slash in the OSS prefix for folder-like behavior.
 - Treat `--delete` as dangerous; require explicit confirmation unless `--yes` is provided.

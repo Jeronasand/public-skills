@@ -34,6 +34,20 @@ Use repeated filters when needed:
   --dry-run
 ```
 
+## Multiple Buckets
+
+Repeat `--oss-url` to upload the same local directory to multiple buckets or prefixes:
+
+```bash
+.codex/skills/oss-upload-folder/scripts/upload_folder_to_oss_cli.sh \
+  --local-dir ./dist \
+  --oss-url oss://example-bucket-a/site/ \
+  --oss-url oss://example-bucket-b/site/ \
+  --dry-run
+```
+
+Each target is validated independently. Bucket-root uploads are blocked for every target.
+
 ## Delete Sync
 
 Use `--delete` only for strict mirror behavior:
@@ -57,6 +71,7 @@ npm install ali-oss
 ```
 
 The Node.js script reads `OSS_NODE_*` values from `.env.oss-upload-folder` in the skill directory. Do not rely on the host environment.
+The Node.js script also supports repeated `--oss-url` values.
 
 ## Troubleshooting
 

@@ -15,11 +15,11 @@ fi
 usage() {
   cat <<'USAGE'
 Usage:
-  upload_folder_to_s3.sh --local-dir <path> --s3-uri <s3://bucket/prefix/> [options]
+  upload_folder_to_s3.sh --local-dir <path> --s3-uri <s3://bucket/prefix/> [--s3-uri <s3://bucket2/prefix/> ...] [options]
 
 Required:
   --local-dir <path>      Local directory to upload
-  --s3-uri <uri>          Destination S3 URI, e.g. s3://example-bucket/site/
+  --s3-uri <uri>          Destination S3 URI, repeatable, e.g. s3://example-bucket/site/
 
 Optional:
   --aws-cli <command>     AWS CLI command, default: aws
@@ -42,7 +42,6 @@ USAGE
 }
 
 LOCAL_DIR=""
-S3_URI="${AWS_S3_UPLOAD_DEFAULT_URI:-}"
 AWS_CLI="aws"
 PROFILE="${AWS_S3_UPLOAD_PROFILE:-}"
 REGION="${AWS_S3_UPLOAD_REGION:-}"
@@ -55,6 +54,17 @@ YES=0
 USE_CP=0
 INCLUDES=()
 EXCLUDES=()
+S3_URIS=()
+
+if [[ -n "${AWS_S3_UPLOAD_DEFAULT_URI:-}" ]]; then
+  S3_URIS+=("$AWS_S3_UPLOAD_DEFAULT_URI")
+fi
+
+if [[ -n "${AWS_S3_UPLOAD_DEFAULT_URIS:-}" ]]; then
+  # shellcheck disable=SC2206
+  defaults=(${AWS_S3_UPLOAD_DEFAULT_URIS//,/ })
+  S3_URIS+=("${defaults[@]}")
+fi
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -63,7 +73,7 @@ while [[ $# -gt 0 ]]; do
       shift 2
       ;;
     --s3-uri)
-      S3_URI="${2:-}"
+      S3_URIS+=("${2:-}")
       shift 2
       ;;
     --aws-cli)
@@ -126,8 +136,8 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-if [[ -z "$LOCAL_DIR" || -z "$S3_URI" ]]; then
-  echo "Error: --local-dir and --s3-uri are required." >&2
+if [[ -z "$LOCAL_DIR" || ${#S3_URIS[@]} -eq 0 ]]; then
+  echo "Error: --local-dir and at least one --s3-uri are required." >&2
   usage
   exit 1
 fi
@@ -142,64 +152,22 @@ if [[ ! -d "$LOCAL_DIR" ]]; then
   exit 1
 fi
 
-if [[ ! "$S3_URI" =~ ^s3:// ]]; then
-  echo "Error: --s3-uri must start with s3://" >&2
-  exit 1
-fi
-
-if [[ "$S3_URI" =~ ^s3://[^/]+/?$ ]]; then
-  echo "Error: bucket-root upload is blocked. Use an explicit prefix." >&2
-  exit 1
-fi
-
-if [[ "$S3_URI" != */ ]]; then
-  S3_URI="${S3_URI}/"
-fi
-
-if [[ $USE_CP -eq 1 ]]; then
-  CMD=("$AWS_CLI" s3 cp "$LOCAL_DIR" "$S3_URI" --recursive)
-else
-  CMD=("$AWS_CLI" s3 sync "$LOCAL_DIR" "$S3_URI")
-fi
-
-[[ -n "$PROFILE" ]] && CMD+=(--profile "$PROFILE")
-[[ -n "$REGION" ]] && CMD+=(--region "$REGION")
-[[ -n "$CACHE_CONTROL" ]] && CMD+=(--cache-control "$CACHE_CONTROL")
-[[ -n "$ACL" ]] && CMD+=(--acl "$ACL")
-
-if [[ $USE_CP -eq 1 && -n "$CONTENT_TYPE" ]]; then
-  CMD+=(--content-type "$CONTENT_TYPE")
-fi
-
-for pattern in "${EXCLUDES[@]}"; do
-  CMD+=(--exclude "$pattern")
-done
-
-for pattern in "${INCLUDES[@]}"; do
-  CMD+=(--include "$pattern")
-done
-
 if [[ $DELETE_EXTRA -eq 1 ]]; then
   if [[ $USE_CP -eq 1 ]]; then
     echo "Error: --delete is supported only in sync mode." >&2
     exit 1
   fi
-  CMD+=(--delete)
-fi
-
-if [[ $DRY_RUN -eq 1 ]]; then
-  CMD+=(--dryrun)
 fi
 
 echo "Local dir : $LOCAL_DIR"
-echo "Target    : $S3_URI"
+echo "Targets   : ${S3_URIS[*]}"
 echo "Mode      : $([[ $USE_CP -eq 1 ]] && echo cp-recursive || echo sync)"
 [[ -n "$PROFILE" ]] && echo "Profile   : $PROFILE"
 [[ -n "$REGION" ]] && echo "Region    : $REGION"
 [[ -n "$CACHE_CONTROL" ]] && echo "Cache     : $CACHE_CONTROL"
 [[ -n "$ACL" ]] && echo "ACL       : $ACL"
-[[ ${#EXCLUDES[@]} -gt 0 ]] && echo "Excludes  : ${EXCLUDES[*]}"
-[[ ${#INCLUDES[@]} -gt 0 ]] && echo "Includes  : ${INCLUDES[*]}"
+[[ ${#EXCLUDES[@]} -gt 0 ]] && echo "Excludes  : ${EXCLUDES[*]:-}"
+[[ ${#INCLUDES[@]} -gt 0 ]] && echo "Includes  : ${INCLUDES[*]:-}"
 [[ $DELETE_EXTRA -eq 1 ]] && echo "Delete    : enabled"
 [[ $DRY_RUN -eq 1 ]] && echo "Dry-run   : enabled"
 
@@ -212,10 +180,64 @@ if [[ $DELETE_EXTRA -eq 1 && $YES -ne 1 ]]; then
   fi
 fi
 
-printf 'Running: '
-printf '%q ' "${CMD[@]}"
-printf '\n'
+run_one_target() {
+  local target="$1"
 
-"${CMD[@]}"
+  if [[ ! "$target" =~ ^s3:// ]]; then
+    echo "Error: --s3-uri must start with s3:// ($target)" >&2
+    exit 1
+  fi
+
+  if [[ "$target" =~ ^s3://[^/]+/?$ ]]; then
+    echo "Error: bucket-root upload is blocked. Use an explicit prefix: $target" >&2
+    exit 1
+  fi
+
+  if [[ "$target" != */ ]]; then
+    target="${target}/"
+  fi
+
+  if [[ $USE_CP -eq 1 ]]; then
+    CMD=("$AWS_CLI" s3 cp "$LOCAL_DIR" "$target" --recursive)
+  else
+    CMD=("$AWS_CLI" s3 sync "$LOCAL_DIR" "$target")
+  fi
+
+  [[ -n "$PROFILE" ]] && CMD+=(--profile "$PROFILE")
+  [[ -n "$REGION" ]] && CMD+=(--region "$REGION")
+  [[ -n "$CACHE_CONTROL" ]] && CMD+=(--cache-control "$CACHE_CONTROL")
+  [[ -n "$ACL" ]] && CMD+=(--acl "$ACL")
+
+  if [[ $USE_CP -eq 1 && -n "$CONTENT_TYPE" ]]; then
+    CMD+=(--content-type "$CONTENT_TYPE")
+  fi
+
+  for pattern in "${EXCLUDES[@]+"${EXCLUDES[@]}"}"; do
+    CMD+=(--exclude "$pattern")
+  done
+
+  for pattern in "${INCLUDES[@]+"${INCLUDES[@]}"}"; do
+    CMD+=(--include "$pattern")
+  done
+
+  if [[ $DELETE_EXTRA -eq 1 ]]; then
+    CMD+=(--delete)
+  fi
+
+  if [[ $DRY_RUN -eq 1 ]]; then
+    CMD+=(--dryrun)
+  fi
+
+  printf 'Running: '
+  printf '%q ' "${CMD[@]}"
+  printf '\n'
+
+  "${CMD[@]}"
+}
+
+for target in "${S3_URIS[@]}"; do
+  [[ -z "$target" ]] && continue
+  run_one_target "$target"
+done
 
 echo "Done."

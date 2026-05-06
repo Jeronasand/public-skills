@@ -15,11 +15,11 @@ fi
 usage() {
   cat <<'USAGE'
 Usage:
-  upload_folder_to_oss_cli.sh --local-dir <path> --oss-url <oss://bucket/prefix/> [options]
+  upload_folder_to_oss_cli.sh --local-dir <path> --oss-url <oss://bucket/prefix/> [--oss-url <oss://bucket2/prefix/> ...] [options]
 
 Required:
   --local-dir <path>      Local directory to upload
-  --oss-url <url>         Destination OSS URL, e.g. oss://example-bucket/site/
+  --oss-url <url>         Destination OSS URL, repeatable, e.g. oss://example-bucket/site/
 
 Optional:
   --cli <command>         OSS CLI command, e.g. ossutil or osscli
@@ -39,7 +39,6 @@ USAGE
 }
 
 LOCAL_DIR=""
-OSS_URL="${OSS_UPLOAD_DEFAULT_URL:-}"
 OSS_CLI="${OSS_UPLOAD_CLI:-}"
 ENDPOINT="${OSS_UPLOAD_ENDPOINT:-}"
 DRY_RUN=0
@@ -48,6 +47,17 @@ DELETE_EXTRA=0
 YES=0
 INCLUDES=()
 EXCLUDES=()
+OSS_URLS=()
+
+if [[ -n "${OSS_UPLOAD_DEFAULT_URL:-}" ]]; then
+  OSS_URLS+=("$OSS_UPLOAD_DEFAULT_URL")
+fi
+
+if [[ -n "${OSS_UPLOAD_DEFAULT_URLS:-}" ]]; then
+  # shellcheck disable=SC2206
+  defaults=(${OSS_UPLOAD_DEFAULT_URLS//,/ })
+  OSS_URLS+=("${defaults[@]}")
+fi
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -56,7 +66,7 @@ while [[ $# -gt 0 ]]; do
       shift 2
       ;;
     --oss-url)
-      OSS_URL="${2:-}"
+      OSS_URLS+=("${2:-}")
       shift 2
       ;;
     --cli)
@@ -103,8 +113,8 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-if [[ -z "$LOCAL_DIR" || -z "$OSS_URL" ]]; then
-  echo "Error: --local-dir and --oss-url are required." >&2
+if [[ -z "$LOCAL_DIR" || ${#OSS_URLS[@]} -eq 0 ]]; then
+  echo "Error: --local-dir and at least one --oss-url are required." >&2
   usage
   exit 1
 fi
@@ -130,52 +140,12 @@ if [[ ! -d "$LOCAL_DIR" ]]; then
   exit 1
 fi
 
-if [[ ! "$OSS_URL" =~ ^oss:// ]]; then
-  echo "Error: --oss-url must start with oss://" >&2
-  exit 1
-fi
-
-if [[ "$OSS_URL" =~ ^oss://[^/]+/?$ ]]; then
-  echo "Error: bucket-root upload is blocked. Use an explicit prefix or confirm manually outside this wrapper." >&2
-  exit 1
-fi
-
-if [[ "$OSS_URL" != */ ]]; then
-  OSS_URL="${OSS_URL}/"
-fi
-
-CMD=("$OSS_CLI" cp -r "$LOCAL_DIR" "$OSS_URL")
-
-if [[ -n "$ENDPOINT" ]]; then
-  CMD+=(--endpoint "$ENDPOINT")
-fi
-
-for pattern in "${INCLUDES[@]}"; do
-  CMD+=(--include "$pattern")
-done
-
-for pattern in "${EXCLUDES[@]}"; do
-  CMD+=(--exclude "$pattern")
-done
-
-if [[ $UPDATE_ONLY -eq 1 ]]; then
-  CMD+=(--update)
-fi
-
-if [[ $DELETE_EXTRA -eq 1 ]]; then
-  CMD+=(--delete)
-fi
-
-if [[ $DRY_RUN -eq 1 ]]; then
-  CMD+=(--dry-run)
-fi
-
 echo "Local dir : $LOCAL_DIR"
-echo "Target    : $OSS_URL"
+echo "Targets   : ${OSS_URLS[*]}"
 echo "CLI       : $OSS_CLI"
 [[ -n "$ENDPOINT" ]] && echo "Endpoint  : $ENDPOINT"
-[[ ${#INCLUDES[@]} -gt 0 ]] && echo "Includes  : ${INCLUDES[*]}"
-[[ ${#EXCLUDES[@]} -gt 0 ]] && echo "Excludes  : ${EXCLUDES[*]}"
+[[ ${#INCLUDES[@]} -gt 0 ]] && echo "Includes  : ${INCLUDES[*]:-}"
+[[ ${#EXCLUDES[@]} -gt 0 ]] && echo "Excludes  : ${EXCLUDES[*]:-}"
 [[ $UPDATE_ONLY -eq 1 ]] && echo "Mode      : update-only"
 [[ $DELETE_EXTRA -eq 1 ]] && echo "Mode      : delete-remote-extra"
 [[ $DRY_RUN -eq 1 ]] && echo "Mode      : dry-run"
@@ -189,10 +159,59 @@ if [[ $DELETE_EXTRA -eq 1 && $YES -ne 1 ]]; then
   fi
 fi
 
-printf 'Running: '
-printf '%q ' "${CMD[@]}"
-printf '\n'
+run_one_target() {
+  local target="$1"
 
-"${CMD[@]}"
+  if [[ ! "$target" =~ ^oss:// ]]; then
+    echo "Error: --oss-url must start with oss:// ($target)" >&2
+    exit 1
+  fi
+
+  if [[ "$target" =~ ^oss://[^/]+/?$ ]]; then
+    echo "Error: bucket-root upload is blocked. Use an explicit prefix or confirm manually outside this wrapper: $target" >&2
+    exit 1
+  fi
+
+  if [[ "$target" != */ ]]; then
+    target="${target}/"
+  fi
+
+  CMD=("$OSS_CLI" cp -r "$LOCAL_DIR" "$target")
+
+  if [[ -n "$ENDPOINT" ]]; then
+    CMD+=(--endpoint "$ENDPOINT")
+  fi
+
+  for pattern in "${INCLUDES[@]+"${INCLUDES[@]}"}"; do
+    CMD+=(--include "$pattern")
+  done
+
+  for pattern in "${EXCLUDES[@]+"${EXCLUDES[@]}"}"; do
+    CMD+=(--exclude "$pattern")
+  done
+
+  if [[ $UPDATE_ONLY -eq 1 ]]; then
+    CMD+=(--update)
+  fi
+
+  if [[ $DELETE_EXTRA -eq 1 ]]; then
+    CMD+=(--delete)
+  fi
+
+  if [[ $DRY_RUN -eq 1 ]]; then
+    CMD+=(--dry-run)
+  fi
+
+  printf 'Running: '
+  printf '%q ' "${CMD[@]}"
+  printf '\n'
+
+  "${CMD[@]}"
+}
+
+for target in "${OSS_URLS[@]}"; do
+  [[ -z "$target" ]] && continue
+  run_one_target "$target"
+done
 
 echo "Done."

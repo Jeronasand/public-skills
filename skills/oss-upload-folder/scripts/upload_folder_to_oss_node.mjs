@@ -25,11 +25,11 @@ function loadSkillEnv(file) {
 
 function usage() {
   console.log(`Usage:
-  upload_folder_to_oss_node.mjs --local-dir <path> --oss-url <oss://bucket/prefix/> [options]
+  upload_folder_to_oss_node.mjs --local-dir <path> --oss-url <oss://bucket/prefix/> [--oss-url <oss://bucket2/prefix/> ...] [options]
 
 Required:
   --local-dir <path>      Local directory to upload
-  --oss-url <url>         Destination OSS URL, e.g. oss://example-bucket/site/
+  --oss-url <url>         Destination OSS URL, repeatable, e.g. oss://example-bucket/site/
 
 Optional:
   --dry-run               Preview files without uploading
@@ -44,11 +44,15 @@ Environment:
 }
 
 function parseArgs(argv) {
-  const out = { dryRun: false };
+  const out = { dryRun: false, ossUrls: [] };
+  if (process.env.OSS_NODE_DEFAULT_URL) out.ossUrls.push(process.env.OSS_NODE_DEFAULT_URL);
+  if (process.env.OSS_NODE_DEFAULT_URLS) {
+    out.ossUrls.push(...process.env.OSS_NODE_DEFAULT_URLS.split(/[,\s]+/).filter(Boolean));
+  }
   for (let i = 0; i < argv.length; i += 1) {
     const arg = argv[i];
     if (arg === "--local-dir") out.localDir = argv[++i];
-    else if (arg === "--oss-url") out.ossUrl = argv[++i];
+    else if (arg === "--oss-url") out.ossUrls.push(argv[++i]);
     else if (arg === "--endpoint") out.endpoint = argv[++i];
     else if (arg === "--region") out.region = argv[++i];
     else if (arg === "--dry-run") out.dryRun = true;
@@ -92,7 +96,7 @@ loadSkillEnv(envPath);
 let options;
 try {
   options = parseArgs(process.argv.slice(2));
-  if (!options.localDir || !options.ossUrl) throw new Error("--local-dir and --oss-url are required");
+  if (!options.localDir || options.ossUrls.length === 0) throw new Error("--local-dir and at least one --oss-url are required");
 } catch (error) {
   console.error(`Error: ${error.message}`);
   usage();
@@ -105,9 +109,9 @@ if (!fs.existsSync(localDir) || !fs.statSync(localDir).isDirectory()) {
   process.exit(1);
 }
 
-let target;
+let targets;
 try {
-  target = parseOssUrl(options.ossUrl);
+  targets = options.ossUrls.filter(Boolean).map(parseOssUrl);
 } catch (error) {
   console.error(`Error: ${error.message}`);
   process.exit(1);
@@ -120,14 +124,16 @@ const accessKeySecret = process.env.OSS_NODE_ACCESS_KEY_SECRET;
 const files = listFiles(localDir);
 
 console.log(`Local dir : ${localDir}`);
-console.log(`Target    : oss://${target.bucket}/${target.prefix}`);
+console.log(`Targets   : ${targets.map((target) => `oss://${target.bucket}/${target.prefix}`).join(" ")}`);
 console.log(`Files     : ${files.length}`);
 console.log(`Mode      : ${options.dryRun ? "dry-run" : "upload"}`);
 
 if (options.dryRun) {
-  for (const file of files) {
-    const rel = path.relative(localDir, file).split(path.sep).join("/");
-    console.log(`DRY-RUN ${rel} -> ${target.prefix}${rel}`);
+  for (const target of targets) {
+    for (const file of files) {
+      const rel = path.relative(localDir, file).split(path.sep).join("/");
+      console.log(`DRY-RUN ${rel} -> oss://${target.bucket}/${target.prefix}${rel}`);
+    }
   }
   process.exit(0);
 }
@@ -146,19 +152,21 @@ try {
   process.exit(1);
 }
 
-const client = new OSS({
-  accessKeyId,
-  accessKeySecret,
-  bucket: target.bucket,
-  region,
-  endpoint,
-});
+for (const target of targets) {
+  const client = new OSS({
+    accessKeyId,
+    accessKeySecret,
+    bucket: target.bucket,
+    region,
+    endpoint,
+  });
 
-for (const file of files) {
-  const rel = path.relative(localDir, file).split(path.sep).join("/");
-  const objectName = `${target.prefix}${rel}`;
-  console.log(`Uploading ${rel} -> ${objectName}`);
-  await client.put(objectName, file);
+  for (const file of files) {
+    const rel = path.relative(localDir, file).split(path.sep).join("/");
+    const objectName = `${target.prefix}${rel}`;
+    console.log(`Uploading ${rel} -> oss://${target.bucket}/${objectName}`);
+    await client.put(objectName, file);
+  }
 }
 
 console.log("Done.");

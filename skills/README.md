@@ -5,11 +5,21 @@
 | Skill | 当前版本 | Tag | 作者/来源 | 用途 | 路径 |
 | --- | --- | --- | --- | --- | --- |
 | Git Commit Convention | `v1.0.2` | `git-commit-convention/v1.0.2` | `Jeronasand & Codex` | 根据仓库规范和实际 diff 生成 git commit 内容 | `skills/git-commit-convention/` |
-| OSS Upload Folder | `v1.0.0` | `oss-upload-folder/v1.0.0` | `Jeronasand & Codex` | 使用 OSS CLI 优先的安全流程上传本地文件夹到阿里云 OSS，并提供可选 Node.js 版本 | `skills/oss-upload-folder/` |
-| AWS S3 Upload Folder | `v1.0.0` | `aws-s3-upload-folder/v1.0.0` | `Jeronasand & Codex` | 使用 AWS CLI 将本地文件夹上传或同步到 Amazon S3 | `skills/aws-s3-upload-folder/` |
+| OSS Upload Folder | `v1.0.1` | `oss-upload-folder/v1.0.1` | `Jeronasand & Codex` | 使用 OSS CLI 优先的安全流程上传本地文件夹到一个或多个阿里云 OSS 目标，并提供可选 Node.js 版本 | `skills/oss-upload-folder/` |
+| AWS S3 Upload Folder | `v1.0.1` | `aws-s3-upload-folder/v1.0.1` | `Jeronasand & Codex` | 使用 AWS CLI 将本地文件夹上传或同步到一个或多个 Amazon S3 目标 | `skills/aws-s3-upload-folder/` |
 | AWS CloudFront Invalidate | `v1.0.0` | `aws-cloudfront-invalidate/v1.0.0` | `Jeronasand & Codex` | 使用 AWS CLI 刷新 CloudFront CDN 路径，并支持 alias 校验 | `skills/aws-cloudfront-invalidate/` |
 
 ## 版本记录
+
+### aws-s3-upload-folder/v1.0.1
+
+- 支持重复传入多个 `--s3-uri`，用于同一次发布上传到多个 bucket 或 prefix。
+- 补充 `AWS_S3_UPLOAD_DEFAULT_URIS` 默认多目标配置。
+
+### oss-upload-folder/v1.0.1
+
+- CLI 和 Node.js 脚本均支持重复传入多个 `--oss-url`，用于同一次发布上传到多个 bucket 或 prefix。
+- 补充 `OSS_UPLOAD_DEFAULT_URLS` 和 `OSS_NODE_DEFAULT_URLS` 默认多目标配置。
 
 ### aws-s3-upload-folder/v1.0.0
 

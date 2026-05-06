@@ -46,11 +46,14 @@ CLI 版本可使用：
 OSS_UPLOAD_CLI=
 OSS_UPLOAD_ENDPOINT=
 OSS_UPLOAD_DEFAULT_URL=
+OSS_UPLOAD_DEFAULT_URLS=
 ```
 
 Node.js 版本需要：
 
 ```text
+OSS_NODE_DEFAULT_URL=
+OSS_NODE_DEFAULT_URLS=
 OSS_NODE_REGION=
 OSS_NODE_BUCKET=
 OSS_NODE_ENDPOINT=
@@ -79,6 +82,16 @@ OSS_NODE_ACCESS_KEY_SECRET=
   --oss-url oss://example-bucket/site/
 ```
 
+上传到多个桶或多个前缀：
+
+```bash
+.codex/skills/oss-upload-folder/scripts/upload_folder_to_oss_cli.sh \
+  --local-dir ./dist \
+  --oss-url oss://example-bucket-a/site/ \
+  --oss-url oss://example-bucket-b/site/ \
+  --dry-run
+```
+
 常用参数：
 
 - `--endpoint <endpoint>`：指定 OSS endpoint。
@@ -99,6 +112,8 @@ node .codex/skills/oss-upload-folder/scripts/upload_folder_to_oss_node.mjs \
   --dry-run
 ```
 
+Node.js 版本同样支持多个 `--oss-url`。
+
 确认后去掉 `--dry-run` 上传。
 
 ## 测试记录
@@ -117,4 +132,6 @@ examples/manual-test.md
 
 ## 版本
 
-- 当前版本：`oss-upload-folder/v1.0.0`
+- 当前版本：`oss-upload-folder/v1.0.1`
+- `v1.0.1`：支持多个 `--oss-url` 目标。
+- `v1.0.0`：新增 OSS 上传 skill。

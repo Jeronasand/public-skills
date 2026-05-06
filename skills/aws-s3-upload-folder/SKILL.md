@@ -52,7 +52,7 @@ aws s3 ls s3://example-bucket/example-prefix/
 ## Supported Options
 
 - `--local-dir <path>`: local folder to upload.
-- `--s3-uri <s3://bucket/prefix/>`: destination.
+- `--s3-uri <s3://bucket/prefix/>`: destination, repeatable for multiple buckets or prefixes.
 - `--profile <name>`: AWS CLI profile.
 - `--region <region>`: AWS region.
 - `--exclude <pattern>`: exclude filter, repeatable.
@@ -68,6 +68,7 @@ aws s3 ls s3://example-bucket/example-prefix/
 ## Safety Rules
 
 - Always run `--dry-run` before a real upload to a new prefix.
+- For multi-bucket uploads, pass multiple `--s3-uri` values and verify every target in dry-run output.
 - Bucket-root upload is blocked by default.
 - Treat `--delete` as dangerous and require confirmation unless `--yes` is provided.
 - Prefer `sync` for static site deploys; use `cp` only when the user explicitly wants recursive copy semantics.

@@ -51,6 +51,7 @@ cp .codex/skills/aws-s3-upload-folder/.env.aws-s3-upload-folder.example \
 AWS_S3_UPLOAD_PROFILE=
 AWS_S3_UPLOAD_REGION=
 AWS_S3_UPLOAD_DEFAULT_URI=
+AWS_S3_UPLOAD_DEFAULT_URIS=
 AWS_S3_UPLOAD_CACHE_CONTROL=
 AWS_S3_UPLOAD_ACL=
 ```
@@ -76,6 +77,16 @@ AWS_S3_UPLOAD_ACL=
   --s3-uri s3://example-bucket/site/
 ```
 
+上传到多个桶或多个前缀：
+
+```bash
+.codex/skills/aws-s3-upload-folder/scripts/upload_folder_to_s3.sh \
+  --local-dir ./dist \
+  --s3-uri s3://example-bucket-a/site/ \
+  --s3-uri s3://example-bucket-b/site/ \
+  --dry-run
+```
+
 严格同步并删除远端多余文件：
 
 ```bash
@@ -89,6 +100,7 @@ AWS_S3_UPLOAD_ACL=
 ## 注意事项
 
 - 第一次上传新路径必须先使用 `--dry-run`。
+- 多桶上传时，每个目标都要先在 dry-run 输出里确认。
 - 默认阻止 bucket 根目录上传。
 - `--delete` 会删除远端多余对象，属于危险操作。
 - 需要同时刷新 CloudFront 时，另行引用 `aws-cloudfront-invalidate` skill。
@@ -101,4 +113,6 @@ AWS_S3_UPLOAD_ACL=
 
 ## 版本
 
-- 当前版本：`aws-s3-upload-folder/v1.0.0`
+- 当前版本：`aws-s3-upload-folder/v1.0.1`
+- `v1.0.1`：支持多个 `--s3-uri` 目标。
+- `v1.0.0`：新增 AWS CLI S3 上传 skill。

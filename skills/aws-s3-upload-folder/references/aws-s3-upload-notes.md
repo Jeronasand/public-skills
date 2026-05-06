@@ -22,6 +22,20 @@ For most static deployments, use the default sync mode:
   --cache-control "public,max-age=31536000,immutable"
 ```
 
+## Multiple Buckets
+
+Repeat `--s3-uri` to upload the same local directory to multiple buckets or prefixes:
+
+```bash
+.codex/skills/aws-s3-upload-folder/scripts/upload_folder_to_s3.sh \
+  --local-dir ./dist \
+  --s3-uri s3://example-bucket-a/site/ \
+  --s3-uri s3://example-bucket-b/site/ \
+  --dry-run
+```
+
+Each target is validated independently. Bucket-root uploads are blocked for every target.
+
 Set cache headers carefully. `index.html` often needs shorter cache settings, which may require separate commands.
 
 ## Strict Mirror
