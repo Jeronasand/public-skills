@@ -4,6 +4,13 @@
 
 这个仓库用于记录和维护用户通过 Codex 创建、整理、验证过，并且可以公开复用的 Codex skills。目标是把零散的一次性 skill 沉淀为可选择、可复制、可导入到其他项目的公开技能库。
 
+## 维护方式
+
+- 本仓库完全由 Codex 维护；用户只需要描述要新增、修改、发布或引用的 skill 需求。
+- Codex 负责创建 skill、补充索引、写版本记录、运行校验、提交、打 tag 和推送。
+- 不要求用户手动编辑仓库文件；如果需要用户在其他项目执行命令，Codex 应优先给出可复制的最小命令序列。
+- 其他仓库引用本仓库 skill 时，应由目标仓库内的 Codex 根据清单挑选需要的 skill，并固定到指定版本。
+
 ## 内容边界
 
 - 只收录可以公开使用的 skill，不提交私有业务密钥、账号凭证、客户数据、运行日志中的敏感 payload。
@@ -17,6 +24,13 @@
 - `skills/<skill-name>/scripts/`：可选，放置该 skill 需要复用的脚本。
 - `skills/<skill-name>/references/`：可选，放置该 skill 的补充参考文档。
 - `skills/README.md`：公开 skill 索引，新增 skill 时同步更新。
+
+## 版本约定
+
+- 单个 skill 使用 `<skill-name>/v<major>.<minor>.<patch>` 作为 tag。
+- 新增公开 skill 的首个稳定版本从 `v1.0.0` 开始。
+- 修复同一 skill 的错误递增 patch，新增兼容能力递增 minor，破坏性变更递增 major。
+- 每次发布新 tag 前，必须同步更新 `skills/README.md` 中的当前版本和版本记录。
 
 ## 编写要求
 

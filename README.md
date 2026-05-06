@@ -1,6 +1,8 @@
 # public-skills
 
-这个仓库用于保存可以公开复用的 Codex skills。它的作用不是存放某个单一项目的私有知识，而是把已经整理过、可以脱敏公开、可以快速导入其他项目的 skill 集中管理起来。
+这个仓库用于保存可以公开复用的 Codex skills。它的作用不是存放某个单一项目的私有知识，而是把已经整理过、可以脱敏公开、可以由其他项目按需挑选引用的 skill 集中管理起来。
+
+本仓库完全由 Codex 维护。用户只需要说明要新增、修改、发布或引用哪些 skill，Codex 负责文件修改、版本记录、校验、提交、tag 和推送。
 
 ## 目录结构
 
@@ -16,24 +18,37 @@ public-skills/
         └── references/
 ```
 
-## 使用方式
+## 其他项目如何引用
 
-选择需要的 skill 后，把对应目录复制到目标项目或 Codex skills 目录中：
+其他项目不需要引用整个 skill 集合，而是在自己的仓库里声明需要哪些 skill 和版本。推荐在目标仓库创建：
 
-```bash
-cp -R skills/<skill-name> /path/to/target/.codex/skills/
+```text
+.codex/public-skills.yaml
 ```
 
-如果目标是全局 Codex skills，可以复制到：
+示例：
 
-```bash
-cp -R skills/<skill-name> ~/.codex/skills/
+```yaml
+skills:
+  - name: git-commit-convention
+    repo: git@github.com:Jeronasand/public-skills.git
+    ref: git-commit-convention/v1.0.0
 ```
 
-复制后建议检查：
+目标仓库里的 Codex 根据这个清单安装对应 skill：
 
 ```bash
-ls ~/.codex/skills/<skill-name>/SKILL.md
+mkdir -p .codex/vendor/public-skills/git-commit-convention .codex/skills
+
+git clone git@github.com:Jeronasand/public-skills.git \
+  .codex/vendor/public-skills/git-commit-convention/v1.0.0
+
+cd .codex/vendor/public-skills/git-commit-convention/v1.0.0
+git checkout git-commit-convention/v1.0.0
+cd -
+
+ln -s ../vendor/public-skills/git-commit-convention/v1.0.0/skills/git-commit-convention \
+  .codex/skills/git-commit-convention
 ```
 
 ## 指定版本引用
@@ -50,17 +65,17 @@ ls ~/.codex/skills/<skill-name>/SKILL.md
 git-commit-convention/v1.0.0
 ```
 
-其他仓库需要固定引用某个版本时，建议把本仓库作为 submodule 放到 `.codex/vendor/public-skills`，再把目标 skill 链接到 `.codex/skills`：
+多个 skill 时，在清单里增加多条记录。每个 skill 都可以独立指定版本：
 
-```bash
-git submodule add git@github.com:Jeronasand/public-skills.git .codex/vendor/public-skills
-cd .codex/vendor/public-skills
-git fetch --tags
-git checkout git-commit-convention/v1.0.0
-cd -
+```yaml
+skills:
+  - name: git-commit-convention
+    repo: git@github.com:Jeronasand/public-skills.git
+    ref: git-commit-convention/v1.0.0
 
-mkdir -p .codex/skills
-ln -s ../vendor/public-skills/skills/git-commit-convention .codex/skills/git-commit-convention
+  - name: another-skill
+    repo: git@github.com:Jeronasand/public-skills.git
+    ref: another-skill/v1.0.0
 ```
 
 ## 新增 skill 流程
