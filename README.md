@@ -9,6 +9,7 @@
 ```text
 public-skills/
 ├── AGENTS.md
+├── CONVENTIONS.md
 ├── README.md
 └── skills/
     ├── README.md
@@ -23,6 +24,8 @@ public-skills/
         ├── references/
         └── examples/
 ```
+
+具体目录要求、版本规则、Release 规则、环境变量规则和 artifact 上传规则集中记录在 [CONVENTIONS.md](./CONVENTIONS.md)。
 
 ## 其他项目如何引用
 
@@ -113,139 +116,11 @@ skills:
     ref: another-skill/v1.0.0
 ```
 
-## 新增 skill 流程
+## 维护约定
 
-1. 在 `skills/<skill-name>/` 下创建 `SKILL.md`。
-2. 在 `skills/<skill-name>/README.md` 下写中文使用说明。
-3. 在 `skills/<skill-name>/SOURCE.md` 下记录作者和来源。
-4. 在 `skills/<skill-name>/RELEASE.md` 下记录独立发布信息。
-5. 如需脚本，放到 `scripts/`；如需补充文档，放到 `references/`。
-6. 如果需要环境变量，在 skill 目录内创建 `skills/<skill-name>/.env.<skill-name>.example`。
-7. 如果 skill 会产生本地 env、临时文件、测试输出或工具缓存，在 skill 目录内创建 `.gitignore`。
-8. 如果涉及测试或人工验证，在 `skills/<skill-name>/examples/` 下补充测试记录。
-9. 确认内容不包含密钥、账号、私有 payload 或不可公开的内部信息。
-10. 更新 `skills/README.md` 索引和版本记录。
-11. 按仓库提交规范提交。
-12. 使用 `<skill-name>/v<major>.<minor>.<patch>` 打 tag 并推送。
-13. 如果 GitHub Release 可用，为该 tag 单独创建 GitHub Release。
+新增 skill、更新版本、创建 Release、记录来源、配置 env、上传 artifact 和提交信息都以 [CONVENTIONS.md](./CONVENTIONS.md) 为准。
 
-## Skill README 约定
-
-每个 skill 必须提供中文说明：
-
-```text
-skills/<skill-name>/README.md
-```
-
-README 面向人类使用者，至少说明用途、适用场景、引用方式、环境变量、常用命令、版本信息、作者/来源和注意事项。`SKILL.md` 面向 Codex 执行，`README.md` 面向用户阅读，两者都要保持同步。
-
-## 来源和作者约定
-
-每个 skill 必须提供：
-
-```text
-skills/<skill-name>/SOURCE.md
-```
-
-自建 skill 的作者写：
-
-```text
-Jeronasand & Codex
-```
-
-如果 skill 来自其他作者、其他仓库或其他 skill 源，必须记录原作者、源地址、原始版本或引用时间。目标仓库使用时，应优先使用源 skill；本仓库只维护清晰注明来源的公开副本或索引，不把外部来源不明的 skill 当作自建内容。
-
-## Release 约定
-
-每个 skill 必须提供：
-
-```text
-skills/<skill-name>/RELEASE.md
-```
-
-每次发布 skill 版本时，都要同步更新：
-
-- `skills/<skill-name>/RELEASE.md`
-- `skills/<skill-name>/README.md` 中的当前版本
-- `skills/README.md` 中的索引和版本记录
-
-每个 skill 独立使用 `<skill-name>/v<major>.<minor>.<patch>` tag。不要用一个全局 release 代替多个 skill 的独立 release。如果 GitHub CLI 已登录或 GitHub Release API 可用，Codex 还要为每个 tag 单独创建 GitHub Release；如果不可用，应在 `RELEASE.md` 和最终回复中说明阻塞原因。
-
-## 测试记录约定
-
-如果 skill 涉及测试、验证或人工确认流程，必须提供：
-
-```text
-skills/<skill-name>/examples/
-```
-
-该目录用于记录人工测试样例、输入输出、执行步骤、预期结果、实际结果和必要备注。测试记录必须脱敏，不能包含真实密钥、账号、私有 payload 或不可公开的业务数据。
-
-## Artifact 上传约定
-
-如果 skill 涉及 PDF、图片、视频、压缩包、二进制样例或较大的非代码/非 Markdown 文档资产，不要直接提交到仓库。默认上传到对象存储，并在仓库中保留 manifest。
-
-本仓库默认 OSS 目标：
-
-```text
-地区: oss-cn-shenzhen
-Bucket: public-skills
-域名: publick-skills.jeronasand.cn
-OSS URI: oss://public-skills/
-```
-
-推荐路径：
-
-```text
-oss://public-skills/skills/<skill-name>/<version>/
-https://publick-skills.jeronasand.cn/skills/<skill-name>/<version>/
-```
-
-OSS 上传使用 `oss-upload-folder` skill。密钥通过本机 OSS CLI 配置，例如：
-
-```bash
-ossutil config
-```
-
-配置通常保存在用户目录的本地文件中，例如：
-
-```text
-~/.ossutilconfig
-```
-
-如果使用的 OSS CLI 版本不同，以该 CLI 的 `config` / `help` 输出为准。密钥只保留在本机，不提交到 git。
-
-S3 上传使用 `aws-s3-upload-folder` skill，密钥使用本机 AWS CLI 配置：
-
-```text
-~/.aws/credentials
-~/.aws/config
-```
-
-## 环境变量约定
-
-如果 skill 需要环境变量，必须在对应 skill 目录内提供 example 文件：
-
-```text
-skills/<skill-name>/.env.<skill-name>.example
-```
-
-使用者在目标仓库的 skill 目录内自己复制一份本地配置：
-
-```bash
-cp .codex/skills/<skill-name>/.env.<skill-name>.example \
-  .codex/skills/<skill-name>/.env.<skill-name>
-```
-
-skill 应读取 `.codex/skills/<skill-name>/.env.<skill-name>`，不要默认读取宿主环境或通用 `.env`，避免误用目标机器上的同名变量。缺少必需变量时，应提示用户补全该 skill 专属 env 文件。
-
-如果 skill 使用 env 文件，该 skill 目录内还应提供 `.gitignore`，至少包含：
-
-```gitignore
-.env.<skill-name>
-```
-
-## 提交规范
+## 提交规范摘要
 
 提交内容使用：
 
