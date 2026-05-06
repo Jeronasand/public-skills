@@ -300,6 +300,11 @@ h1 {
   padding: 15px;
 }
 
+.skillCard.activeSkill {
+  border-color: rgba(15, 118, 110, 0.52);
+  box-shadow: inset 0 0 0 1px rgba(15, 118, 110, 0.22);
+}
+
 .cardTop {
   display: flex;
   justify-content: space-between;
@@ -364,6 +369,26 @@ h1 {
   color: var(--accent);
 }
 
+.flag.inherit {
+  background: rgba(49, 95, 159, 0.1);
+  color: var(--accent-3);
+}
+
+.dateGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.dateGrid span {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--field);
+  padding: 7px 8px;
+}
+
 .promptBox {
   display: grid;
   gap: 7px;
@@ -394,6 +419,163 @@ h1 {
   background: var(--accent);
   color: #fff;
   cursor: pointer;
+}
+
+.cardActions,
+.selectionActions {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 8px;
+}
+
+.selectButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 38px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel-solid);
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.previewPanel {
+  padding-bottom: 20px;
+}
+
+.modeSwitch {
+  display: inline-flex;
+  gap: 6px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--field);
+  padding: 4px;
+}
+
+.modeSwitch button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 34px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--muted);
+  padding: 0 10px;
+  cursor: pointer;
+}
+
+.modeSwitch button.active {
+  background: var(--panel-solid);
+  color: var(--ink);
+  box-shadow: 0 1px 8px rgba(20, 34, 48, 0.08);
+}
+
+.previewLayout {
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr);
+  gap: 14px;
+  min-height: 560px;
+}
+
+.fileRail,
+.filePreview {
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel-solid);
+}
+
+.fileRail {
+  padding: 12px;
+}
+
+.versionSelect {
+  display: grid;
+  gap: 7px;
+  margin-bottom: 12px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.versionSelect select {
+  width: 100%;
+  min-height: 38px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--field);
+  color: var(--ink);
+  padding: 0 10px;
+}
+
+.fileList {
+  display: grid;
+  gap: 7px;
+  max-height: 640px;
+  overflow: auto;
+}
+
+.fileList button {
+  display: grid;
+  gap: 4px;
+  width: 100%;
+  min-height: 48px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--field);
+  color: var(--ink);
+  padding: 8px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.fileList button.active {
+  border-color: rgba(15, 118, 110, 0.46);
+  background: rgba(15, 118, 110, 0.08);
+}
+
+.fileList span {
+  overflow-wrap: anywhere;
+  font-size: 13px;
+}
+
+.fileList small {
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.filePreview {
+  overflow: hidden;
+}
+
+.filePreviewHeader {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  border-bottom: 1px solid var(--line);
+  padding: 12px 14px;
+}
+
+.filePreviewHeader span {
+  color: var(--muted);
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+
+.filePreview pre {
+  min-height: 520px;
+  max-height: 720px;
+  margin: 0;
+  overflow: auto;
+  background: #0f1720;
+  color: #e6edf3;
+  padding: 16px;
+  font: 12px/1.65 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
 }
 
 .associationList {
@@ -478,6 +660,14 @@ h1 {
   .association {
     grid-template-columns: 1fr;
   }
+
+  .previewLayout {
+    grid-template-columns: 1fr;
+  }
+
+  .fileList {
+    max-height: 260px;
+  }
 }
 
 @media (max-width: 680px) {
@@ -500,5 +690,19 @@ h1 {
   .ghostButton {
     width: 100%;
     justify-content: center;
+  }
+
+  .cardActions,
+  .selectionActions,
+  .dateGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .modeSwitch {
+    width: 100%;
+  }
+
+  .modeSwitch button {
+    flex: 1;
   }
 }

@@ -32,7 +32,9 @@
         "split-commit",
         "staging"
       ],
-      "installPrompt": "请从 git@github.com:Jeronasand/public-skills.git 安装 public skill `git-commit-convention`，固定版本 `git-commit-convention/v1.0.5`，安装到当前仓库 `.codex/skills/git-commit-convention`；安装前请检查 `skills/associations.json`，如果存在相关 skill，请先询问我是否一起安装。"
+      "installPrompt": "请从 git@github.com:Jeronasand/public-skills.git 安装 public skill `git-commit-convention`，固定版本 `git-commit-convention/v1.0.5`，安装到当前仓库 `.codex/skills/git-commit-convention`；安装前请检查 `skills/associations.json`，如果存在相关 skill，请先询问我是否一起安装。",
+      "createdAt": "2026-05-06",
+      "updatedAt": "2026-05-07"
     },
     {
       "name": "oss-upload-folder",
@@ -62,7 +64,9 @@
         "static-site",
         "upload"
       ],
-      "installPrompt": "请从 git@github.com:Jeronasand/public-skills.git 安装 public skill `oss-upload-folder`，固定版本 `oss-upload-folder/v1.0.3`，安装到当前仓库 `.codex/skills/oss-upload-folder`；安装前请检查 `skills/associations.json`，如果存在相关 skill，请先询问我是否一起安装。"
+      "installPrompt": "请从 git@github.com:Jeronasand/public-skills.git 安装 public skill `oss-upload-folder`，固定版本 `oss-upload-folder/v1.0.3`，安装到当前仓库 `.codex/skills/oss-upload-folder`；安装前请检查 `skills/associations.json`，如果存在相关 skill，请先询问我是否一起安装。",
+      "createdAt": "2026-05-06",
+      "updatedAt": "2026-05-07"
     },
     {
       "name": "aws-s3-upload-folder",
@@ -92,7 +96,9 @@
         "static-site",
         "upload"
       ],
-      "installPrompt": "请从 git@github.com:Jeronasand/public-skills.git 安装 public skill `aws-s3-upload-folder`，固定版本 `aws-s3-upload-folder/v1.0.3`，安装到当前仓库 `.codex/skills/aws-s3-upload-folder`；安装前请检查 `skills/associations.json`，如果存在相关 skill，请先询问我是否一起安装。"
+      "installPrompt": "请从 git@github.com:Jeronasand/public-skills.git 安装 public skill `aws-s3-upload-folder`，固定版本 `aws-s3-upload-folder/v1.0.3`，安装到当前仓库 `.codex/skills/aws-s3-upload-folder`；安装前请检查 `skills/associations.json`，如果存在相关 skill，请先询问我是否一起安装。",
+      "createdAt": "2026-05-06",
+      "updatedAt": "2026-05-07"
     },
     {
       "name": "aws-cloudfront-invalidate",
@@ -122,7 +128,9 @@
         "install-prompt",
         "invalidate"
       ],
-      "installPrompt": "请从 git@github.com:Jeronasand/public-skills.git 安装 public skill `aws-cloudfront-invalidate`，固定版本 `aws-cloudfront-invalidate/v1.0.2`，安装到当前仓库 `.codex/skills/aws-cloudfront-invalidate`；安装前请检查 `skills/associations.json`，如果存在相关 skill，请先询问我是否一起安装。"
+      "installPrompt": "请从 git@github.com:Jeronasand/public-skills.git 安装 public skill `aws-cloudfront-invalidate`，固定版本 `aws-cloudfront-invalidate/v1.0.2`，安装到当前仓库 `.codex/skills/aws-cloudfront-invalidate`；安装前请检查 `skills/associations.json`，如果存在相关 skill，请先询问我是否一起安装。",
+      "createdAt": "2026-05-06",
+      "updatedAt": "2026-05-07"
     },
     {
       "name": "ai-cli-context-governance",
@@ -152,7 +160,9 @@
         "install-prompt",
         "retrieval"
       ],
-      "installPrompt": "请从 git@github.com:Jeronasand/public-skills.git 安装 public skill `ai-cli-context-governance`，固定版本 `ai-cli-context-governance/v1.0.5`，安装到当前仓库 `.codex/skills/ai-cli-context-governance`；安装前请检查 `skills/associations.json`，如果存在相关 skill，请先询问我是否一起安装。"
+      "installPrompt": "请从 git@github.com:Jeronasand/public-skills.git 安装 public skill `ai-cli-context-governance`，固定版本 `ai-cli-context-governance/v1.0.5`，安装到当前仓库 `.codex/skills/ai-cli-context-governance`；安装前请检查 `skills/associations.json`，如果存在相关 skill，请先询问我是否一起安装。",
+      "createdAt": "2026-05-06",
+      "updatedAt": "2026-05-07"
     },
     {
       "name": "bucket-upload-policy",
@@ -182,7 +192,9 @@
         "oss",
         "s3"
       ],
-      "installPrompt": "请从 git@github.com:Jeronasand/public-skills.git 安装 public skill `bucket-upload-policy`，固定版本 `bucket-upload-policy/v1.0.3`，安装到当前仓库 `.codex/skills/bucket-upload-policy`；安装前请检查 `skills/associations.json`，如果存在相关 skill，请先询问我是否一起安装。"
+      "installPrompt": "请从 git@github.com:Jeronasand/public-skills.git 安装 public skill `bucket-upload-policy`，固定版本 `bucket-upload-policy/v1.0.3`，安装到当前仓库 `.codex/skills/bucket-upload-policy`；安装前请检查 `skills/associations.json`，如果存在相关 skill，请先询问我是否一起安装。",
+      "createdAt": "2026-05-06",
+      "updatedAt": "2026-05-07"
     },
     {
       "name": "public-skills-catalog",
@@ -214,7 +226,9 @@
         "skill-discovery",
         "usage-guide"
       ],
-      "installPrompt": "请从 git@github.com:Jeronasand/public-skills.git 安装 public skill `public-skills-catalog`，固定版本 `public-skills-catalog/v1.0.2`，安装到当前仓库 `.codex/skills/public-skills-catalog`；安装前请检查 `skills/associations.json`，如果存在相关 skill，请先询问我是否一起安装。"
+      "installPrompt": "请从 git@github.com:Jeronasand/public-skills.git 安装 public skill `public-skills-catalog`，固定版本 `public-skills-catalog/v1.0.2`，安装到当前仓库 `.codex/skills/public-skills-catalog`；安装前请检查 `skills/associations.json`，如果存在相关 skill，请先询问我是否一起安装。",
+      "createdAt": "2026-05-07",
+      "updatedAt": "2026-05-07"
     }
   ]
 }

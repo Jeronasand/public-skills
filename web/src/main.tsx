@@ -6,7 +6,9 @@ import {
   Check,
   CircleDot,
   Copy,
+  FileText,
   GitBranch,
+  History,
   Link2,
   RefreshCcw,
   Search,
@@ -20,6 +22,8 @@ type Skill = {
   name: string;
   title: string;
   latestVersion: string;
+  createdAt?: string;
+  updatedAt?: string;
   tag: string;
   path: string;
   skillFile: string;
@@ -71,6 +75,39 @@ type Associations = {
   associations: Association[];
 };
 
+type PreviewFile = {
+  path: string;
+  language: string;
+  size: number;
+  content: string;
+};
+
+type SkillHistory = {
+  tag: string;
+  version: string;
+  createdAt: string;
+  files: PreviewFile[];
+};
+
+type SkillPreview = {
+  name: string;
+  title: string;
+  tag: string;
+  latestVersion: string;
+  createdAt: string;
+  updatedAt: string;
+  latest: {
+    files: PreviewFile[];
+  };
+  history: SkillHistory[];
+};
+
+type SkillPreviews = {
+  version: number;
+  generatedAt: string;
+  skills: SkillPreview[];
+};
+
 type SkillsData =
   | { status: "loading"; error: null }
   | { status: "error"; error: Error }
@@ -79,6 +116,7 @@ type SkillsData =
       catalog: Catalog;
       categories: Categories;
       associations: Associations;
+      previews: SkillPreviews;
       error: null;
     };
 
@@ -93,6 +131,7 @@ const jsonFiles = {
   catalog: "catalog.json",
   categories: "categories.json",
   associations: "associations.json",
+  previews: "skill-previews.json",
 };
 
 const remoteDataBase =
@@ -190,9 +229,10 @@ function useSkillsData() {
       loadJson<Catalog>(jsonFiles.catalog),
       loadJson<Categories>(jsonFiles.categories),
       loadJson<Associations>(jsonFiles.associations),
+      loadJson<SkillPreviews>(jsonFiles.previews),
     ])
-      .then(([catalog, categories, associations]) => {
-        if (alive) setData({ status: "ready", catalog, categories, associations, error: null });
+      .then(([catalog, categories, associations, previews]) => {
+        if (alive) setData({ status: "ready", catalog, categories, associations, previews, error: null });
       })
       .catch((error) => {
         if (alive) setData({ status: "error", error });
@@ -219,7 +259,17 @@ function Metric({ value, label, icon: Icon }: { value: number; label: string; ic
   );
 }
 
-function SkillCard({ skill, categories }: { skill: Skill; categories: Categories }) {
+function SkillCard({
+  skill,
+  categories,
+  active,
+  onPreview,
+}: {
+  skill: Skill;
+  categories: Categories;
+  active: boolean;
+  onPreview: (name: string) => void;
+}) {
   const [copied, setCopied] = useState(false);
 
   async function copyPrompt() {
@@ -229,7 +279,7 @@ function SkillCard({ skill, categories }: { skill: Skill; categories: Categories
   }
 
   return (
-    <article className="skillCard">
+    <article className={`skillCard ${active ? "activeSkill" : ""}`}>
       <div className="cardTop">
         <div>
           <h3>{skill.title}</h3>
@@ -258,6 +308,12 @@ function SkillCard({ skill, categories }: { skill: Skill; categories: Categories
         {skill.hasScripts && <span className="flag script">包含脚本</span>}
         {skill.hasExamples && <span className="flag">包含 examples</span>}
         {!skill.requiresEnv && !skill.hasScripts && !skill.hasExamples && <span className="flag">无需本地配置</span>}
+        <span className="flag inherit">可继承</span>
+      </div>
+
+      <div className="dateGrid">
+        <span>创建 {skill.createdAt || "未知"}</span>
+        <span>更新 {skill.updatedAt || "未知"}</span>
       </div>
 
       <label className="promptBox">
@@ -265,11 +321,117 @@ function SkillCard({ skill, categories }: { skill: Skill; categories: Categories
         <textarea readOnly value={skill.installPrompt} />
       </label>
 
-      <button className="copyButton" type="button" onClick={copyPrompt}>
-        {copied ? <Check size={16} /> : <Copy size={16} />}
-        {copied ? "已复制" : "复制 Prompt"}
-      </button>
+      <div className="cardActions">
+        <button className="copyButton" type="button" onClick={copyPrompt}>
+          {copied ? <Check size={16} /> : <Copy size={16} />}
+          {copied ? "已复制" : "复制 Prompt"}
+        </button>
+        <button className="selectButton" type="button" onClick={() => onPreview(skill.name)}>
+          <FileText size={16} aria-hidden="true" />
+          {active ? "正在预览" : "预览内容"}
+        </button>
+      </div>
     </article>
+  );
+}
+
+function formatBytes(size: number) {
+  if (size < 1024) return `${size} B`;
+  return `${(size / 1024).toFixed(1)} KB`;
+}
+
+function SkillPreviewPanel({ skill, preview }: { skill: Skill; preview?: SkillPreview }) {
+  const [mode, setMode] = useState<"latest" | "history">("latest");
+  const [activeHistoryTag, setActiveHistoryTag] = useState("");
+  const [activeFilePath, setActiveFilePath] = useState("");
+
+  const latestHistory = preview?.history[preview.history.length - 1];
+  const activeHistory = preview?.history.find((item) => item.tag === activeHistoryTag) || latestHistory;
+  const files: PreviewFile[] = mode === "latest" ? preview?.latest.files || [] : activeHistory?.files || [];
+  const activeFile = files.find((file) => file.path === activeFilePath) || files[0];
+
+  useEffect(() => {
+    setMode("latest");
+    setActiveHistoryTag("");
+    setActiveFilePath("");
+  }, [skill.name]);
+
+  useEffect(() => {
+    setActiveFilePath("");
+  }, [mode, activeHistoryTag]);
+
+  return (
+    <section className="panel previewPanel">
+      <div className="panelHeader">
+        <div>
+          <h2>{skill.title}</h2>
+          <p>
+            {skill.name} · {skill.tag} · 创建 {preview?.createdAt || skill.createdAt || "未知"} · 更新{" "}
+            {preview?.updatedAt || skill.updatedAt || "未知"}
+          </p>
+        </div>
+        <div className="modeSwitch">
+          <button className={mode === "latest" ? "active" : ""} type="button" onClick={() => setMode("latest")}>
+            最新内容
+          </button>
+          <button className={mode === "history" ? "active" : ""} type="button" onClick={() => setMode("history")}>
+            <History size={15} aria-hidden="true" />
+            历史版本
+          </button>
+        </div>
+      </div>
+
+      {!preview ? (
+        <div className="empty">当前 skill 还没有生成预览数据，请运行 web 的数据同步流程。</div>
+      ) : (
+        <div className="previewLayout">
+          <aside className="fileRail">
+            {mode === "history" && (
+              <label className="versionSelect">
+                <span>历史 tag</span>
+                <select value={activeHistory?.tag || ""} onChange={(event) => setActiveHistoryTag(event.target.value)}>
+                  {preview.history.map((item) => (
+                    <option key={item.tag} value={item.tag}>
+                      {item.tag} · {item.createdAt}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            )}
+            <div className="fileList">
+              {files.map((file) => (
+                <button
+                  className={activeFile?.path === file.path ? "active" : ""}
+                  type="button"
+                  key={file.path}
+                  onClick={() => setActiveFilePath(file.path)}
+                >
+                  <span>{file.path}</span>
+                  <small>
+                    {file.language} · {formatBytes(file.size)}
+                  </small>
+                </button>
+              ))}
+            </div>
+          </aside>
+          <article className="filePreview">
+            {activeFile ? (
+              <>
+                <div className="filePreviewHeader">
+                  <strong>{activeFile.path}</strong>
+                  <span>{mode === "latest" ? "latest" : activeHistory?.tag}</span>
+                </div>
+                <pre>
+                  <code>{activeFile.content}</code>
+                </pre>
+              </>
+            ) : (
+              <div className="empty">当前版本没有可预览的文本文件。</div>
+            )}
+          </article>
+        </div>
+      )}
+    </section>
   );
 }
 
@@ -303,6 +465,7 @@ function App() {
   const [envOnly, setEnvOnly] = useState(false);
   const [scriptsOnly, setScriptsOnly] = useState(false);
   const [examplesOnly, setExamplesOnly] = useState(false);
+  const [activeSkillName, setActiveSkillName] = useState("");
 
   const filteredSkills = useMemo(() => {
     if (data.status !== "ready") return [];
@@ -339,6 +502,11 @@ function App() {
 
   const isReady = data.status === "ready";
   const statusText = data.status === "ready" ? "目录已加载" : data.status === "error" ? "加载失败" : "正在加载";
+  const activeSkill = isReady
+    ? data.catalog.skills.find((skill) => skill.name === activeSkillName) || filteredSkills[0] || data.catalog.skills[0]
+    : undefined;
+  const activePreview =
+    isReady && activeSkill ? data.previews.skills.find((preview) => preview.name === activeSkill.name) : undefined;
 
   return (
     <>
@@ -440,6 +608,8 @@ function App() {
                   <Metric value={data.associations.associations.length} label={metricLabels.associations} icon={Link2} />
                 </section>
 
+                {activeSkill && <SkillPreviewPanel skill={activeSkill} preview={activePreview} />}
+
                 <section className="panel">
                   <div className="panelHeader">
                     <div>
@@ -454,7 +624,15 @@ function App() {
 
                   <div className="skillsGrid">
                     {filteredSkills.length ? (
-                      filteredSkills.map((skill) => <SkillCard skill={skill} categories={data.categories} key={skill.name} />)
+                      filteredSkills.map((skill) => (
+                        <SkillCard
+                          skill={skill}
+                          categories={data.categories}
+                          active={activeSkill?.name === skill.name}
+                          onPreview={setActiveSkillName}
+                          key={skill.name}
+                        />
+                      ))
                     ) : (
                       <div className="empty">当前筛选条件下没有匹配的 skill。</div>
                     )}

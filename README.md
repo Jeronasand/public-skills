@@ -29,7 +29,7 @@ public-skills/
         └── examples/
 ```
 
-具体目录要求、版本规则、Release 规则、环境变量规则、artifact 上传规则、skill 分类规则和关联规则集中记录在 [CONVENTIONS.md](./CONVENTIONS.md)。机器可读目录位于 [skills/catalog.json](./skills/catalog.json)，分类清单位于 [skills/categories.json](./skills/categories.json)，关联清单位于 [skills/associations.json](./skills/associations.json)。
+具体目录要求、版本规则、Release 规则、环境变量规则、artifact 上传规则、skill 分类规则和关联规则集中记录在 [CONVENTIONS.md](./CONVENTIONS.md)。机器可读目录位于 [skills/catalog.json](./skills/catalog.json)，分类清单位于 [skills/categories.json](./skills/categories.json)，关联清单位于 [skills/associations.json](./skills/associations.json)，Web 预览内容位于 [skills/skill-previews.json](./skills/skill-previews.json)。
 
 ## Skills DNA 预览
 
@@ -39,6 +39,7 @@ public-skills/
 https://public-skills.jeronasand.cn/skills-dna/data/catalog.json
 https://public-skills.jeronasand.cn/skills-dna/data/categories.json
 https://public-skills.jeronasand.cn/skills-dna/data/associations.json
+https://public-skills.jeronasand.cn/skills-dna/data/skill-previews.json
 ```
 
 本地运行：
