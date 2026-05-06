@@ -6,8 +6,8 @@
     {
       "name": "git-commit-convention",
       "title": "Git Commit Convention",
-      "latestVersion": "v1.0.4",
-      "tag": "git-commit-convention/v1.0.4",
+      "latestVersion": "v1.0.5",
+      "tag": "git-commit-convention/v1.0.5",
       "path": "skills/git-commit-convention/",
       "skillFile": "skills/git-commit-convention/SKILL.md",
       "readme": "skills/git-commit-convention/README.md",
@@ -23,19 +23,22 @@
       "hasExamples": false,
       "description": "根据仓库规范和真实 diff 生成 git commit message；当改动混杂多个主题时，先提示用户是否拆分提交。",
       "keywords": [
+        "agent-install",
         "commit",
         "conventional-commit",
         "git",
+        "install-prompt",
         "repository",
         "split-commit",
         "staging"
-      ]
+      ],
+      "installPrompt": "请从 git@github.com:Jeronasand/public-skills.git 安装 public skill `git-commit-convention`，固定版本 `git-commit-convention/v1.0.5`，安装到当前仓库 `.codex/skills/git-commit-convention`；安装前请检查 `skills/associations.json`，如果存在相关 skill，请先询问我是否一起安装。"
     },
     {
       "name": "oss-upload-folder",
       "title": "OSS Upload Folder",
-      "latestVersion": "v1.0.2",
-      "tag": "oss-upload-folder/v1.0.2",
+      "latestVersion": "v1.0.3",
+      "tag": "oss-upload-folder/v1.0.3",
       "path": "skills/oss-upload-folder/",
       "skillFile": "skills/oss-upload-folder/SKILL.md",
       "readme": "skills/oss-upload-folder/README.md",
@@ -51,18 +54,21 @@
       "hasExamples": true,
       "description": "使用 OSS CLI 优先的安全流程上传本地文件夹到一个或多个阿里云 OSS 目标，并提供可选 Node.js 版本。",
       "keywords": [
-        "oss",
+        "agent-install",
         "aliyun",
+        "install-prompt",
         "object-storage",
-        "upload",
-        "static-site"
-      ]
+        "oss",
+        "static-site",
+        "upload"
+      ],
+      "installPrompt": "请从 git@github.com:Jeronasand/public-skills.git 安装 public skill `oss-upload-folder`，固定版本 `oss-upload-folder/v1.0.3`，安装到当前仓库 `.codex/skills/oss-upload-folder`；安装前请检查 `skills/associations.json`，如果存在相关 skill，请先询问我是否一起安装。"
     },
     {
       "name": "aws-s3-upload-folder",
       "title": "AWS S3 Upload Folder",
-      "latestVersion": "v1.0.2",
-      "tag": "aws-s3-upload-folder/v1.0.2",
+      "latestVersion": "v1.0.3",
+      "tag": "aws-s3-upload-folder/v1.0.3",
       "path": "skills/aws-s3-upload-folder/",
       "skillFile": "skills/aws-s3-upload-folder/SKILL.md",
       "readme": "skills/aws-s3-upload-folder/README.md",
@@ -78,18 +84,21 @@
       "hasExamples": true,
       "description": "使用 AWS CLI 将本地文件夹上传或同步到一个或多个 Amazon S3 目标。",
       "keywords": [
+        "agent-install",
         "aws",
-        "s3",
+        "install-prompt",
         "object-storage",
-        "upload",
-        "static-site"
-      ]
+        "s3",
+        "static-site",
+        "upload"
+      ],
+      "installPrompt": "请从 git@github.com:Jeronasand/public-skills.git 安装 public skill `aws-s3-upload-folder`，固定版本 `aws-s3-upload-folder/v1.0.3`，安装到当前仓库 `.codex/skills/aws-s3-upload-folder`；安装前请检查 `skills/associations.json`，如果存在相关 skill，请先询问我是否一起安装。"
     },
     {
       "name": "aws-cloudfront-invalidate",
       "title": "AWS CloudFront Invalidate",
-      "latestVersion": "v1.0.1",
-      "tag": "aws-cloudfront-invalidate/v1.0.1",
+      "latestVersion": "v1.0.2",
+      "tag": "aws-cloudfront-invalidate/v1.0.2",
       "path": "skills/aws-cloudfront-invalidate/",
       "skillFile": "skills/aws-cloudfront-invalidate/SKILL.md",
       "readme": "skills/aws-cloudfront-invalidate/README.md",
@@ -105,18 +114,21 @@
       "hasExamples": true,
       "description": "使用 AWS CLI 刷新 CloudFront CDN 路径，并支持 alias 校验。",
       "keywords": [
+        "agent-install",
         "aws",
-        "cloudfront",
+        "cache",
         "cdn",
-        "invalidate",
-        "cache"
-      ]
+        "cloudfront",
+        "install-prompt",
+        "invalidate"
+      ],
+      "installPrompt": "请从 git@github.com:Jeronasand/public-skills.git 安装 public skill `aws-cloudfront-invalidate`，固定版本 `aws-cloudfront-invalidate/v1.0.2`，安装到当前仓库 `.codex/skills/aws-cloudfront-invalidate`；安装前请检查 `skills/associations.json`，如果存在相关 skill，请先询问我是否一起安装。"
     },
     {
       "name": "ai-cli-context-governance",
       "title": "AI CLI Context Governance",
-      "latestVersion": "v1.0.3",
-      "tag": "ai-cli-context-governance/v1.0.3",
+      "latestVersion": "v1.0.4",
+      "tag": "ai-cli-context-governance/v1.0.4",
       "path": "skills/ai-cli-context-governance/",
       "skillFile": "skills/ai-cli-context-governance/SKILL.md",
       "readme": "skills/ai-cli-context-governance/README.md",
@@ -132,18 +144,21 @@
       "hasExamples": true,
       "description": "AI CLI 长上下文性能、幻觉治理、检索、压缩和证据约束工作流。",
       "keywords": [
+        "agent-install",
         "ai-cli",
-        "context",
-        "retrieval",
         "compaction",
-        "hallucination"
-      ]
+        "context",
+        "hallucination",
+        "install-prompt",
+        "retrieval"
+      ],
+      "installPrompt": "请从 git@github.com:Jeronasand/public-skills.git 安装 public skill `ai-cli-context-governance`，固定版本 `ai-cli-context-governance/v1.0.4`，安装到当前仓库 `.codex/skills/ai-cli-context-governance`；安装前请检查 `skills/associations.json`，如果存在相关 skill，请先询问我是否一起安装。"
     },
     {
       "name": "bucket-upload-policy",
       "title": "Bucket Upload Policy",
-      "latestVersion": "v1.0.1",
-      "tag": "bucket-upload-policy/v1.0.1",
+      "latestVersion": "v1.0.2",
+      "tag": "bucket-upload-policy/v1.0.2",
       "path": "skills/bucket-upload-policy/",
       "skillFile": "skills/bucket-upload-policy/SKILL.md",
       "readme": "skills/bucket-upload-policy/README.md",
@@ -159,18 +174,21 @@
       "hasExamples": false,
       "description": "判断 skill 相关大文件或二进制资产是否应上传到 OSS/S3，并生成仓库内 artifact manifest。",
       "keywords": [
+        "agent-install",
         "artifact",
-        "oss",
-        "s3",
+        "install-prompt",
+        "large-files",
         "manifest",
-        "large-files"
-      ]
+        "oss",
+        "s3"
+      ],
+      "installPrompt": "请从 git@github.com:Jeronasand/public-skills.git 安装 public skill `bucket-upload-policy`，固定版本 `bucket-upload-policy/v1.0.2`，安装到当前仓库 `.codex/skills/bucket-upload-policy`；安装前请检查 `skills/associations.json`，如果存在相关 skill，请先询问我是否一起安装。"
     },
     {
       "name": "public-skills-catalog",
       "title": "Public Skills Catalog",
-      "latestVersion": "v1.0.1",
-      "tag": "public-skills-catalog/v1.0.1",
+      "latestVersion": "v1.0.2",
+      "tag": "public-skills-catalog/v1.0.2",
       "path": "skills/public-skills-catalog/",
       "skillFile": "skills/public-skills-catalog/SKILL.md",
       "readme": "skills/public-skills-catalog/README.md",
@@ -186,14 +204,17 @@
       "hasExamples": false,
       "description": "读取 public-skills 的 catalog、categories 和 associations JSON，帮助 AI 快速了解、筛选、组合、安装，并在用户解析仓库使用方式时渲染 skill 信息。",
       "keywords": [
+        "agent-install",
         "associations",
         "catalog",
         "classification",
         "index",
+        "install-prompt",
         "render-catalog",
         "skill-discovery",
         "usage-guide"
-      ]
+      ],
+      "installPrompt": "请从 git@github.com:Jeronasand/public-skills.git 安装 public skill `public-skills-catalog`，固定版本 `public-skills-catalog/v1.0.2`，安装到当前仓库 `.codex/skills/public-skills-catalog`；安装前请检查 `skills/associations.json`，如果存在相关 skill，请先询问我是否一起安装。"
     }
   ]
 }

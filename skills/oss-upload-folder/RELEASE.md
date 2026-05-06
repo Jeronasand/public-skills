@@ -3,8 +3,8 @@
 ## Current Release
 
 - Skill: `oss-upload-folder`
-- Version: `oss-upload-folder/v1.0.2`
-- Previous version: `oss-upload-folder/v1.0.1`
+- Version: `oss-upload-folder/v1.0.3`
+- Previous version: `oss-upload-folder/v1.0.2`
 - Release type: patch
 - Maintainer: `Jeronasand & Codex`
 
@@ -14,7 +14,8 @@
 
 ## Changes
 
-- 新增 RELEASE.md，记录该 skill 的独立发布信息。
+- 补充可复制给 agent 的安装 prompt。
+- 明确安装前需要检查 `skills/associations.json`，有相关 skill 时先询问用户是否一起安装。
 
 ## Artifacts
 

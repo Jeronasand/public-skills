@@ -48,14 +48,16 @@ Use this output order:
    - Render as a compact table with category id, Chinese name, description, and included skills.
 
 2. Skill catalog from `skills/catalog.json`.
-   - Render as a table with skill name, latest tag, category, env requirement, scripts/examples flags, and short description.
+   - Render as a table with skill name, latest tag, category, env requirement, scripts/examples flags, short description, and install prompt.
    - Use `tag` exactly as the install ref.
+   - Use `installPrompt` as the copyable one-line prompt for an agent.
 
 3. Associations from `skills/associations.json`.
    - Render as a table with primary skill, related skills, type, and the question Codex should ask before optional installation.
 
 4. Install guidance.
    - Show the `.codex/public-skills.yaml` entries for only the skills the user chooses or asks about.
+   - Also show the selected skill's `installPrompt` as copyable text.
    - If the user has not chosen a skill yet, do not dump every install snippet; first present the rendered catalog and ask which skill or category they want.
 
 Keep the rendered catalog concise. Do not paste full raw JSON unless the user explicitly asks for raw JSON.
@@ -66,7 +68,7 @@ When creating or updating a public skill:
 
 1. Decide the skill category yourself from its actual purpose.
 2. Update `skills/categories.json` if the skill is new or its category changes.
-3. Update `skills/catalog.json` with the latest version, tag, paths, flags, description, keywords, author, and source type.
+3. Update `skills/catalog.json` with the latest version, tag, paths, flags, description, keywords, author, source type, and `installPrompt`.
 4. Update `skills/associations.json` if the skill overlaps with, depends on, follows, or optionally enhances another skill.
 5. Validate all JSON before committing.
 

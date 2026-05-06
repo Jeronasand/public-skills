@@ -33,7 +33,15 @@ aws s3 ls s3://example-bucket/example-prefix/
 skills:
   - name: aws-s3-upload-folder
     repo: git@github.com:Jeronasand/public-skills.git
-    ref: aws-s3-upload-folder/v1.0.2
+    ref: aws-s3-upload-folder/v1.0.3
+```
+
+## Agent 安装 Prompt
+
+复制下面这句话给目标仓库里的 Codex/agent：
+
+```text
+请从 git@github.com:Jeronasand/public-skills.git 安装 public skill `aws-s3-upload-folder`，固定版本 `aws-s3-upload-folder/v1.0.3`，安装到当前仓库 `.codex/skills/aws-s3-upload-folder`；安装前请检查 `skills/associations.json`，如果存在相关 skill，请先询问我是否一起安装。
 ```
 
 ## 环境变量
@@ -113,7 +121,8 @@ AWS_S3_UPLOAD_ACL=
 
 ## 版本
 
+- `v1.0.3`：补充可复制给 agent 的安装 prompt。
 - `v1.0.2`：补充独立 RELEASE.md 发布记录。
-- 当前版本：`aws-s3-upload-folder/v1.0.2`
+- 当前版本：`aws-s3-upload-folder/v1.0.3`
 - `v1.0.1`：支持多个 `--s3-uri` 目标。
 - `v1.0.0`：新增 AWS CLI S3 上传 skill。

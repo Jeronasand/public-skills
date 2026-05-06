@@ -100,5 +100,14 @@ S3 上传使用 AWS CLI 本地配置：
 
 ## 版本
 
+- `v1.0.2`：补充可复制给 agent 的安装 prompt。
 - `v1.0.1`：补充独立 RELEASE.md 发布记录。
-- 当前版本：`bucket-upload-policy/v1.0.1`
+- 当前版本：`bucket-upload-policy/v1.0.2`
+
+## Agent 安装 Prompt
+
+复制下面这句话给目标仓库里的 Codex/agent：
+
+```text
+请从 git@github.com:Jeronasand/public-skills.git 安装 public skill `bucket-upload-policy`，固定版本 `bucket-upload-policy/v1.0.2`，安装到当前仓库 `.codex/skills/bucket-upload-policy`；安装前请检查 `skills/associations.json`，如果存在相关 skill，请先询问我是否一起安装。
+```

@@ -3,8 +3,8 @@
 ## Current Release
 
 - Skill: `git-commit-convention`
-- Version: `git-commit-convention/v1.0.4`
-- Previous version: `git-commit-convention/v1.0.3`
+- Version: `git-commit-convention/v1.0.5`
+- Previous version: `git-commit-convention/v1.0.4`
 - Release type: patch
 - Maintainer: `Jeronasand & Codex`
 
@@ -14,9 +14,8 @@
 
 ## Changes
 
-- 新增混乱改动拆分判断流程。
-- 当 diff 跨多个不相关目的、模块或提交类型时，Codex 需要先说明建议拆分组并询问用户是否分开提交。
-- 未经用户确认，不自动拆分、不部分 stage。
+- 补充可复制给 agent 的安装 prompt。
+- 明确安装前需要检查 `skills/associations.json`，有相关 skill 时先询问用户是否一起安装。
 
 ## Artifacts
 

@@ -28,7 +28,15 @@ npm install ali-oss
 skills:
   - name: oss-upload-folder
     repo: git@github.com:Jeronasand/public-skills.git
-    ref: oss-upload-folder/v1.0.2
+    ref: oss-upload-folder/v1.0.3
+```
+
+## Agent 安装 Prompt
+
+复制下面这句话给目标仓库里的 Codex/agent：
+
+```text
+请从 git@github.com:Jeronasand/public-skills.git 安装 public skill `oss-upload-folder`，固定版本 `oss-upload-folder/v1.0.3`，安装到当前仓库 `.codex/skills/oss-upload-folder`；安装前请检查 `skills/associations.json`，如果存在相关 skill，请先询问我是否一起安装。
 ```
 
 ## 环境变量
@@ -132,7 +140,8 @@ examples/manual-test.md
 
 ## 版本
 
+- `v1.0.3`：补充可复制给 agent 的安装 prompt。
 - `v1.0.2`：补充独立 RELEASE.md 发布记录。
-- 当前版本：`oss-upload-folder/v1.0.2`
+- 当前版本：`oss-upload-folder/v1.0.3`
 - `v1.0.1`：支持多个 `--oss-url` 目标。
 - `v1.0.0`：新增 OSS 上传 skill。

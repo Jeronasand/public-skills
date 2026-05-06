@@ -3,8 +3,8 @@
 ## Current Release
 
 - Skill: `public-skills-catalog`
-- Version: `public-skills-catalog/v1.0.1`
-- Previous version: `public-skills-catalog/v1.0.0`
+- Version: `public-skills-catalog/v1.0.2`
+- Previous version: `public-skills-catalog/v1.0.1`
 - Release type: patch
 - Maintainer: `Jeronasand & Codex`
 
@@ -14,9 +14,8 @@
 
 ## Changes
 
-- 当用户询问仓库怎么用、有哪些 skill 或要求解析仓库时，Codex 应读取 `categories`、`catalog`、`associations` JSON 并渲染分类表、skill 目录表和关联提示表。
-- 默认不直接粘贴完整 raw JSON，除非用户明确要求。
-- 用户选定 skill 后，再输出对应 `.codex/public-skills.yaml` 安装片段。
+- 补充可复制给 agent 的安装 prompt。
+- 明确安装前需要检查 `skills/associations.json`，有相关 skill 时先询问用户是否一起安装。
 
 ## Artifacts
 

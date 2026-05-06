@@ -19,7 +19,7 @@
 skills:
   - name: ai-cli-context-governance
     repo: git@github.com:Jeronasand/public-skills.git
-    ref: ai-cli-context-governance/v1.0.3
+    ref: ai-cli-context-governance/v1.0.4
 ```
 
 ## 使用场景
@@ -50,6 +50,14 @@ skills:
 ## 证据约束
 
 回答前先选 evidence block，再基于证据生成。没有证据时应明确说不确定，而不是凭印象补全。
+
+## Agent 安装 Prompt
+
+复制下面这句话给目标仓库里的 Codex/agent：
+
+```text
+请从 git@github.com:Jeronasand/public-skills.git 安装 public skill `ai-cli-context-governance`，固定版本 `ai-cli-context-governance/v1.0.4`，安装到当前仓库 `.codex/skills/ai-cli-context-governance`；安装前请检查 `skills/associations.json`，如果存在相关 skill，请先询问我是否一起安装。
+```
 
 ## 环境变量
 
@@ -89,8 +97,9 @@ https://publick-skills.jeronasand.cn/skills/ai-cli-context-governance/v1.0.1/AI_
 
 ## 版本
 
+- `v1.0.4`：补充可复制给 agent 的安装 prompt。
 - `v1.0.3`：补充独立 RELEASE.md 发布记录。
-- 当前版本：`ai-cli-context-governance/v1.0.3`
+- 当前版本：`ai-cli-context-governance/v1.0.4`
 - `v1.0.2`：更新 PDF artifact 上传状态，公开访问已验证。
 - `v1.0.1`：补充原始 PDF 的 OSS artifact manifest。
 - `v1.0.0`：新增 AI CLI 上下文治理 skill。

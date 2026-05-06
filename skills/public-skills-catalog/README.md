@@ -29,7 +29,7 @@ skills/associations.json
 skills:
   - name: public-skills-catalog
     repo: git@github.com:Jeronasand/public-skills.git
-    ref: public-skills-catalog/v1.0.0
+    ref: public-skills-catalog/v1.0.2
 ```
 
 ## 核心规则
@@ -46,8 +46,9 @@ skills/associations.json
 
 1. 先展示分类。
 2. 再展示 skill 目录和当前 tag。
-3. 再展示可选关联安装提示。
-4. 用户选定 skill 后，再给 `.codex/public-skills.yaml` 的安装片段。
+3. 同时展示每个 skill 可复制给 agent 的安装 prompt。
+4. 再展示可选关联安装提示。
+5. 用户选定 skill 后，再给 `.codex/public-skills.yaml` 的安装片段。
 
 默认不要直接粘贴完整原始 JSON，除非用户明确要求 raw JSON。
 
@@ -60,6 +61,14 @@ skills/associations.json
 ```
 
 不要要求用户手动归类。只有在 skill 目的读完仍然不明确时，才向用户提问。
+
+## Agent 安装 Prompt
+
+复制下面这句话给目标仓库里的 Codex/agent：
+
+```text
+请从 git@github.com:Jeronasand/public-skills.git 安装 public skill `public-skills-catalog`，固定版本 `public-skills-catalog/v1.0.2`，安装到当前仓库 `.codex/skills/public-skills-catalog`；安装前请检查 `skills/associations.json`，如果存在相关 skill，请先询问我是否一起安装。
+```
 
 ## 环境变量
 
@@ -81,6 +90,7 @@ python3 -m json.tool skills/associations.json >/tmp/public-skills-associations.j
 
 ## 版本
 
-- 当前版本：`public-skills-catalog/v1.0.1`
+- `v1.0.2`：补充可复制给 agent 的安装 prompt。
+- 当前版本：`public-skills-catalog/v1.0.2`
 - `v1.0.1`：用户解析仓库使用方式时，要求把分类、目录和关联 JSON 渲染成用户可读表格。
 - `v1.0.0`：新增 public skills 机器可读目录和分类读取 skill。
