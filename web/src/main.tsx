@@ -457,6 +457,155 @@ function formatBytes(size: number) {
   return `${(size / 1024).toFixed(1)} KB`;
 }
 
+function isMarkdownFile(file?: PreviewFile) {
+  return Boolean(file && (file.language === "markdown" || file.path.toLowerCase().endsWith(".md")));
+}
+
+function renderInlineMarkdown(text: string) {
+  const nodes: React.ReactNode[] = [];
+  const pattern = /(`[^`]+`|\*\*[^*]+\*\*|\[[^\]]+\]\([^)]+\))/g;
+  let lastIndex = 0;
+  let match: RegExpExecArray | null;
+  while ((match = pattern.exec(text))) {
+    if (match.index > lastIndex) nodes.push(text.slice(lastIndex, match.index));
+    const token = match[0];
+    if (token.startsWith("`")) {
+      nodes.push(<code key={`${match.index}-code`}>{token.slice(1, -1)}</code>);
+    } else if (token.startsWith("**")) {
+      nodes.push(<strong key={`${match.index}-strong`}>{token.slice(2, -2)}</strong>);
+    } else {
+      const link = token.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
+      nodes.push(
+        <a key={`${match.index}-link`} href={link?.[2] || "#"} target="_blank" rel="noreferrer">
+          {link?.[1] || token}
+        </a>,
+      );
+    }
+    lastIndex = pattern.lastIndex;
+  }
+  if (lastIndex < text.length) nodes.push(text.slice(lastIndex));
+  return nodes;
+}
+
+function MarkdownPreview({ content }: { content: string }) {
+  const lines = content.replace(/\r\n/g, "\n").split("\n");
+  const elements: React.ReactNode[] = [];
+  let index = 0;
+  let key = 0;
+
+  if (lines[0] === "---") {
+    const end = lines.slice(1).findIndex((line) => line === "---");
+    if (end !== -1) {
+      index = end + 2;
+    }
+  }
+
+  function paragraphStart(line: string) {
+    return (
+      /^#{1,6}\s+/.test(line) ||
+      /^```/.test(line) ||
+      /^[-*]\s+/.test(line) ||
+      /^\d+\.\s+/.test(line) ||
+      /^>\s?/.test(line) ||
+      /^---+$/.test(line)
+    );
+  }
+
+  while (index < lines.length) {
+    const line = lines[index];
+    if (!line.trim()) {
+      index += 1;
+      continue;
+    }
+
+    if (/^```/.test(line)) {
+      const fence = line.replace(/^```/, "").trim();
+      const codeLines: string[] = [];
+      index += 1;
+      while (index < lines.length && !/^```/.test(lines[index])) {
+        codeLines.push(lines[index]);
+        index += 1;
+      }
+      index += 1;
+      elements.push(
+        <pre className="markdownCode" key={`code-${key++}`}>
+          <code data-language={fence}>{codeLines.join("\n")}</code>
+        </pre>,
+      );
+      continue;
+    }
+
+    const heading = line.match(/^(#{1,6})\s+(.+)$/);
+    if (heading) {
+      const level = Math.min(heading[1].length, 4);
+      const headingContent = renderInlineMarkdown(heading[2]);
+      if (level === 1) elements.push(<h1 key={`heading-${key++}`}>{headingContent}</h1>);
+      else if (level === 2) elements.push(<h2 key={`heading-${key++}`}>{headingContent}</h2>);
+      else if (level === 3) elements.push(<h3 key={`heading-${key++}`}>{headingContent}</h3>);
+      else elements.push(<h4 key={`heading-${key++}`}>{headingContent}</h4>);
+      index += 1;
+      continue;
+    }
+
+    if (/^[-*]\s+/.test(line)) {
+      const items: string[] = [];
+      while (index < lines.length && /^[-*]\s+/.test(lines[index])) {
+        items.push(lines[index].replace(/^[-*]\s+/, ""));
+        index += 1;
+      }
+      elements.push(
+        <ul key={`ul-${key++}`}>
+          {items.map((item, itemIndex) => (
+            <li key={itemIndex}>{renderInlineMarkdown(item)}</li>
+          ))}
+        </ul>,
+      );
+      continue;
+    }
+
+    if (/^\d+\.\s+/.test(line)) {
+      const items: string[] = [];
+      while (index < lines.length && /^\d+\.\s+/.test(lines[index])) {
+        items.push(lines[index].replace(/^\d+\.\s+/, ""));
+        index += 1;
+      }
+      elements.push(
+        <ol key={`ol-${key++}`}>
+          {items.map((item, itemIndex) => (
+            <li key={itemIndex}>{renderInlineMarkdown(item)}</li>
+          ))}
+        </ol>,
+      );
+      continue;
+    }
+
+    if (/^>\s?/.test(line)) {
+      const quotes: string[] = [];
+      while (index < lines.length && /^>\s?/.test(lines[index])) {
+        quotes.push(lines[index].replace(/^>\s?/, ""));
+        index += 1;
+      }
+      elements.push(<blockquote key={`quote-${key++}`}>{quotes.map((item) => renderInlineMarkdown(item))}</blockquote>);
+      continue;
+    }
+
+    if (/^---+$/.test(line)) {
+      elements.push(<hr key={`hr-${key++}`} />);
+      index += 1;
+      continue;
+    }
+
+    const paragraph: string[] = [];
+    while (index < lines.length && lines[index].trim() && !paragraphStart(lines[index])) {
+      paragraph.push(lines[index]);
+      index += 1;
+    }
+    elements.push(<p key={`p-${key++}`}>{renderInlineMarkdown(paragraph.join(" "))}</p>);
+  }
+
+  return <div className="markdownPreview">{elements}</div>;
+}
+
 function SkillPreviewPanel({
   skill,
   preview,
@@ -603,9 +752,13 @@ function SkillPreviewPanel({
                     <strong>{activeFile.path}</strong>
                     <span>{mode === "latest" ? "latest" : activeHistory?.tag}</span>
                   </div>
-                  <pre>
-                    <code>{activeFile.content}</code>
-                  </pre>
+                  {isMarkdownFile(activeFile) ? (
+                    <MarkdownPreview content={activeFile.content} />
+                  ) : (
+                    <pre>
+                      <code>{activeFile.content}</code>
+                    </pre>
+                  )}
                 </>
               ) : (
                 <div className="empty">当前版本没有可预览的文本文件。</div>
