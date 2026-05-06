@@ -4,9 +4,21 @@
 
 | Skill | 当前版本 | Tag | 作者/来源 | 用途 | 路径 |
 | --- | --- | --- | --- | --- | --- |
-| Git Commit Convention | `v1.0.1` | `git-commit-convention/v1.0.1` | `Jeronasand & Codex` | 根据仓库规范和实际 diff 生成 git commit 内容 | `skills/git-commit-convention/` |
+| Git Commit Convention | `v1.0.2` | `git-commit-convention/v1.0.2` | `Jeronasand & Codex` | 根据仓库规范和实际 diff 生成 git commit 内容 | `skills/git-commit-convention/` |
+| OSS Upload Folder | `v1.0.0` | `oss-upload-folder/v1.0.0` | `Jeronasand & Codex` | 使用 OSS CLI 优先的安全流程上传本地文件夹到阿里云 OSS，并提供可选 Node.js 版本 | `skills/oss-upload-folder/` |
 
 ## 版本记录
+
+### git-commit-convention/v1.0.2
+
+- 补充中文 `README.md`。
+
+### oss-upload-folder/v1.0.0
+
+- 新增 `oss-upload-folder` skill。
+- 默认使用已安装的 `ossutil` 或 `osscli` 上传文件夹到 OSS。
+- 提供可选 Node.js 脚本，需要用户明确选择 Node.js 版本并安装 `ali-oss`。
+- 补充 skill 专属 env 模板、`.gitignore`、来源记录和人工测试记录目录。
 
 ### git-commit-convention/v1.0.1
 

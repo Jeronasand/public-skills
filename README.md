@@ -16,6 +16,7 @@ public-skills/
         ├── .env.<skill-name>.example
         ├── .gitignore
         ├── SKILL.md
+        ├── README.md
         ├── SOURCE.md
         ├── scripts/
         ├── references/
@@ -85,15 +86,26 @@ skills:
 ## 新增 skill 流程
 
 1. 在 `skills/<skill-name>/` 下创建 `SKILL.md`。
-2. 在 `skills/<skill-name>/SOURCE.md` 下记录作者和来源。
-3. 如需脚本，放到 `scripts/`；如需补充文档，放到 `references/`。
-4. 如果需要环境变量，在 skill 目录内创建 `skills/<skill-name>/.env.<skill-name>.example`。
-5. 如果 skill 会产生本地 env、临时文件、测试输出或工具缓存，在 skill 目录内创建 `.gitignore`。
-6. 如果涉及测试或人工验证，在 `skills/<skill-name>/examples/` 下补充测试记录。
-7. 确认内容不包含密钥、账号、私有 payload 或不可公开的内部信息。
-8. 更新 `skills/README.md` 索引和版本记录。
-9. 按仓库提交规范提交。
-10. 使用 `<skill-name>/v<major>.<minor>.<patch>` 打 tag 并推送。
+2. 在 `skills/<skill-name>/README.md` 下写中文使用说明。
+3. 在 `skills/<skill-name>/SOURCE.md` 下记录作者和来源。
+4. 如需脚本，放到 `scripts/`；如需补充文档，放到 `references/`。
+5. 如果需要环境变量，在 skill 目录内创建 `skills/<skill-name>/.env.<skill-name>.example`。
+6. 如果 skill 会产生本地 env、临时文件、测试输出或工具缓存，在 skill 目录内创建 `.gitignore`。
+7. 如果涉及测试或人工验证，在 `skills/<skill-name>/examples/` 下补充测试记录。
+8. 确认内容不包含密钥、账号、私有 payload 或不可公开的内部信息。
+9. 更新 `skills/README.md` 索引和版本记录。
+10. 按仓库提交规范提交。
+11. 使用 `<skill-name>/v<major>.<minor>.<patch>` 打 tag 并推送。
+
+## Skill README 约定
+
+每个 skill 必须提供中文说明：
+
+```text
+skills/<skill-name>/README.md
+```
+
+README 面向人类使用者，至少说明用途、适用场景、引用方式、环境变量、常用命令、版本信息、作者/来源和注意事项。`SKILL.md` 面向 Codex 执行，`README.md` 面向用户阅读，两者都要保持同步。
 
 ## 来源和作者约定
 
