@@ -3,20 +3,20 @@
 ## Current Release
 
 - Skill: `public-skills-catalog`
-- Version: `public-skills-catalog/v1.0.0`
-- Previous version: none
-- Release type: initial
+- Version: `public-skills-catalog/v1.0.1`
+- Previous version: `public-skills-catalog/v1.0.0`
+- Release type: patch
 - Maintainer: `Jeronasand & Codex`
 
 ## Summary
 
-新增用于读取和维护 public-skills 机器可读目录、分类和关联 JSON 的 skill。
+读取和维护 public-skills 机器可读目录、分类和关联 JSON，并在用户解析仓库使用方式时渲染为用户可读表格。
 
 ## Changes
 
-- 新增 `skills/catalog.json`，记录所有 skill 的名称、版本、tag、路径、分类、关键词和维护信息。
-- 新增 `skills/categories.json`，记录 skill 分类和每个分类下的 skill 列表。
-- 新增 `public-skills-catalog` skill，指导 AI 快速读取目录并在创建 skill 时自行归类。
+- 当用户询问仓库怎么用、有哪些 skill 或要求解析仓库时，Codex 应读取 `categories`、`catalog`、`associations` JSON 并渲染分类表、skill 目录表和关联提示表。
+- 默认不直接粘贴完整 raw JSON，除非用户明确要求。
+- 用户选定 skill 后，再输出对应 `.codex/public-skills.yaml` 安装片段。
 
 ## Artifacts
 

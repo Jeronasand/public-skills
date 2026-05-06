@@ -10,9 +10,13 @@
 | AWS CloudFront Invalidate | `v1.0.1` | `aws-cloudfront-invalidate/v1.0.1` | `Jeronasand & Codex` | 使用 AWS CLI 刷新 CloudFront CDN 路径，并支持 alias 校验 | `skills/aws-cloudfront-invalidate/` |
 | AI CLI Context Governance | `v1.0.3` | `ai-cli-context-governance/v1.0.3` | 社群 PDF 来源，`Jeronasand & Codex` 整理 | AI CLI 长上下文性能、幻觉治理、检索、压缩和证据约束工作流 | `skills/ai-cli-context-governance/` |
 | Bucket Upload Policy | `v1.0.1` | `bucket-upload-policy/v1.0.1` | `Jeronasand & Codex` | 判断 skill 相关大文件或二进制资产是否应上传到 OSS/S3，并生成仓库内 artifact manifest | `skills/bucket-upload-policy/` |
-| Public Skills Catalog | `v1.0.0` | `public-skills-catalog/v1.0.0` | `Jeronasand & Codex` | 读取机器可读目录、分类和关联 JSON，帮助 AI 快速了解、筛选、组合和安装 public skills | `skills/public-skills-catalog/` |
+| Public Skills Catalog | `v1.0.1` | `public-skills-catalog/v1.0.1` | `Jeronasand & Codex` | 读取机器可读目录、分类和关联 JSON，并把仓库 skill 信息渲染给用户 | `skills/public-skills-catalog/` |
 
 ## 版本记录
+
+### public-skills-catalog/v1.0.1
+
+- 用户解析仓库使用方式时，将分类、目录和关联 JSON 渲染为用户可读表格。
 
 ### git-commit-convention/v1.0.4
 

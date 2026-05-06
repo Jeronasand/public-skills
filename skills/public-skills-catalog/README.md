@@ -16,6 +16,7 @@ skills/associations.json
 
 - 需要快速知道本仓库有哪些 public skills。
 - 需要按分类查找 skill。
+- 用户询问“这个仓库怎么用”“有哪些 skill”“帮我解析这个仓库”。
 - 需要知道每个 skill 当前固定 tag。
 - 需要在安装某个 skill 前判断是否要提示安装相关 skill。
 - Codex 新增或更新 skill 时，需要同步维护目录、分类和关联。
@@ -32,6 +33,23 @@ skills:
 ```
 
 ## 核心规则
+
+当用户询问这个仓库的使用方式、当前有哪些 skill、如何选择 skill 时，Codex 应读取三份 JSON，并把内容渲染成用户可读的表格：
+
+```text
+skills/categories.json
+skills/catalog.json
+skills/associations.json
+```
+
+渲染顺序：
+
+1. 先展示分类。
+2. 再展示 skill 目录和当前 tag。
+3. 再展示可选关联安装提示。
+4. 用户选定 skill 后，再给 `.codex/public-skills.yaml` 的安装片段。
+
+默认不要直接粘贴完整原始 JSON，除非用户明确要求 raw JSON。
 
 Codex 每次创建或更新 skill 时，必须自己判断分类，并同步：
 
@@ -63,5 +81,6 @@ python3 -m json.tool skills/associations.json >/tmp/public-skills-associations.j
 
 ## 版本
 
-- 当前版本：`public-skills-catalog/v1.0.0`
+- 当前版本：`public-skills-catalog/v1.0.1`
+- `v1.0.1`：用户解析仓库使用方式时，要求把分类、目录和关联 JSON 渲染成用户可读表格。
 - `v1.0.0`：新增 public skills 机器可读目录和分类读取 skill。

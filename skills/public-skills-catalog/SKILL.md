@@ -38,6 +38,28 @@ Use `skills/README.md` only as the human-readable index after reading the JSON f
    - Follow that skill's instructions for execution.
    - Use its `README.md` only for user-facing reference details.
 
+## Repository Usage Rendering
+
+When the user asks how to use this repository, asks to parse this repository, or asks what skills are available, render the JSON metadata for the user instead of only describing it in prose.
+
+Use this output order:
+
+1. Categories from `skills/categories.json`.
+   - Render as a compact table with category id, Chinese name, description, and included skills.
+
+2. Skill catalog from `skills/catalog.json`.
+   - Render as a table with skill name, latest tag, category, env requirement, scripts/examples flags, and short description.
+   - Use `tag` exactly as the install ref.
+
+3. Associations from `skills/associations.json`.
+   - Render as a table with primary skill, related skills, type, and the question Codex should ask before optional installation.
+
+4. Install guidance.
+   - Show the `.codex/public-skills.yaml` entries for only the skills the user chooses or asks about.
+   - If the user has not chosen a skill yet, do not dump every install snippet; first present the rendered catalog and ask which skill or category they want.
+
+Keep the rendered catalog concise. Do not paste full raw JSON unless the user explicitly asks for raw JSON.
+
 ## Maintenance Workflow
 
 When creating or updating a public skill:

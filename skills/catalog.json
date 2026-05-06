@@ -169,8 +169,8 @@
     {
       "name": "public-skills-catalog",
       "title": "Public Skills Catalog",
-      "latestVersion": "v1.0.0",
-      "tag": "public-skills-catalog/v1.0.0",
+      "latestVersion": "v1.0.1",
+      "tag": "public-skills-catalog/v1.0.1",
       "path": "skills/public-skills-catalog/",
       "skillFile": "skills/public-skills-catalog/SKILL.md",
       "readme": "skills/public-skills-catalog/README.md",
@@ -184,13 +184,15 @@
       "requiresEnv": false,
       "hasScripts": false,
       "hasExamples": false,
-      "description": "读取 public-skills 的 catalog、categories 和 associations JSON，帮助 AI 快速了解、筛选、组合和安装可用 skills。",
+      "description": "读取 public-skills 的 catalog、categories 和 associations JSON，帮助 AI 快速了解、筛选、组合、安装，并在用户解析仓库使用方式时渲染 skill 信息。",
       "keywords": [
+        "associations",
         "catalog",
-        "index",
-        "skill-discovery",
         "classification",
-        "associations"
+        "index",
+        "render-catalog",
+        "skill-discovery",
+        "usage-guide"
       ]
     }
   ]
