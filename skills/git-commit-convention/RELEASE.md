@@ -3,8 +3,8 @@
 ## Current Release
 
 - Skill: `git-commit-convention`
-- Version: `git-commit-convention/v1.0.5`
-- Previous version: `git-commit-convention/v1.0.4`
+- Version: `git-commit-convention/v1.0.6`
+- Previous version: `git-commit-convention/v1.0.5`
 - Release type: patch
 - Maintainer: `Jeronasand & Codex`
 
@@ -14,8 +14,9 @@
 
 ## Changes
 
-- 补充可复制给 agent 的安装 prompt。
-- 明确安装前需要检查 `skills/associations.json`，有相关 skill 时先询问用户是否一起安装。
+- 明确必须读取 `CONVENTIONS.md` 等仓库约定文件。
+- 如果仓库规则定义了提交单元、发布单元、生成文件归属或 tag 规则，按本地规则判断拆分提交。
+- 生成文件、索引文件、lockfile 和快照默认跟随触发它们变化的源改动；仓库有明确规则时以仓库规则为准。
 
 ## Artifacts
 

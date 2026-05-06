@@ -6,8 +6,8 @@
     {
       "name": "git-commit-convention",
       "title": "Git Commit Convention",
-      "latestVersion": "v1.0.5",
-      "tag": "git-commit-convention/v1.0.5",
+      "latestVersion": "v1.0.6",
+      "tag": "git-commit-convention/v1.0.6",
       "path": "skills/git-commit-convention/",
       "skillFile": "skills/git-commit-convention/SKILL.md",
       "readme": "skills/git-commit-convention/README.md",
@@ -21,18 +21,20 @@
       "requiresEnv": false,
       "hasScripts": false,
       "hasExamples": false,
-      "description": "根据仓库规范和真实 diff 生成 git commit message；当改动混杂多个主题时，先提示用户是否拆分提交。",
+      "description": "根据仓库规范和真实 diff 生成 git commit message；当仓库规则定义提交/发布单元或改动混杂多个主题时，先提示用户是否拆分提交。",
       "keywords": [
         "agent-install",
         "commit",
         "conventional-commit",
         "git",
         "install-prompt",
+        "local-conventions",
+        "release-unit",
         "repository",
         "split-commit",
         "staging"
       ],
-      "installPrompt": "请从 git@github.com:Jeronasand/public-skills.git 安装 public skill `git-commit-convention`，固定版本 `git-commit-convention/v1.0.5`，安装到当前仓库 `.codex/skills/git-commit-convention`；安装前请检查 `skills/associations.json`，如果存在相关 skill，请先询问我是否一起安装。",
+      "installPrompt": "请从 git@github.com:Jeronasand/public-skills.git 安装 public skill `git-commit-convention`，固定版本 `git-commit-convention/v1.0.6`，安装到当前仓库 `.codex/skills/git-commit-convention`；安装前请检查 `skills/associations.json`，如果存在相关 skill，请先询问我是否一起安装。",
       "createdAt": "2026-05-06",
       "updatedAt": "2026-05-07"
     },

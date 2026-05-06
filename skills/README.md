@@ -4,7 +4,7 @@
 
 | Skill | 当前版本 | Tag | 作者/来源 | 用途 | 路径 |
 | --- | --- | --- | --- | --- | --- |
-| Git Commit Convention | `v1.0.5` | `git-commit-convention/v1.0.5` | `Jeronasand & Codex` | 根据仓库规范和实际 diff 生成 git commit 内容，改动混杂时提示是否拆分提交 | `skills/git-commit-convention/` |
+| Git Commit Convention | `v1.0.6` | `git-commit-convention/v1.0.6` | `Jeronasand & Codex` | 根据仓库规范和实际 diff 生成 git commit 内容，并按仓库约定的提交/发布单元判断是否拆分 | `skills/git-commit-convention/` |
 | OSS Upload Folder | `v1.0.3` | `oss-upload-folder/v1.0.3` | `Jeronasand & Codex` | 使用 OSS CLI 优先的安全流程上传本地文件夹到一个或多个阿里云 OSS 目标，并提供可选 Node.js 版本 | `skills/oss-upload-folder/` |
 | AWS S3 Upload Folder | `v1.0.3` | `aws-s3-upload-folder/v1.0.3` | `Jeronasand & Codex` | 使用 AWS CLI 将本地文件夹上传或同步到一个或多个 Amazon S3 目标 | `skills/aws-s3-upload-folder/` |
 | AWS CloudFront Invalidate | `v1.0.2` | `aws-cloudfront-invalidate/v1.0.2` | `Jeronasand & Codex` | 使用 AWS CLI 刷新 CloudFront CDN 路径，并支持 alias 校验 | `skills/aws-cloudfront-invalidate/` |
@@ -13,6 +13,10 @@
 | Public Skills Catalog | `v1.0.2` | `public-skills-catalog/v1.0.2` | `Jeronasand & Codex` | 读取机器可读目录、分类和关联 JSON，并把仓库 skill 信息渲染给用户 | `skills/public-skills-catalog/` |
 
 ## 版本记录
+
+### git-commit-convention/v1.0.6
+
+- 读取仓库约定文件，并按仓库定义的提交/发布单元判断拆分提交。
 
 ### git-commit-convention/v1.0.5
 

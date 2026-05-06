@@ -30,23 +30,24 @@
 继承模型：
 
 - base skill：来自 `public-skills` 的固定 tag，是上游公共能力。
-- inherited skill：目标仓库基于 base skill 增加的本地扩展层，只在目标仓库生效。
+- inherited skill：目标仓库在 base skill 目录内通过继承文件夹增加的本地扩展层，只在目标仓库生效。
 - public release：只有本仓库发布的 base skill 版本，才算 public skill 版本。
 
 继承和本地扩展应遵守以下边界：
 
 - 所有 skill 默认可继承，不需要单个 skill 额外声明“允许继承”。
 - 来源、作者或许可证限制只影响是否能把本地扩展回流发布到 `public-skills`，不影响目标仓库在本地继承和扩展。
-- 目标仓库可以在 `.codex/skills/<skill-name>/` 中补充本地脚本、模板、示例、项目专属说明或本地 env 文件。
-- 目标仓库应使用 `LOCAL_EXTENSION.md` 或等价本地说明文件记录继承关系，包括 base skill 名称、base tag、本地扩展内容、扩展原因和维护人。
+- 目标仓库需要继承某个 skill 时，必须在该 skill 目录内新建继承文件夹：`.codex/skills/<skill-name>/inheritance/`。
+- 继承文件夹用于存放对当前 skill 的继承和补充，例如本地脚本、模板、示例、项目专属说明、人工测试记录或 override 说明。
+- 继承关系说明应写入 `.codex/skills/<skill-name>/inheritance/README.md`，记录 base skill 名称、base tag、本地扩展内容、扩展原因和维护人。
 - 本地扩展默认属于目标仓库，不自动回流到 `public-skills`。
 - 本地扩展不能影响 public skill 的版本号、tag 或 release 记录；目标仓库仍然引用原始安装 tag。
 - 只有扩展内容被脱敏、通用化并提交回本仓库后，才允许按本仓库版本规则递增 public skill 版本。
 - 只有脱敏、通用、可公开复用的扩展，才可以整理后提交回本仓库。
-- 本地扩展不能覆盖或删除 public skill 的来源、作者、版本和安装说明；如果需要覆盖行为，应在本地新增清晰的 override 文档或脚本。
+- 本地扩展不能覆盖、删除或直接修改 public skill 的来源、作者、版本和安装说明；如果需要覆盖行为，应在 `inheritance/` 中新增清晰的 override 文档或脚本。
 - 需要环境变量时，仍然使用该 skill 目录内的 `.env.<skill-name>`，不要读取宿主项目根目录的通用 `.env` 作为隐式配置。
 - 目标仓库如果对 public skill 做了本地修改，应在本地记录来源 tag 和修改说明，避免后续升级时误以为仍是原始 public 版本。
-- 目标仓库如果需要标记本地扩展版本，应使用本地字段或文件，例如 `LOCAL_EXTENSION.md`，不要修改 public skill 的 `RELEASE.md`、`SOURCE.md` 或安装 prompt 中的固定 tag。
+- 目标仓库如果需要标记本地扩展版本，应写入 `inheritance/README.md` 或 `inheritance/VERSION.md`，不要修改 public skill 的 `RELEASE.md`、`SOURCE.md` 或安装 prompt 中的固定 tag。
 - 当目标仓库升级 base skill tag 时，Codex 必须先阅读本地继承说明，判断本地扩展是否需要迁移、保留或废弃，不得直接覆盖本地扩展。
 
 ## 目录约定

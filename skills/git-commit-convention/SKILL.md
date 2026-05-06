@@ -10,8 +10,9 @@ Use this skill to turn real repository changes into a commit message that follow
 ## Workflow
 
 1. Inspect the repository rules before writing the message.
-   - Read `AGENTS.md`, `CONTRIBUTING.md`, `.gitmessage`, README contribution sections, or package-specific docs if they exist.
+   - Read `AGENTS.md`, `CONVENTIONS.md`, `CONTRIBUTING.md`, `.gitmessage`, README contribution sections, package-specific docs, or other repository-maintained rule files if they exist.
    - Prefer explicit local rules over generic conventions.
+   - Treat repository-maintained rule files as binding for this repository, including any documented commit units, release units, staging rules, generated-file rules, tag rules, or "ask before split/merge" requirements.
    - If the user provides a convention in the prompt, treat it as the newest rule for this task.
 
 2. Inspect the actual change set.
@@ -22,6 +23,9 @@ Use this skill to turn real repository changes into a commit message that follow
 
 3. Decide whether the change set should be split.
    - If the diff mixes unrelated purposes, unrelated modules, generated files plus source edits, formatting-only churn plus behavior changes, or multiple commit types such as `feat` and `fix`, pause before composing a single message.
+   - If the repository rules define commit or release units, use those local units as the primary split boundary.
+   - If the diff mixes files from different locally defined units, propose one commit per unit unless the user explicitly asks to merge them.
+   - Treat generated index files, lockfiles, snapshots, or build metadata according to the repository's local rules; if no local rule exists, commit them with the source change that caused them.
    - Explain the likely split groups in concrete file or behavior terms.
    - Ask the user whether they want separate commits.
    - Do not split or partially stage without user confirmation.
