@@ -72,8 +72,10 @@ shasum -a 256 artifact-upload/ai-cli-context-governance/v1.0.1/AI_CLI_context_so
 Result:
 
 - SHA-256: `2b852917429f455c1d6cdd19620c5b5722ecc1df6bf006382681a190ea7f5c4e`
-- Upload dry-run was blocked because local `ossutil`/`osscli` was not installed during verification.
-- Artifact manifest was added with status `Pending upload`.
+- Initial OSS CLI dry-run was blocked because local `ossutil`/`osscli` was not installed during verification.
+- Node.js upload path succeeded after using local `.env.oss-upload-folder` credentials and temporary `ali-oss` dependencies under `/tmp`.
+- OSS SDK HEAD returned `200`, content length `131103`, ETag `"CD254638D2C06F1ECE6BB3F00732EC24"`.
+- Public URL HEAD returned `200 OK`, content type `application/pdf`, content length `131103`, ETag `"CD254638D2C06F1ECE6BB3F00732EC24"` after the bucket owner updated read permissions.
 
 ## Result
 

@@ -78,6 +78,8 @@ oss://public-skills/skills/ai-cli-context-governance/v1.0.1/AI_CLI_context_solut
 https://publick-skills.jeronasand.cn/skills/ai-cli-context-governance/v1.0.1/AI_CLI_context_solution.pdf
 ```
 
+当前状态：PDF 已上传到 OSS，SDK HEAD 和公开域名 HEAD 均验证通过。
+
 ## 作者和来源
 
 - 来源：社群「新•AI游戏开发」未来游戏人交流中的 PDF《AI CLI 长上下文性能与幻觉治理方案》
@@ -87,6 +89,7 @@ https://publick-skills.jeronasand.cn/skills/ai-cli-context-governance/v1.0.1/AI_
 
 ## 版本
 
-- 当前版本：`ai-cli-context-governance/v1.0.1`
+- 当前版本：`ai-cli-context-governance/v1.0.2`
+- `v1.0.2`：更新 PDF artifact 上传状态，公开访问已验证。
 - `v1.0.1`：补充原始 PDF 的 OSS artifact manifest。
 - `v1.0.0`：新增 AI CLI 上下文治理 skill。
