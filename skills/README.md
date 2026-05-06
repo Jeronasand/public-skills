@@ -8,8 +8,15 @@
 | OSS Upload Folder | `v1.0.1` | `oss-upload-folder/v1.0.1` | `Jeronasand & Codex` | 使用 OSS CLI 优先的安全流程上传本地文件夹到一个或多个阿里云 OSS 目标，并提供可选 Node.js 版本 | `skills/oss-upload-folder/` |
 | AWS S3 Upload Folder | `v1.0.1` | `aws-s3-upload-folder/v1.0.1` | `Jeronasand & Codex` | 使用 AWS CLI 将本地文件夹上传或同步到一个或多个 Amazon S3 目标 | `skills/aws-s3-upload-folder/` |
 | AWS CloudFront Invalidate | `v1.0.0` | `aws-cloudfront-invalidate/v1.0.0` | `Jeronasand & Codex` | 使用 AWS CLI 刷新 CloudFront CDN 路径，并支持 alias 校验 | `skills/aws-cloudfront-invalidate/` |
+| AI CLI Context Governance | `v1.0.0` | `ai-cli-context-governance/v1.0.0` | 社群 PDF 来源，`Jeronasand & Codex` 整理 | AI CLI 长上下文性能、幻觉治理、检索、压缩和证据约束工作流 | `skills/ai-cli-context-governance/` |
 
 ## 版本记录
+
+### ai-cli-context-governance/v1.0.0
+
+- 新增 `ai-cli-context-governance` skill。
+- 来源于社群「新•AI游戏开发」未来游戏人交流中的 PDF《AI CLI 长上下文性能与幻觉治理方案》。
+- 沉淀 Hot/Warm/Cold context、token budget、prompt caching、evidence block、`/compact`、`/pin`、`/forget`、`/retrieve` 等 AI CLI 上下文治理流程。
 
 ### aws-s3-upload-folder/v1.0.1
 

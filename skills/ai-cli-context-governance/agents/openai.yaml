@@ -1,0 +1,4 @@
+interface:
+  display_name: "AI CLI Context Governance"
+  short_description: "Design long-context AI CLI systems with retrieval, compaction, and evidence controls."
+  default_prompt: "Help me diagnose and improve an AI CLI long-context workflow using layered context and evidence-driven generation."
