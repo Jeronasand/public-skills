@@ -10,6 +10,7 @@
 public-skills/
 ├── AGENTS.md
 ├── README.md
+├── .env.<skill-name>.example
 └── skills/
     ├── README.md
     └── <skill-name>/
@@ -82,10 +83,27 @@ skills:
 
 1. 在 `skills/<skill-name>/` 下创建 `SKILL.md`。
 2. 如需脚本，放到 `scripts/`；如需补充文档，放到 `references/`。
-3. 确认内容不包含密钥、账号、私有 payload 或不可公开的内部信息。
-4. 更新 `skills/README.md` 索引和版本记录。
-5. 按仓库提交规范提交。
-6. 使用 `<skill-name>/v<major>.<minor>.<patch>` 打 tag 并推送。
+3. 如果需要环境变量，在仓库根目录创建 `.env.<skill-name>.example`。
+4. 确认内容不包含密钥、账号、私有 payload 或不可公开的内部信息。
+5. 更新 `skills/README.md` 索引和版本记录。
+6. 按仓库提交规范提交。
+7. 使用 `<skill-name>/v<major>.<minor>.<patch>` 打 tag 并推送。
+
+## 环境变量约定
+
+如果 skill 需要环境变量，必须提供根目录 example 文件：
+
+```text
+.env.<skill-name>.example
+```
+
+使用者在目标仓库根目录自己复制一份本地配置：
+
+```bash
+cp .env.<skill-name>.example .env.<skill-name>
+```
+
+skill 应读取 `.env.<skill-name>`，不要默认读取宿主环境或通用 `.env`，避免误用目标机器上的同名变量。缺少必需变量时，应提示用户补全该 skill 专属 env 文件。
 
 ## 提交规范
 

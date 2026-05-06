@@ -23,6 +23,7 @@
 - `skills/<skill-name>/SKILL.md`：每个 skill 的主说明文件。
 - `skills/<skill-name>/scripts/`：可选，放置该 skill 需要复用的脚本。
 - `skills/<skill-name>/references/`：可选，放置该 skill 的补充参考文档。
+- `.env.<skill-name>.example`：可选但有环境变量时必需，放在仓库根目录，记录该 skill 需要的环境变量模板。
 - `skills/README.md`：公开 skill 索引，新增 skill 时同步更新。
 
 ## 版本约定
@@ -39,6 +40,14 @@
 - 示例命令使用占位符，不能包含真实 token、私钥、cookie、账号或内部 URL。
 - 如果 skill 依赖本地工具，写清楚依赖名称、检查命令和失败时的处理方式。
 - 如果 skill 包含脚本，脚本默认先提供 dry-run 或预览能力，再执行有副作用操作。
+
+## 环境变量约定
+
+- 如果 skill 需要环境变量，必须在仓库根目录提供 `.env.<skill-name>.example`。
+- example 文件只写变量名、注释和安全占位值，不写真实密钥、token、cookie、账号或私有 endpoint。
+- `SKILL.md` 必须明确要求使用者在目标仓库根目录复制一份本地配置，例如 `cp .env.<skill-name>.example .env.<skill-name>`。
+- skill 执行时应优先读取目标仓库根目录的 `.env.<skill-name>`，避免直接使用宿主环境或通用 `.env` 中的同名变量。
+- 如果缺少必需变量，skill 应停止并提示用户补全 `.env.<skill-name>`，不要静默回退到宿主环境。
 
 ## Git 提交规范
 
