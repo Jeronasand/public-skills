@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generatedAt": "2026-05-06T21:15:47.551Z",
+  "generatedAt": "2026-05-08T03:57:06.839Z",
   "repository": "Jeronasand/public-skills",
   "skills": [
     {
       "name": "git-commit-convention",
-      "tag": "git-commit-convention/v1.0.6",
+      "tag": "git-commit-convention/v1.0.7",
       "method": "deepseek",
       "model": "deepseek-v4-pro",
       "aliases": [
@@ -17,31 +17,31 @@
         "约定式提交"
       ],
       "intents": [
-        "generate a commit message from git diff",
-        "follow repository commit conventions",
+        "generate commit message from diff",
+        "follow repository commit rules",
         "split mixed changes into separate commits",
-        "create conventional commit style message",
+        "create conventional commit message",
         "根据仓库规范生成提交信息",
-        "将改动拆分为多个提交",
-        "生成约定式提交格式的信息"
+        "拆分混合改动为多个提交",
+        "生成约定式提交信息"
       ],
       "useCases": [
-        "User wants to commit staged changes and needs a message that follows the repo's CONTRIBUTING.md rules.",
-        "User has a diff mixing feature work and formatting fixes and needs guidance on splitting commits.",
-        "User asks Codex to commit all changes and wants the commit message to match the project's conventional commit standard.",
-        "用户要求根据仓库的AGENTS.md规范为暂存区改动生成提交信息。",
-        "用户需要将包含功能开发和文档更新的混合改动拆分为两个独立的提交。"
+        "User wants to commit staged changes following the repo's CONTRIBUTING.md rules.",
+        "User has mixed feature and fix changes and needs to split them into separate commits.",
+        "User asks Codex to write a commit message for the current diff.",
+        "用户要求根据仓库规范生成提交信息。",
+        "用户需要将功能改动和修复拆分成两个提交。"
       ],
       "priorityTerms": [
+        "git commit",
         "conventional commit",
-        "git commit message",
-        "commit splitting",
-        "repository convention",
+        "commit message",
+        "split commit",
+        "提交规范",
         "约定式提交",
-        "提交信息生成",
-        "提交拆分"
+        "拆分提交"
       ],
-      "updatedAt": "2026-05-06T21:15:47.551Z"
+      "updatedAt": "2026-05-08T03:57:06.839Z"
     },
     {
       "name": "oss-upload-folder",
@@ -49,47 +49,43 @@
       "method": "deepseek",
       "model": "deepseek-v4-pro",
       "aliases": [
-        "oss upload",
-        "oss sync",
-        "upload to oss",
-        "oss folder upload",
+        "oss-upload-folder",
+        "oss上传文件夹",
+        "oss同步目录",
+        "oss sync folder",
+        "oss deploy static site",
+        "oss发布静态网站",
         "ossutil upload",
-        "osscli upload",
-        "阿里云OSS上传",
-        "OSS上传文件夹",
-        "OSS同步",
-        "静态网站部署到OSS"
+        "osscli upload"
       ],
       "intents": [
-        "upload a local folder to Alibaba Cloud OSS",
-        "sync a directory to OSS bucket",
+        "upload local folder to Alibaba Cloud OSS",
+        "sync directory to OSS bucket",
         "deploy static site to OSS",
-        "mirror local files to OSS",
         "publish dist folder to OSS",
-        "use ossutil to upload folder",
-        "use osscli to sync directory",
-        "upload to multiple OSS buckets"
+        "mirror local files to OSS",
+        "使用OSS CLI上传文件夹",
+        "将本地目录同步到阿里云OSS",
+        "发布静态网站到OSS"
       ],
       "useCases": [
-        "Upload a static website's dist/ folder to an OSS bucket for hosting.",
-        "Sync a local backup directory to OSS for offsite storage.",
-        "Deploy frontend build output to multiple OSS buckets for multi-region distribution.",
-        "Preview which files will be uploaded to OSS before performing the actual upload.",
-        "Mirror a local media library to OSS using the CLI tool.",
-        "将静态网站的dist文件夹上传到OSS存储桶用于托管。"
+        "Upload a static website build output (dist/) to an OSS bucket for hosting.",
+        "Sync a local media folder to multiple OSS buckets for redundancy.",
+        "Preview OSS upload changes with --dry-run before executing the actual sync.",
+        "Use the Node.js version to upload files when the project already uses ali-oss.",
+        "Delete remote files not present locally using the --delete flag with confirmation."
       ],
       "priorityTerms": [
         "oss upload folder",
         "ossutil upload",
         "osscli sync",
-        "aliyun oss upload",
-        "static site deploy oss",
-        "OSS上传文件夹",
+        "static site deploy OSS",
         "阿里云OSS上传",
-        "ossutil上传",
-        "静态网站部署OSS"
+        "OSS同步目录",
+        "oss deploy dist",
+        "oss dry-run upload"
       ],
-      "updatedAt": "2026-05-06T21:15:47.551Z"
+      "updatedAt": "2026-05-08T03:57:06.839Z"
     },
     {
       "name": "aws-s3-upload-folder",
@@ -100,33 +96,39 @@
         "s3 upload folder",
         "s3 sync directory",
         "aws s3 deploy",
-        "S3 文件夹上传",
-        "S3 同步目录",
-        "AWS S3 部署"
+        "s3 上传文件夹",
+        "s3 同步目录",
+        "aws s3 部署"
       ],
       "intents": [
         "upload local folder to S3",
-        "sync static site to S3",
-        "deploy dist to S3",
+        "sync directory to S3 bucket",
+        "deploy static site to S3",
+        "publish dist to S3",
         "将本地文件夹上传到 S3",
-        "同步静态网站到 S3",
-        "部署 dist 到 S3"
+        "同步目录到 S3 存储桶",
+        "部署静态网站到 S3",
+        "发布 dist 到 S3"
       ],
       "useCases": [
-        "Publish a static website by syncing the build output folder to an S3 bucket.",
-        "Upload a directory of assets to multiple S3 buckets for redundancy.",
-        "通过同步构建输出文件夹到 S3 存储桶来发布静态网站。",
-        "将资产目录上传到多个 S3 存储桶以实现冗余。"
+        "Upload a built React app from ./dist to s3://my-site-bucket/prod/",
+        "Sync a local assets folder to multiple S3 buckets for redundancy",
+        "Preview S3 upload with --dry-run before actual deployment",
+        "将构建好的 React 应用从 ./dist 上传到 s3://my-site-bucket/prod/",
+        "将本地资源文件夹同步到多个 S3 存储桶以实现冗余",
+        "在实际部署前使用 --dry-run 预览 S3 上传"
       ],
       "priorityTerms": [
         "aws s3 sync",
-        "s3 upload",
-        "static site deploy",
-        "s3 cp recursive",
-        "S3 上传",
-        "静态网站部署"
+        "s3 upload folder",
+        "s3 deploy",
+        "static site s3",
+        "s3 上传",
+        "s3 同步",
+        "s3 部署",
+        "静态网站 s3"
       ],
-      "updatedAt": "2026-05-06T21:15:47.551Z"
+      "updatedAt": "2026-05-08T03:57:06.839Z"
     },
     {
       "name": "aws-cloudfront-invalidate",
@@ -137,37 +139,39 @@
         "cloudfront invalidate",
         "CDN cache refresh",
         "aws cloudfront invalidation",
-        "刷新CDN",
-        "CloudFront缓存刷新",
-        "CDN缓存失效"
+        "刷新CloudFront",
+        "CDN缓存刷新",
+        "cloudfront刷新"
       ],
       "intents": [
         "invalidate CloudFront cache",
         "refresh CDN after S3 upload",
-        "clear CloudFront cache for specific paths",
-        "verify distribution alias before invalidation",
-        "create CloudFront invalidation with AWS CLI",
+        "clear CloudFront paths",
+        "create CloudFront invalidation",
+        "verify distribution alias before invalidating",
+        "preview CloudFront invalidation",
         "刷新CloudFront缓存",
-        "清除CDN缓存",
-        "使CloudFront路径失效"
+        "清除CDN缓存"
       ],
       "useCases": [
-        "After deploying a static site to S3, invalidate /index.html and /assets/* on CloudFront to serve the latest content.",
-        "Before invalidating, verify that the CloudFront distribution is associated with the domain example.com using the --alias flag.",
-        "Preview an invalidation for /images/* on distribution E1234567890ABC using --dry-run to avoid accidental cache clearing.",
-        "Invalidate multiple paths like /about.html and /contact.html on a CloudFront distribution after a content update.",
-        "Use the skill to automate CDN cache refresh in a CI/CD pipeline after uploading new assets to S3."
+        "After deploying a static site to S3, invalidate /index.html and /assets/* on the CloudFront distribution.",
+        "Use --alias to ensure the correct distribution is targeted before running an invalidation.",
+        "Preview the invalidation paths with --dry-run before executing to avoid mistakes.",
+        "Invalidate a specific file like /images/logo.png to update it immediately on the CDN.",
+        "S3静态站点上传后，刷新CloudFront上的/index.html和/assets/*路径。",
+        "使用--alias校验域名对应的分发，避免刷错CDN。"
       ],
       "priorityTerms": [
-        "CloudFront invalidation",
+        "cloudfront invalidate",
         "CDN cache refresh",
-        "aws cloudfront create-invalidation",
-        "S3 static site deploy",
-        "CloudFront缓存刷新",
-        "CDN失效",
-        "AWS CLI invalidate"
+        "aws cloudfront invalidation",
+        "刷新CloudFront",
+        "CDN缓存刷新",
+        "cloudfront刷新",
+        "invalidate cloudfront",
+        "cloudfront cache clear"
       ],
-      "updatedAt": "2026-05-06T21:15:47.551Z"
+      "updatedAt": "2026-05-08T03:57:06.839Z"
     },
     {
       "name": "ai-cli-context-governance",
@@ -177,46 +181,48 @@
       "aliases": [
         "context governance",
         "上下文治理",
+        "AI CLI context",
+        "long context optimization",
         "长上下文优化",
-        "AI CLI 上下文管理",
+        "hallucination control",
+        "幻觉治理",
         "context compaction",
         "上下文压缩",
-        "幻觉治理",
-        "hallucination control",
-        "prompt 结构优化",
-        "prompt caching"
+        "evidence-driven generation"
       ],
       "intents": [
-        "优化 AI CLI 长上下文性能",
-        "减少模型幻觉",
-        "设计上下文分层架构",
-        "实现 /compact /pin /forget 命令",
-        "制定 token 预算",
-        "构建证据驱动的生成流程",
-        "排查上下文污染问题",
-        "提升 prompt caching 效率"
+        "Reduce AI CLI slowness caused by large context",
+        "解决 AI CLI 长上下文导致的响应变慢",
+        "Prevent model hallucinations in long conversations",
+        "防止模型在长对话中产生幻觉",
+        "Design context compaction and retrieval for AI CLI",
+        "为 AI CLI 设计上下文压缩和检索机制",
+        "Implement evidence-constrained generation",
+        "实现基于证据约束的生成"
       ],
       "useCases": [
-        "当 AI CLI 对话轮次增加后响应变慢，需要压缩上下文并引入检索机制",
-        "模型在长上下文中引用过时信息或编造不存在的文件，需要实施证据约束",
-        "设计新的 AI CLI 工具时，规划 hot/warm/cold 三层上下文架构",
-        "为现有 CLI 添加 /compact 命令以将对话压缩为结构化状态",
-        "排查 prompt 中重复发送完整历史导致 token 超限的问题",
-        "需要固定关键约束或文件到每轮上下文，防止模型偏离目标"
+        "A developer wants to stop their AI CLI from getting slower each turn by implementing rolling summaries and retrieval.",
+        "开发者希望通过实现滚动摘要和检索，阻止 AI CLI 每轮都变慢。",
+        "A team needs to prevent the AI from inventing functions by enforcing evidence-only answers.",
+        "团队需要通过强制仅基于证据回答，防止 AI 编造函数。",
+        "An engineer is designing a new AI CLI and needs a layered context architecture with hot, warm, and cold contexts.",
+        "工程师正在设计新的 AI CLI，需要包含热、温、冷上下文的分层架构。"
       ],
       "priorityTerms": [
-        "上下文治理",
         "context governance",
-        "长上下文优化",
-        "幻觉治理",
-        "evidence-driven",
-        "prompt caching",
-        "token budget",
-        "context compaction",
-        "检索增强生成",
-        "AI CLI 架构"
+        "上下文治理",
+        "AI CLI",
+        "long context",
+        "长上下文",
+        "hallucination",
+        "幻觉",
+        "compaction",
+        "压缩",
+        "retrieval",
+        "检索",
+        "evidence"
       ],
-      "updatedAt": "2026-05-06T21:15:47.551Z"
+      "updatedAt": "2026-05-08T03:57:06.839Z"
     },
     {
       "name": "bucket-upload-policy",
@@ -227,33 +233,37 @@
         "bucket-upload-policy",
         "upload-policy",
         "artifact-upload-policy",
+        "oss-upload-policy",
+        "s3-upload-policy",
         "大文件上传策略",
         "制品上传规范",
-        "OSS上传策略",
-        "S3上传策略"
+        "对象存储上传策略"
       ],
       "intents": [
         "判断大文件是否应上传到对象存储",
-        "生成制品清单而非提交二进制文件",
-        "配置OSS或S3上传策略",
-        "保持仓库轻量避免提交大文件",
-        "管理技能相关的外部资产引用"
+        "生成制品清单避免提交二进制文件",
+        "规范 OSS/S3 上传路径和权限",
+        "保持仓库轻量，只保留链接和校验信息",
+        "为 skill 相关资产选择存储位置"
       ],
       "useCases": [
-        "当技能包含PDF、图片或视频等非代码资产时，使用此策略决定上传到OSS并生成manifest",
-        "需要将大型测试文件或二进制样例存储到S3，并在仓库中仅保留链接和校验信息",
-        "在公共技能仓库中，通过OSS公开访问技能相关截图和文档，避免仓库膨胀"
+        "当 skill 包含 PDF 参考文档时，上传到 OSS 并生成 manifest 记录链接和校验值",
+        "当 skill 需要截图或视频作为示例时，上传到 S3 并在仓库中保留引用",
+        "当 skill 依赖大型测试文件或二进制样例时，使用本策略避免提交到 git",
+        "当希望公开访问生成的产物时，按规范上传到 public-skills 桶并记录公开 URL"
       ],
       "priorityTerms": [
-        "bucket-upload-policy",
+        "bucket upload policy",
         "artifact manifest",
         "OSS upload",
         "S3 upload",
+        "large file storage",
+        "object storage policy",
+        "制品清单",
         "大文件上传",
-        "对象存储策略",
-        "制品清单"
+        "对象存储策略"
       ],
-      "updatedAt": "2026-05-06T21:15:47.551Z"
+      "updatedAt": "2026-05-08T03:57:06.839Z"
     },
     {
       "name": "public-skills-catalog",
@@ -265,34 +275,42 @@
         "技能目录",
         "技能索引",
         "skill catalog",
-        "skill index"
+        "skill index",
+        "技能发现",
+        "skill discovery",
+        "技能安装指南",
+        "skill install guide"
       ],
       "intents": [
-        "查看所有公开技能",
+        "查看仓库有哪些公开技能",
         "按分类查找技能",
-        "了解技能安装方式",
-        "发现相关技能",
+        "了解技能的最新版本和标签",
+        "获取技能的安装提示",
+        "了解技能之间的关联关系",
+        "解析仓库使用方式",
+        "渲染技能目录信息",
         "维护技能目录元数据"
       ],
       "useCases": [
-        "用户询问“这个仓库有哪些技能”时，读取并渲染技能目录",
-        "需要按分类（如代码生成、文档处理）筛选技能",
-        "安装某个技能前，检查是否有推荐的关联技能",
-        "新增或更新技能后，自动更新目录、分类和关联JSON文件"
+        "用户询问“这个仓库怎么用”时，读取并渲染技能目录、分类和关联信息。",
+        "需要按分类（如代码生成、文档处理）查找合适的技能。",
+        "在安装某个技能前，检查关联技能并提示用户是否一起安装。",
+        "Codex 新增或更新技能时，自动同步更新目录、分类和关联 JSON 文件。",
+        "为其他仓库提供可复制的技能安装 prompt。"
       ],
       "priorityTerms": [
         "技能目录",
         "skill catalog",
-        "技能发现",
-        "skill discovery",
+        "技能分类",
+        "skill categories",
+        "技能关联",
+        "skill associations",
         "安装提示",
         "install prompt",
-        "分类",
-        "categories",
-        "关联",
-        "associations"
+        "仓库解析",
+        "repository usage"
       ],
-      "updatedAt": "2026-05-06T21:15:47.551Z"
+      "updatedAt": "2026-05-08T03:57:06.839Z"
     }
   ]
 }

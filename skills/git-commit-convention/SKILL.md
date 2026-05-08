@@ -22,15 +22,24 @@ Use this skill to turn real repository changes into a commit message that follow
    - Do not include unrelated dirty files in the message unless they are part of the requested commit.
 
 3. Decide whether the change set should be split.
-   - If the diff mixes unrelated purposes, unrelated modules, generated files plus source edits, formatting-only churn plus behavior changes, or multiple commit types such as `feat` and `fix`, pause before composing a single message.
+   - Default to separate commits when the diff mixes unrelated purposes, unrelated modules, generated files plus source edits, formatting-only churn plus behavior changes, dependency/runtime changes plus repo tooling, or multiple commit types such as `feat` and `fix`.
+   - Treat repo-local Codex skill installation or updates under `.codex/skills/` or `.codex/public-skills.yaml` as a separate repository-maintenance commit unless the repository explicitly defines it as part of the same release unit.
+   - Treat package dependency updates, import migrations, build configuration changes, and runtime code changes as separate from agent/tooling setup unless they are directly required by the same source change.
    - If the repository rules define commit or release units, use those local units as the primary split boundary.
    - If the diff mixes files from different locally defined units, propose one commit per unit unless the user explicitly asks to merge them.
    - Treat generated index files, lockfiles, snapshots, or build metadata according to the repository's local rules; if no local rule exists, commit them with the source change that caused them.
    - Explain the likely split groups in concrete file or behavior terms.
-   - Ask the user whether they want separate commits.
+   - Ask the user to confirm the split only when staging/committing will be performed. If the user only asked for commit messages, output one message per split group.
    - Do not split or partially stage without user confirmation.
    - If the user confirms, create one focused message per group and stage/commit each group separately.
    - If the user wants one commit anyway, write a single message that honestly describes the combined scope.
+
+   Example: if one change set includes `@mizumessenger/sui-stack-messaging` dependency/import replacement and `.codex/skills/git-commit-convention/` installation, do not write one combined message such as `chore: update messaging package and commit skill`. Split it into two focused commits, for example:
+
+   ```text
+   chore: update messaging package
+   chore: install git commit convention skill
+   ```
 
 4. Choose the commit type from the repo convention.
    - Common types: `feat`, `fix`, `docs`, `chore`, `refactor`, `test`, `build`, `ci`, `perf`.
