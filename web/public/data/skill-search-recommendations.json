@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generatedAt": "2026-05-11T03:49:55.098Z",
+  "generatedAt": "2026-05-11T05:53:48.957Z",
   "repository": "Jeronasand/public-skills",
   "skills": [
     {
@@ -124,6 +124,44 @@
         "OSS Dual Bucket Access"
       ],
       "updatedAt": "2026-05-11T03:49:55.098Z"
+    },
+    {
+      "name": "react-ts-web-init",
+      "tag": "react-ts-web-init/v1.0.0",
+      "method": "fallback",
+      "model": null,
+      "aliases": [
+        "React TS Web Init",
+        "react-ts-web-init",
+        "agent-install",
+        "componentized",
+        "frontend",
+        "install-prompt",
+        "react",
+        "react-router"
+      ],
+      "intents": [
+        "初始化 React + TypeScript Web 项目，默认使用 Vite、组件化目录、React Router 路由管理和 Tailwind CSS Vite 插件。",
+        "web-frontend-development"
+      ],
+      "useCases": [
+        "初始化 React + TypeScript Web 项目，默认使用 Vite、组件化目录、React Router 路由管理和 Tailwind CSS Vite 插件。"
+      ],
+      "priorityTerms": [
+        "agent-install",
+        "componentized",
+        "frontend",
+        "install-prompt",
+        "react",
+        "react-router",
+        "tailwindcss",
+        "typescript",
+        "vite",
+        "web-init",
+        "react-ts-web-init",
+        "React TS Web Init"
+      ],
+      "updatedAt": "2026-05-11T05:53:48.957Z"
     },
     {
       "name": "aws-s3-upload-folder",

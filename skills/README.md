@@ -7,6 +7,7 @@
 | Git Commit Convention | `v1.0.7` | `git-commit-convention/v1.0.7` | `Jeronasand & Codex` | 根据仓库规范和实际 diff 生成 git commit 内容，并默认拆分依赖/代码迁移与 repo-local skill 安装等不同业务目的 | `skills/git-commit-convention/` |
 | OSS Upload Folder | `v1.0.3` | `oss-upload-folder/v1.0.3` | `Jeronasand & Codex` | 使用 OSS CLI 优先的安全流程上传本地文件夹到一个或多个阿里云 OSS 目标，并提供可选 Node.js 版本 | `skills/oss-upload-folder/` |
 | OSS Dual Bucket Access | `v1.0.0` | `oss-dual-bucket-access/v1.0.0` | `Jeronasand & Codex` | 规划 OSS 双桶访问：登录桶使用用户 OSS AK 或 STS token，数据源桶先确认访问模式再按最小权限访问 | `skills/oss-dual-bucket-access/` |
+| React TS Web Init | `v1.0.0` | `react-ts-web-init/v1.0.0` | `Jeronasand & Codex` | 初始化 React + TypeScript Web 项目，默认使用 Vite、组件化目录、React Router 路由管理和 Tailwind CSS Vite 插件 | `skills/react-ts-web-init/` |
 | AWS S3 Upload Folder | `v1.0.3` | `aws-s3-upload-folder/v1.0.3` | `Jeronasand & Codex` | 使用 AWS CLI 将本地文件夹上传或同步到一个或多个 Amazon S3 目标 | `skills/aws-s3-upload-folder/` |
 | AWS CloudFront Invalidate | `v1.0.2` | `aws-cloudfront-invalidate/v1.0.2` | `Jeronasand & Codex` | 使用 AWS CLI 刷新 CloudFront CDN 路径，并支持 alias 校验 | `skills/aws-cloudfront-invalidate/` |
 | AI CLI Context Governance | `v1.0.5` | `ai-cli-context-governance/v1.0.5` | 社群 PDF 来源，`Jeronasand & Codex` 整理 | AI CLI 长上下文性能、幻觉治理、检索、压缩和证据约束工作流 | `skills/ai-cli-context-governance/` |
@@ -14,6 +15,10 @@
 | Public Skills Catalog | `v1.0.2` | `public-skills-catalog/v1.0.2` | `Jeronasand & Codex` | 读取机器可读目录、分类和关联 JSON，并把仓库 skill 信息渲染给用户 | `skills/public-skills-catalog/` |
 
 ## 版本记录
+
+### react-ts-web-init/v1.0.0
+
+- 新增 React + TypeScript Web 初始化 skill，默认使用 Vite、组件化目录、React Router 路由管理和 Tailwind CSS Vite 插件，并将 OSS 上传发布作为可选关联。
 
 ### oss-dual-bucket-access/v1.0.0
 

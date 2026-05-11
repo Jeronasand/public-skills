@@ -23,6 +23,14 @@
       ]
     },
     {
+      "id": "web-frontend-development",
+      "name": "Web 前端开发",
+      "description": "用于 Web 前端项目初始化、组件化结构、路由管理和 CSS 工程化。",
+      "skills": [
+        "react-ts-web-init"
+      ]
+    },
+    {
       "id": "ai-cli-architecture",
       "name": "AI CLI 架构",
       "description": "用于 AI CLI 上下文治理、长上下文性能、幻觉控制和证据约束。",

@@ -35,6 +35,17 @@
       "reason": "bucket-upload-policy 可在数据源桶写入前判断 artifact 边界，避免把大文件误提交到 git 或把不该公开的内容上传到 OSS。"
     },
     {
+      "id": "react-ts-web-init-oss-publish",
+      "type": "optional-followup",
+      "primary": "react-ts-web-init",
+      "related": [
+        "oss-upload-folder"
+      ],
+      "prompt": "如果初始化后的 React + TypeScript Web 项目需要把 dist/ 发布到阿里云 OSS，是否同时安装 oss-upload-folder？",
+      "installDefault": false,
+      "reason": "react-ts-web-init 负责前端项目初始化；oss-upload-folder 可在构建后提供 preview-first 的 OSS dist/ 上传流程。"
+    },
+    {
       "id": "s3-upload-artifact-policy",
       "type": "optional-precheck",
       "primary": "aws-s3-upload-folder",

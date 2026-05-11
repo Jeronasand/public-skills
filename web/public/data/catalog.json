@@ -106,6 +106,41 @@
       "updatedAt": "2026-05-11"
     },
     {
+      "name": "react-ts-web-init",
+      "title": "React TS Web Init",
+      "latestVersion": "v1.0.0",
+      "tag": "react-ts-web-init/v1.0.0",
+      "path": "skills/react-ts-web-init/",
+      "skillFile": "skills/react-ts-web-init/SKILL.md",
+      "readme": "skills/react-ts-web-init/README.md",
+      "source": "skills/react-ts-web-init/SOURCE.md",
+      "release": "skills/react-ts-web-init/RELEASE.md",
+      "categories": [
+        "web-frontend-development"
+      ],
+      "author": "Jeronasand & Codex",
+      "sourceType": "original",
+      "requiresEnv": false,
+      "hasScripts": true,
+      "hasExamples": true,
+      "description": "初始化 React + TypeScript Web 项目，默认使用 Vite、组件化目录、React Router 路由管理和 Tailwind CSS Vite 插件。",
+      "keywords": [
+        "agent-install",
+        "componentized",
+        "frontend",
+        "install-prompt",
+        "react",
+        "react-router",
+        "tailwindcss",
+        "typescript",
+        "vite",
+        "web-init"
+      ],
+      "installPrompt": "请从 git@github.com:Jeronasand/public-skills.git 安装 public skill `react-ts-web-init`，固定版本 `react-ts-web-init/v1.0.0`，安装到当前仓库 `.codex/skills/react-ts-web-init`；安装前请检查 `skills/associations.json`，如果存在相关 skill，请先询问我是否一起安装。",
+      "createdAt": "2026-05-11",
+      "updatedAt": "2026-05-11"
+    },
+    {
       "name": "aws-s3-upload-folder",
       "title": "AWS S3 Upload Folder",
       "latestVersion": "v1.0.3",
