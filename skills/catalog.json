@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generatedAt": "2026-05-07",
+  "generatedAt": "2026-05-11",
   "repository": "git@github.com:Jeronasand/public-skills.git",
   "skills": [
     {
@@ -36,7 +36,7 @@
       ],
       "installPrompt": "请从 git@github.com:Jeronasand/public-skills.git 安装 public skill `git-commit-convention`，固定版本 `git-commit-convention/v1.0.7`，安装到当前仓库 `.codex/skills/git-commit-convention`；安装前请检查 `skills/associations.json`，如果存在相关 skill，请先询问我是否一起安装。",
       "createdAt": "2026-05-06",
-      "updatedAt": "2026-05-07"
+      "updatedAt": "2026-05-08"
     },
     {
       "name": "oss-upload-folder",
@@ -69,6 +69,41 @@
       "installPrompt": "请从 git@github.com:Jeronasand/public-skills.git 安装 public skill `oss-upload-folder`，固定版本 `oss-upload-folder/v1.0.3`，安装到当前仓库 `.codex/skills/oss-upload-folder`；安装前请检查 `skills/associations.json`，如果存在相关 skill，请先询问我是否一起安装。",
       "createdAt": "2026-05-06",
       "updatedAt": "2026-05-07"
+    },
+    {
+      "name": "oss-dual-bucket-access",
+      "title": "OSS Dual Bucket Access",
+      "latestVersion": "v1.0.0",
+      "tag": "oss-dual-bucket-access/v1.0.0",
+      "path": "skills/oss-dual-bucket-access/",
+      "skillFile": "skills/oss-dual-bucket-access/SKILL.md",
+      "readme": "skills/oss-dual-bucket-access/README.md",
+      "source": "skills/oss-dual-bucket-access/SOURCE.md",
+      "release": "skills/oss-dual-bucket-access/RELEASE.md",
+      "categories": [
+        "object-storage-and-cdn"
+      ],
+      "author": "Jeronasand & Codex",
+      "sourceType": "original",
+      "requiresEnv": true,
+      "hasScripts": false,
+      "hasExamples": true,
+      "description": "规划阿里云 OSS 双桶访问：登录桶使用用户 OSS AK 或 STS token，数据源桶必须先询问访问模式再按最小权限访问。",
+      "keywords": [
+        "agent-install",
+        "aliyun",
+        "cors",
+        "data-bucket",
+        "dual-bucket",
+        "install-prompt",
+        "login-bucket",
+        "object-storage",
+        "oss",
+        "sts"
+      ],
+      "installPrompt": "请从 git@github.com:Jeronasand/public-skills.git 安装 public skill `oss-dual-bucket-access`，固定版本 `oss-dual-bucket-access/v1.0.0`，安装到当前仓库 `.codex/skills/oss-dual-bucket-access`；安装前请检查 `skills/associations.json`，如果存在相关 skill，请先询问我是否一起安装。",
+      "createdAt": "2026-05-11",
+      "updatedAt": "2026-05-11"
     },
     {
       "name": "aws-s3-upload-folder",

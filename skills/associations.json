@@ -13,6 +13,28 @@
       "reason": "bucket-upload-policy 可在上传前判断 PDF、图片、压缩包、二进制样例等文件是否应该进入 OSS/S3，避免仓库提交大文件。"
     },
     {
+      "id": "oss-dual-bucket-upload-followup",
+      "type": "optional-followup",
+      "primary": "oss-dual-bucket-access",
+      "related": [
+        "oss-upload-folder"
+      ],
+      "prompt": "如果数据源 OSS 桶需要上传、同步或发布本地目录，是否同时安装 oss-upload-folder 来执行 preview-first 上传流程？",
+      "installDefault": false,
+      "reason": "oss-dual-bucket-access 负责区分登录桶和数据源桶并确认访问模式；oss-upload-folder 可在用户选择上传/同步时提供具体 OSS 上传脚本和 dry-run 防护。"
+    },
+    {
+      "id": "oss-dual-bucket-artifact-policy",
+      "type": "optional-precheck",
+      "primary": "oss-dual-bucket-access",
+      "related": [
+        "bucket-upload-policy"
+      ],
+      "prompt": "如果数据源桶用于存放大文件、二进制产物或公开 artifact，是否同时安装 bucket-upload-policy 来判断哪些文件应该进 OSS 并生成 manifest？",
+      "installDefault": false,
+      "reason": "bucket-upload-policy 可在数据源桶写入前判断 artifact 边界，避免把大文件误提交到 git 或把不该公开的内容上传到 OSS。"
+    },
+    {
       "id": "s3-upload-artifact-policy",
       "type": "optional-precheck",
       "primary": "aws-s3-upload-folder",

@@ -17,6 +17,7 @@
       "skills": [
         "bucket-upload-policy",
         "oss-upload-folder",
+        "oss-dual-bucket-access",
         "aws-s3-upload-folder",
         "aws-cloudfront-invalidate"
       ]

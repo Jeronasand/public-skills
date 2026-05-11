@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generatedAt": "2026-05-08T03:57:06.839Z",
+  "generatedAt": "2026-05-11T03:49:55.098Z",
   "repository": "Jeronasand/public-skills",
   "skills": [
     {
@@ -86,6 +86,44 @@
         "oss dry-run upload"
       ],
       "updatedAt": "2026-05-08T03:57:06.839Z"
+    },
+    {
+      "name": "oss-dual-bucket-access",
+      "tag": "oss-dual-bucket-access/v1.0.0",
+      "method": "fallback",
+      "model": null,
+      "aliases": [
+        "OSS Dual Bucket Access",
+        "oss-dual-bucket-access",
+        "agent-install",
+        "aliyun",
+        "cors",
+        "data-bucket",
+        "dual-bucket",
+        "install-prompt"
+      ],
+      "intents": [
+        "规划阿里云 OSS 双桶访问：登录桶使用用户 OSS AK 或 STS token，数据源桶必须先询问访问模式再按最小权限访问。",
+        "object-storage-and-cdn"
+      ],
+      "useCases": [
+        "规划阿里云 OSS 双桶访问：登录桶使用用户 OSS AK 或 STS token，数据源桶必须先询问访问模式再按最小权限访问。"
+      ],
+      "priorityTerms": [
+        "agent-install",
+        "aliyun",
+        "cors",
+        "data-bucket",
+        "dual-bucket",
+        "install-prompt",
+        "login-bucket",
+        "object-storage",
+        "oss",
+        "sts",
+        "oss-dual-bucket-access",
+        "OSS Dual Bucket Access"
+      ],
+      "updatedAt": "2026-05-11T03:49:55.098Z"
     },
     {
       "name": "aws-s3-upload-folder",
